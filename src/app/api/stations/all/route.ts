@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getRandomRadioBrowserBaseUrl } from '../../servers/utils';
-import { RadioAPIFetch } from '../../utils';
+import { getBaseUrl } from '../../lib/utils';
+import { RadioAPIFetch } from '../../lib/utils';
 
 /*
   GET all radio stations.
@@ -8,7 +8,7 @@ import { RadioAPIFetch } from '../../utils';
            Use the /stations API with query params to get faster results.
 */
 export const GET = async (): Promise<NextResponse> => {
-  const baseUrl: string = await getRandomRadioBrowserBaseUrl();
+  const baseUrl: string = await getBaseUrl();
   const url: string = `${baseUrl}/stations`;
   const res: globalThis.Response = await RadioAPIFetch(url);
   const data = await res.json();

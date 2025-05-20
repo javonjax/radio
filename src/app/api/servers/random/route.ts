@@ -1,4 +1,4 @@
-import { getRandomRadioBrowserBaseUrl } from '../utils';
+import { getRandomRadioBrowserBaseUrl } from '../../lib/utils';
 
 /*
   GET a random available radio-browser server url.
