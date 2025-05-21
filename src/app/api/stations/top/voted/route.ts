@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, RadioAPIFetch } from '../../lib/utils';
+import { getBaseUrl, RadioAPIFetch } from '../../../lib/utils';
 
 /*
   GET top radio stations.
