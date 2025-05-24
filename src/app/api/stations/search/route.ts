@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, SchemaError } from '../lib/utils';
-import { RadioAPIFetch } from '../lib/utils';
-import { RadioStation, RadioStationsAPIResponse } from '../lib/schemas';
+import { getBaseUrl, HTTPError, SchemaError } from '../../lib/utils';
+import { RadioAPIFetch } from '../../lib/utils';
+import { RadioStation, RadioStationsAPIResponse } from '../../lib/schemas';
 
 /*
   GET stations using query params.
@@ -11,7 +11,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
     const queryParams: string = request.nextUrl.searchParams.toString();
-    const url: string = `${baseUrl}/stations?${queryParams}`;
+    const url: string = `${baseUrl}/stations/search?${queryParams}`;
     const res: globalThis.Response = await RadioAPIFetch(url);
     if (!res.ok) {
       throw new HTTPError('Unable to get radio stations at this time.', 404);
