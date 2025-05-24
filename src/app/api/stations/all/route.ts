@@ -23,8 +23,8 @@ export const GET = async (): Promise<NextResponse> => {
       throw new SchemaError();
     }
 
-    const stations: RadioStation[] = parsedData.data;
-    return NextResponse.json(stations);
+    const allStations: RadioStation[] = parsedData.data;
+    return NextResponse.json(allStations);
   } catch (error) {
     let message: string = 'Internal server error';
     let status: number | undefined = undefined;
