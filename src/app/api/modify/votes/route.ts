@@ -2,14 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getBaseUrl, HTTPError, RadioAPIFetch, RadioBrowserServerError } from '../../lib/utils';
 
 /*
-  Increases station click count by passing in its UUID.
-  This API should be called every time a user starts playing a stream
-  to mark the stream as more popular.
+  Increases station vote count by passing in its UUID.
 */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
-
     if (!baseUrl.length) {
       throw new RadioBrowserServerError();
     }
@@ -22,14 +19,14 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     }
 
     const stationUUID: string = request.nextUrl.searchParams.get('uuid')?.toString() || '';
-    const url: string = `${baseUrl}/url/${stationUUID}`;
+    const url: string = `${baseUrl}/vote/${stationUUID}`;
     const res: globalThis.Response = await RadioAPIFetch(url);
 
     if (!res.ok) {
-      throw new Error(`Failed to update click count for stationUUID: ${stationUUID}`);
+      throw new Error(`Failed to update vote count for stationUUID: ${stationUUID}`);
     }
 
-    return NextResponse.json({ message: `Click count updated for stationUUID: ${stationUUID}` });
+    return NextResponse.json({ message: `Vote count updated for stationUUID: ${stationUUID}` });
   } catch (error) {
     let message: string = 'Internal server error';
     let status: number = 500;

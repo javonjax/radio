@@ -70,3 +70,23 @@ export const RadioAPIFetch = async (url: string, options: RequestInit = {}): Pro
     },
   });
 };
+
+/*
+  Custom error class for failure to retrieve active radio-browser servers.
+*/
+export class RadioBrowserServerError extends Error {
+  constructor(message: string = 'An active radio-browser server could not be found.') {
+    super(message);
+  }
+}
+
+/*
+  Custom error class that allows adding a status code.
+*/
+export class HTTPError extends Error {
+  public status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
