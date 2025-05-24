@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getBaseUrl } from '../../lib/utils';
+import { getBaseUrl, HTTPError, SchemaError } from '../../lib/utils';
 import { RadioAPIFetch } from '../../lib/utils';
+import { RadioStation, RadioStationsAPIResponse } from '../../lib/schemas';
 
 /*
   GET all radio stations.
@@ -8,9 +9,33 @@ import { RadioAPIFetch } from '../../lib/utils';
            Use the /stations API with query params to get faster results.
 */
 export const GET = async (): Promise<NextResponse> => {
-  const baseUrl: string = await getBaseUrl();
-  const url: string = `${baseUrl}/stations`;
-  const res: globalThis.Response = await RadioAPIFetch(url);
-  const data = await res.json();
-  return NextResponse.json({ data });
+  try {
+    const baseUrl: string = await getBaseUrl();
+    const url: string = `${baseUrl}/stations`;
+    const res: globalThis.Response = await RadioAPIFetch(url);
+    if (!res.ok) {
+      throw new HTTPError('Unable to get radio stations at this time.', 404);
+    }
+
+    const data: unknown = await res.json();
+    const parsedData = RadioStationsAPIResponse.safeParse(data);
+    if (!parsedData.success) {
+      throw new SchemaError();
+    }
+
+    const stations: RadioStation[] = parsedData.data;
+    return NextResponse.json(stations);
+  } catch (error) {
+    let message: string = 'Internal server error';
+    let status: number | undefined = undefined;
+
+    if (error instanceof Error) {
+      message = error.message;
+    }
+    if (error instanceof HTTPError) {
+      status = error.status;
+    }
+
+    return NextResponse.json({ error: message }, { status: status || 500 });
+  }
 };

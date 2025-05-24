@@ -1,9 +1,24 @@
-import { getRandomRadioBrowserBaseUrl } from '../../lib/utils';
+import { NextResponse } from 'next/server';
+import { getRandomRadioBrowserBaseUrl, HTTPError } from '../../lib/utils';
 
 /*
   GET a random available radio-browser server url.
  */
 export const GET = async () => {
-  const res: string = await getRandomRadioBrowserBaseUrl();
-  return Response.json({ server: `${res}/json` });
+  try {
+    const res: string = await getRandomRadioBrowserBaseUrl();
+    return Response.json({ server: res });
+  } catch (error) {
+    let message: string = 'Internal server error';
+    let status: number | undefined = undefined;
+
+    if (error instanceof Error) {
+      message = error.message;
+    }
+    if (error instanceof HTTPError) {
+      status = error.status;
+    }
+
+    return NextResponse.json({ error: message }, { status: status || 500 });
+  }
 };

@@ -14,18 +14,18 @@ export const getRadioBrowserBaseUrls = async (): Promise<string[]> => {
     if (error instanceof Error) {
       console.error('DNS lookup for radio-browser servers failed:/n', error);
     }
-    return [];
+    throw new RadioBrowserServerError('DNS lookup for radio-browser servers failed.');
   }
 };
 
 /*
   GET a random available radio-browser server url.
- */
+*/
 export const getRandomRadioBrowserBaseUrl = async (): Promise<string> => {
   try {
     const servers: string[] = await getRadioBrowserBaseUrls();
     if (!servers.length) {
-      throw new Error('Failed to find an active server.');
+      throw new RadioBrowserServerError('Failed to find an active server.');
     }
     const randomServer: string = servers[Math.floor(Math.random() * (servers.length - 1))];
     return randomServer;
@@ -33,7 +33,7 @@ export const getRandomRadioBrowserBaseUrl = async (): Promise<string> => {
     if (error instanceof Error) {
       console.error(error.message);
     }
-    return '';
+    throw error;
   }
 };
 
@@ -45,7 +45,7 @@ export const getBaseUrl = async (): Promise<string> => {
   try {
     const res: string = await getRandomRadioBrowserBaseUrl();
     if (!res.length) {
-      throw new Error('Failed to find an active server.');
+      throw new RadioBrowserServerError('Failed to find an active server.');
     }
     baseUrl = res;
     return baseUrl;
@@ -53,7 +53,7 @@ export const getBaseUrl = async (): Promise<string> => {
     if (error instanceof Error) {
       console.error(error.message);
     }
-    return '';
+    throw error;
   }
 };
 
@@ -75,8 +75,13 @@ export const RadioAPIFetch = async (url: string, options: RequestInit = {}): Pro
   Custom error class for failure to retrieve active radio-browser servers.
 */
 export class RadioBrowserServerError extends Error {
-  constructor(message: string = 'An active radio-browser server could not be found.') {
+  public status: number;
+  constructor(
+    message: string = 'An active radio-browser server could not be found.',
+    status: number = 500
+  ) {
     super(message);
+    this.status = status;
   }
 }
 
@@ -86,6 +91,17 @@ export class RadioBrowserServerError extends Error {
 export class HTTPError extends Error {
   public status: number;
   constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
+
+export class SchemaError extends Error {
+  public status: number;
+  constructor(
+    message: string = 'API response does not match the desired schema.',
+    status: number = 500
+  ) {
     super(message);
     this.status = status;
   }
