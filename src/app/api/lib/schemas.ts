@@ -30,3 +30,12 @@ export const RadioStationSchema = z.object({
 export type RadioStation = z.infer<typeof RadioStationSchema>;
 
 export const RadioStationsAPIResponse = z.array(RadioStationSchema);
+
+export const TagSchema = z.object({
+  name: z.string().nullable(),
+  stationcount: z.number().nullable(),
+});
+
+export type Tag = z.infer<typeof TagSchema>;
+
+export const TagsAPIResponse = z.array(TagSchema);
