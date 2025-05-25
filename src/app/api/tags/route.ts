@@ -11,7 +11,16 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
     const searchTerm: string = request.nextUrl.searchParams.get('search') || '';
-    const url: string = `${baseUrl}/tags/${searchTerm}?hidebroken=true`;
+    const queryParams: URLSearchParams = request.nextUrl.searchParams;
+    const filteredParams: URLSearchParams = new URLSearchParams();
+    for (const [key, val] of queryParams.entries()) {
+      if (key !== 'search') {
+        filteredParams.append(key, val);
+      }
+    }
+    console.log(filteredParams.size);
+    const url: string = `${baseUrl}/tags${searchTerm ? `/${searchTerm}` : ''}${filteredParams.size ? `?${filteredParams.toString()}` : ''}`;
+    console.log(url);
     const res: globalThis.Response = await RadioAPIFetch(url);
     if (!res.ok) {
       throw new HTTPError('Unable to get radio station tags at this time.', 404);
