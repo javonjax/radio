@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Nunito, Roboto_Mono } from 'next/font/google';
 import './globals.css';
 import Footer from './components/shared/Footer';
+import Header from './components/shared/Header/Header';
 
 // Fonts.
 const nunito = Nunito({
@@ -29,6 +30,7 @@ const RootLayout = ({
       <body
         className={`${nunito.variable} ${robotoMono.variable} flex min-h-screen w-full flex-col`}
       >
+        <Header />
         <main className="mx-auto flex w-full max-w-7xl grow flex-col">{children}</main>
         <Footer />
       </body>
