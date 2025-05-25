@@ -3,18 +3,15 @@ import { Menu } from 'lucide-react';
 const Header = () => {
   return (
     <header className="mx-auto flex w-full max-w-7xl items-center justify-center rounded-none p-6">
-      <div className="w-full">
-        <div className="flex w-full items-center">
-          <div>RadioBrowser</div>
-          <div className="mx-auto flex justify-center gap-x-8">
-            <a>Top Stations</a>
-            <a>Browse by Category</a>
-            <a>Map</a>
-          </div>
-          <div className="flex">
-            <Menu />{' '}
-          </div>
+      <div className="flex w-full items-center justify-between">
+        <div className="">RadioBrowser</div>
+        <div className="flex grow items-center justify-center gap-x-6">
+          <div>Top</div>
+          <div>Trending</div>
+          <div>New</div>
+          <div>Map</div>
         </div>
+        <Menu />
       </div>
     </header>
   );
