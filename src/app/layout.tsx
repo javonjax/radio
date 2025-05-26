@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Nunito, Roboto_Mono } from 'next/font/google';
 import './globals.css';
-import Footer from './components/Footer/Footer';
+import Footer from './components/Shared/Footer/Footer';
 import Header from './components/Shared/Header/Header';
 
 // Fonts.
@@ -16,7 +16,7 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Radio Browser',
+  title: 'Tune Tide - Ride the airwaves',
   description: 'Radio browser application.',
 };
 
