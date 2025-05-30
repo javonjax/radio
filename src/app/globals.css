@@ -28,3 +28,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-nunito), sans-serif;
 }
+
+@layer base {
+  th {
+    @apply text-left;
+  }
+}
