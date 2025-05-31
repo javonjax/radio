@@ -1,5 +1,5 @@
-import Filters from '../components/StationsPage/Filters';
-import StationsList from '../components/StationsPage/StationsList';
+import Filters from '../components/StationBrowser/Filters';
+import StationList from '../components/StationBrowser/StationList';
 
 const StationsPage = async () => {
   // const [stations, setStations] = useState<RadioStation[]>([]);
@@ -9,7 +9,7 @@ const StationsPage = async () => {
   return (
     <div className="flex h-full w-full flex-col">
       <Filters />
-      <StationsList stations={data} />
+      <StationList stations={data} />
     </div>
   );
 };

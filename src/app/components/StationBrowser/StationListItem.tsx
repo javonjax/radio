@@ -1,11 +1,11 @@
 import { RadioStation } from '@/app/api/lib/schemas';
 import Image from 'next/image';
 
-export interface StationsListItemProps {
+export interface StationListItemProps {
   station: RadioStation;
 }
 
-const StationsListItem = ({ station }: StationsListItemProps) => {
+const StationListItem = ({ station }: StationListItemProps) => {
   return (
     <li
       key={station.stationuuid}
@@ -45,4 +45,4 @@ const StationsListItem = ({ station }: StationsListItemProps) => {
   );
 };
 
-export default StationsListItem;
+export default StationListItem;

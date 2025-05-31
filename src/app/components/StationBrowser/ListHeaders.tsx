@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StationsListHeaders = () => {
+const ListHeaders = () => {
   return (
     <div className="flex w-full p-4">
       <div className="w-[30%]">Name</div>
@@ -11,4 +11,4 @@ const StationsListHeaders = () => {
   );
 };
 
-export default StationsListHeaders;
+export default ListHeaders;
