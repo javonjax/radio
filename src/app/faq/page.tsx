@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FAQPage = () => {
+const FAQPage = (): React.JSX.Element => {
   return <div>FAQ</div>;
 };
 

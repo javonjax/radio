@@ -1,7 +1,7 @@
 import { Tag } from './api/lib/schemas';
 import Header from './components/HomePage/Header';
 
-const HomePage = async () => {
+const HomePage = async (): Promise<React.JSX.Element> => {
   const res: globalThis.Response = await fetch(
     'http://localhost:3000/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=10'
   );
