@@ -1,42 +1,15 @@
 import Filters from '../components/StationsPage/Filters';
+import StationsList from '../components/StationsPage/StationsList';
 
-const StationsPage = () => {
+const StationsPage = async () => {
+  // const [stations, setStations] = useState<RadioStation[]>([]);
+  const res = await fetch('http://localhost:3000/api/stations/search?limit=100&hidebroken=true');
+  const data = await res.json();
+  // setStations(data);
   return (
-    <div className="grid h-full w-full grid-cols-12 border-2">
+    <div className="flex h-full w-full flex-col">
       <Filters />
-      <table className="col-span-full table-auto">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Tags</th>
-            <th>Last Online Check</th>
-            <th>Last Update</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border-2">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-            <td className="border-2">Malcolm Lockyer</td>
-            <td>1961</td>
-            <td>1961</td>
-            <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-          </tr>
-          <tr>
-            <td className="border-2">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-            <td className="border-2">Malcolm Lockyer</td>
-            <td>1961</td>
-            <td>1961</td>
-            <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-          </tr>
-          <tr>
-            <td className="border-2">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-            <td className="border-2">Malcolm Lockyer</td>
-            <td>1961</td>
-            <td>1961</td>
-            <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-          </tr>
-        </tbody>
-      </table>
+      <StationsList stations={data} />
     </div>
   );
 };
