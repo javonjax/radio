@@ -6,7 +6,7 @@ const ListHeaders = () => {
       <div className="w-[30%]">Name</div>
       <div className="w-[30%]">Info</div>
       <div className="w-[20%]">Tags</div>
-      <div className="w-[20%]">Last Online Check</div>
+      <div className="w-[20%]"></div>
     </div>
   );
 };

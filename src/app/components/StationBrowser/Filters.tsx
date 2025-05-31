@@ -1,14 +1,14 @@
-// import { NextRouter, useRouter } from 'next/router';
-import React from 'react';
-// type StationQueryParams = {
-//   order: "name" | "url",
-//   limit: number,
-// };
-const Filters = () => {
-  // const router: NextRouter = useRouter();
-  // const onSubmit = () => {
+import { Search } from 'lucide-react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-  // };
+type StationQueryParams = {
+  order: 'name' | 'url';
+  limit: number;
+};
+const Filters = () => {
+  const router: AppRouterInstance = useRouter();
+  const onSubmit = () => {};
 
   return (
     <div className="flex w-full flex-wrap gap-4">
@@ -43,7 +43,7 @@ const Filters = () => {
         </select>
       </div>
       <button className="bg-button rounded-lg p-4" type="submit" onSubmit={() => {}}>
-        Search
+        <Search />
       </button>
     </div>
   );
