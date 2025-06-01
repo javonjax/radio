@@ -31,7 +31,7 @@ const RootLayout = ({
         className={`${nunito.variable} ${robotoMono.variable} flex min-h-screen w-full flex-col`}
       >
         <Header />
-        <main className="mx-auto flex w-full max-w-7xl grow flex-col p-6">{children}</main>
+        <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
         <Footer />
       </body>
     </html>
