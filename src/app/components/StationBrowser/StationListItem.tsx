@@ -16,7 +16,7 @@ const StationListItem = ({ station }: StationListItemProps) => {
         <div id="station-name" className="flex w-full items-center">
           {station.favicon !== null && station.favicon !== 'null' && station.favicon.length > 0 && (
             <Image
-              src={station.favicon}
+              src={station.favicon.trim()}
               className="mr-4"
               width={40}
               height={40}
@@ -32,15 +32,19 @@ const StationListItem = ({ station }: StationListItemProps) => {
             {station.name}{' '}
           </a>
         </div>
-        <div className="flex items-center gap-4 p-4"></div>
       </div>
-      <div id="station-info" className="w-[30%] text-wrap">
+      <div id="station-info" className="flex w-[30%] flex-col justify-center text-wrap">
         {station.country && <div>Country: {station.country}</div>}
         {station.language && <div>Language: {station.language}</div>}
-        {station.clickcount && <div>Times clicked: {station.clickcount}</div>}
-        {station.votes !== null && <div>Votes: {station.votes}</div>}
+        {station.clickcount !== null && station.clickcount > 0 && (
+          <div>Clicks: {station.clickcount}</div>
+        )}
+        {station.votes !== null && <div>Favorites: {station.votes}</div>}
         {station.clicktrend !== null && station.clicktrend > 10 && (
           <div id="station-trending">Trending!</div>
+        )}
+        {station.clicktimestamp_iso8601 && (
+          <div>Last clicked: {station.clicktimestamp_iso8601}</div>
         )}
       </div>
       <div id="station-tags" className="w-[20%] text-wrap break-words">

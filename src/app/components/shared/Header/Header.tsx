@@ -1,11 +1,13 @@
-import { Menu } from 'lucide-react';
+import { Menu, RadioTower } from 'lucide-react';
 import Link from 'next/link';
 
 const Header = () => {
   return (
-    <header className="mx-auto flex w-full max-w-7xl items-center justify-center rounded-none p-6">
+    <header className="mx-auto flex w-full max-w-7xl items-center justify-center rounded-none p-4">
       <div className="flex w-full items-center justify-between">
-        <Link href="/">TuneTide</Link>
+        <Link href="/" className="flex items-center gap-2 text-3xl">
+          TuneTide <RadioTower size={30} className="text-button" />
+        </Link>
         <div className="flex grow items-center justify-center gap-x-6">
           <div>Top</div>
           <div>Trending</div>
