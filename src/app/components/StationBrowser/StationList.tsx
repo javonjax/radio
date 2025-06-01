@@ -1,4 +1,4 @@
-import { RadioStation } from '@/app/api/lib/schemas';
+import { RadioStation } from '@/lib/api/schemas';
 import React from 'react';
 import StationListItem from './StationListItem';
 import ListHeaders from './ListHeaders';

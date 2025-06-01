@@ -1,4 +1,4 @@
-import { RadioStation } from '@/app/api/lib/schemas';
+import { RadioStation } from '@/lib/api/schemas';
 import { Heart, Info, Play } from 'lucide-react';
 import Image from 'next/image';
 

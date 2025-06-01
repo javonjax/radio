@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, RadioAPIFetch } from '../../lib/utils';
+import { getBaseUrl, HTTPError, RadioAPIFetch } from '../../../../lib/api/utils';
 
 /*
   Increases station vote count by passing in its UUID.

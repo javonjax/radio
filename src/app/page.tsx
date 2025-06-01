@@ -1,4 +1,4 @@
-import { Tag } from './api/lib/schemas';
+import { Tag } from '../lib/api/schemas';
 import Header from './components/HomePage/Header';
 
 const HomePage = async (): Promise<React.JSX.Element> => {

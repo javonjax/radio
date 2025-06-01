@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, SchemaError } from '../../lib/utils';
-import { RadioAPIFetch } from '../../lib/utils';
-import { RadioStation, RadioStationsAPIResponse } from '../../lib/schemas';
+import { getBaseUrl, HTTPError, SchemaError } from '../../../../lib/api/utils';
+import { RadioAPIFetch } from '../../../../lib/api/utils';
+import { RadioStation, RadioStationsAPIResponse } from '../../../../lib/api/schemas';
 
 /*
   GET stations using query params.
