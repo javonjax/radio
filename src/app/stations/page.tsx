@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Filters from '../components/StationBrowser/Filters';
 import StationList from '../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
-import { RadioStation } from '../api/lib/schemas';
+import { RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export type StationFilters = {

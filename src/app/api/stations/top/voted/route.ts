@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, RadioAPIFetch, SchemaError } from '../../../lib/utils';
-import { RadioStation, RadioStationsAPIResponse } from '@/app/api/lib/schemas';
+import { getBaseUrl, HTTPError, RadioAPIFetch, SchemaError } from '../../../../../lib/api/utils';
+import { RadioStation, RadioStationsAPIResponse } from '@/lib/api/schemas';
 
 /*
   GET top radio stations.
