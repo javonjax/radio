@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, RadioAPIFetch, SchemaError } from '../../../lib/api/utils';
+import {
+  capitalize,
+  getBaseUrl,
+  HTTPError,
+  isValidName,
+  RadioAPIFetch,
+  SchemaError,
+} from '../../../lib/api/utils';
 import { Language, LanguagesAPIResponse } from '../../../lib/api/schemas';
 
 /*
@@ -31,7 +38,28 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }
 
     const languages: Language[] = parsedData.data;
-    return NextResponse.json(languages);
+    const filteredLanguages: Language[] = [];
+    const languageNames = new Set<string>();
+    /*
+        Exclude duplicate languages and the unnecessary data entries
+        ie. languages named '#japan' or '10 additional languages' and
+            languages names that are urls.
+    */
+    for (const l of languages) {
+      if (!languageNames.has(l.name) && isValidName(l.name)) {
+        const capitalizedName: string = capitalize(l.name);
+        const language: Language = {
+          ...l,
+          name: capitalizedName,
+        };
+        filteredLanguages.push(language);
+      }
+      languageNames.add(l.name);
+    }
+
+    filteredLanguages.sort((a, b) => a.name.localeCompare(b.name));
+
+    return NextResponse.json(filteredLanguages);
   } catch (error) {
     let message: string = 'Internal server error';
     let status: number | undefined = undefined;
