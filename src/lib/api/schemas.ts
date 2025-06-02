@@ -41,7 +41,7 @@ export type Tag = z.infer<typeof TagSchema>;
 export const TagsAPIResponse = z.array(TagSchema);
 
 export const CountrySchema = z.object({
-  name: z.string().nullable(),
+  name: z.string(),
   iso_3166_1: z.string().nullable(),
   stationcount: z.number().nullable(),
 });
@@ -51,7 +51,7 @@ export type Country = z.infer<typeof CountrySchema>;
 export const CountriesAPIResponse = z.array(CountrySchema);
 
 export const LanguageSchema = z.object({
-  name: z.string().nullable(),
+  name: z.string(),
   iso_639: z.string().nullable(),
   stationcount: z.number().nullable(),
 });

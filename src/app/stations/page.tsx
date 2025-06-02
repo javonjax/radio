@@ -3,24 +3,10 @@ import { useEffect, useState } from 'react';
 import Filters from '../components/StationBrowser/Filters';
 import StationList from '../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
-import { RadioStation } from '../../lib/api/schemas';
+import { Country, Language, RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-
-export type StationFilters = {
-  name: string;
-  tag: string;
-  sortBy: StationSortingOption;
-  country: string;
-  language: string;
-};
-
-export type StationSortingOption =
-  | 'name'
-  | 'clicks'
-  | 'favorites'
-  | 'recentlyPlayed'
-  | 'recentlyAdded'
-  | 'trending';
+import { setStationBrowserDropdownOptions, setStationBrowserSearchParams } from './utils';
+import { StationFilters } from './schemas';
 
 const StationsPage = (): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
@@ -29,15 +15,44 @@ const StationsPage = (): React.JSX.Element => {
   const [filters, setFilters] = useState<StationFilters>({
     name: '',
     tag: '',
-    sortBy: 'name',
+    order: 'clickcount',
     country: '',
     language: '',
   });
+  const [languages, setLanguages] = useState<Language[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
 
+  // Init.
   useEffect(() => {
+    console.log('init fetch');
+    const fetchCountries = async (): Promise<void> => {
+      const url: string = `http://localhost:3000/api/countries`;
+      const res: globalThis.Response = await fetch(url);
+      const data: Country[] = await res.json();
+      setCountries(data);
+    };
+
+    const fetchLanguages = async (): Promise<void> => {
+      const url: string = `http://localhost:3000/api/languages`;
+      const res: globalThis.Response = await fetch(url);
+      const data: Language[] = await res.json();
+      setLanguages(data);
+    };
+
+    fetchCountries();
+    fetchLanguages();
+  }, []);
+
+  // Event handlers.
+  useEffect(() => {
+    console.log('param fetch');
     const fetchStations = async (): Promise<void> => {
-      console.log(searchParams.toString().includes('order=name'));
-      let url: string = `http://localhost:3000/api/stations/search?${searchParams.toString()}&limit=100&hidebroken=true`;
+      console.log(searchParams);
+      let url: string = `http://localhost:3000/api/stations/search?limit=100&hidebroken=true`;
+      const paramString: string = searchParams.toString();
+      if (paramString.length) {
+        url += `&${paramString}`;
+      }
       /* 
         Numerical data from the radio-browser API is sorted in ascending order.
         Add the param 'reverse=true' to retrieve numerical data in descending order. 
@@ -49,45 +64,25 @@ const StationsPage = (): React.JSX.Element => {
       const data = await res.json();
       setStations(data);
     };
+
+    setStationBrowserDropdownOptions(searchParams, setFilters);
     fetchStations();
   }, [searchParams]);
 
   const onSearch = (): void => {
-    const searchParams: string[] = [];
-    if (filters.name.length) {
-      searchParams.push(`name=${filters.name}`);
-    }
-
-    if (filters.tag.length) {
-      searchParams.push(`tag=${filters.tag}`);
-    }
-
-    if (filters.country.length) {
-      searchParams.push(`country=${filters.country}`);
-    }
-
-    if (filters.language.length) {
-      searchParams.push(`language=${filters.language}`);
-    }
-
-    const sortOrder: Record<string, string> = {
-      name: 'name',
-      clicks: 'clickcount',
-      favorites: 'votes',
-      recentlyPlayed: 'clicktimestamp',
-      recentlyAdded: 'changetimestamp',
-      trending: 'clicktrend',
-    };
-
-    searchParams.push(`order=${sortOrder[filters.sortBy]}`);
-    const searchParamsString: string = `?${searchParams.join('&')}`;
-    router.push(searchParamsString);
+    setStationBrowserSearchParams(filters, router);
   };
 
   return (
     <div className="flex h-full w-full flex-col gap-y-4">
       <h1 className="text-heading text-2xl">Station Browser</h1>
-      <Filters filters={filters} setFilters={setFilters} onSearch={onSearch} />
+      <Filters
+        filters={filters}
+        setFilters={setFilters}
+        onSearch={onSearch}
+        countries={countries}
+        languages={languages}
+      />
       <StationList stations={stations} />
     </div>
   );

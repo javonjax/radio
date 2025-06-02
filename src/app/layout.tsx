@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Nunito, Roboto_Mono } from 'next/font/google';
 import './globals.css';
-import Footer from './components/Shared/Footer/Footer';
-import Header from './components/Shared/Header/Header';
+import Header from './components/shared/Header/Header';
+import Footer from './components/shared/Footer/Footer';
 
 // Fonts.
 const nunito = Nunito({

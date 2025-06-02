@@ -9,7 +9,7 @@ const Header = () => {
         <h2>Browse radio stations from around the world, all in one place.</h2>
       </div>
       <div className="col-span-full flex items-center justify-center gap-6">
-        <a className="bg-button rounded-xl p-4" href="/stations">
+        <a className="bg-accent rounded-xl p-4" href="/stations?order=clickcount">
           Browse Stations
         </a>
         <a className="rounded-xl p-4" href="/faq">
