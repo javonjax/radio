@@ -55,13 +55,13 @@ const StationListItem = ({ station }: StationListItemProps) => {
       </div>
 
       <div className="flex w-[20%] flex-wrap items-center justify-center gap-4">
-        <button className="bg-button rounded-xl p-4">
+        <button className="bg-accent rounded-xl p-4">
           <Play />
         </button>
-        <button className="bg-button rounded-xl p-4">
+        <button className="bg-accent rounded-xl p-4">
           <Heart />
         </button>
-        <button className="bg-button rounded-xl p-4">
+        <button className="bg-accent rounded-xl p-4">
           <Info />
         </button>
       </div>
