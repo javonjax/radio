@@ -82,16 +82,14 @@ const Filters = ({
             }}
           >
             <option value="">All</option>
-            {countries
-              ?.sort((a, b) => a.name.localeCompare(b.name))
-              .map((country) => {
-                if (!country.name) return null;
-                return (
-                  <option key={country.name} value={country.name}>
-                    {country.name}
-                  </option>
-                );
-              })}
+            {countries?.map((country) => {
+              if (!country.name) return null;
+              return (
+                <option key={country.name} value={country.name}>
+                  {country.name}
+                </option>
+              );
+            })}
           </select>
         </div>
 
@@ -110,11 +108,9 @@ const Filters = ({
           >
             <option value="">All</option>
             {languages?.map((language) => {
-              // Filters out some of the weird entries in the radio-browser db ie. "16 additional languages" or "#english".
-              if (!language.name || !/^[a-zA-z]$/.test(language.name[0])) return null;
               return (
                 <option key={language.name} value={language.name}>
-                  {language.name[0].toUpperCase() + language.name.slice(1)}
+                  {language.name}
                 </option>
               );
             })}

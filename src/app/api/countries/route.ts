@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, RadioAPIFetch, SchemaError } from '../../../lib/api/utils';
+import {
+  capitalize,
+  getBaseUrl,
+  HTTPError,
+  isValidName,
+  RadioAPIFetch,
+  SchemaError,
+} from '../../../lib/api/utils';
 import { CountriesAPIResponse, Country } from '../../../lib/api/schemas';
 
 /*
@@ -28,8 +35,27 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       throw new SchemaError();
     }
 
-    const tags: Country[] = parsedData.data;
-    return NextResponse.json(tags);
+    const countries: Country[] = parsedData.data;
+    const filteredCountries: Country[] = [];
+    const countryNames = new Set<string>();
+    /*
+      Exclude duplicate country names.
+    */
+    for (const c of countries) {
+      if (!countryNames.has(c.name) && isValidName(c.name)) {
+        const capitalizedName: string = capitalize(c.name);
+        const country: Country = {
+          ...c,
+          name: capitalizedName,
+        };
+        filteredCountries.push(country);
+      }
+      countryNames.add(c.name);
+    }
+
+    filteredCountries.sort((a, b) => a.name.localeCompare(b.name));
+
+    return NextResponse.json(filteredCountries);
   } catch (error) {
     let message: string = 'Internal server error';
     let status: number | undefined = undefined;
