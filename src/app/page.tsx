@@ -1,5 +1,5 @@
 import { Tag } from '../lib/api/schemas';
-import Header from './components/HomePage/Header';
+import Header from '../components/HomePage/Header';
 
 const HomePage = async (): Promise<React.JSX.Element> => {
   const res: globalThis.Response = await fetch(

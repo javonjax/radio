@@ -1,12 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Filters from '../components/StationBrowser/Filters';
-import StationList from '../components/StationBrowser/StationList';
+import Filters from '../../components/StationBrowser/Filters';
+import StationList from '../../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { Country, Language, RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserDropdownOptions, setStationBrowserSearchParams } from './utils';
 import { StationFilters } from './schemas';
+import Combobox from '../../components/ui/Combobox/Combobox';
 
 const StationsPage = (): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
@@ -76,6 +77,7 @@ const StationsPage = (): React.JSX.Element => {
   return (
     <div className="flex h-full w-full flex-col gap-y-4">
       <h1 className="text-heading text-2xl">Station Browser</h1>
+      <Combobox />
       <Filters
         filters={filters}
         setFilters={setFilters}
