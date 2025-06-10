@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Check, ChevronDown } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import { capitalize, cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -15,85 +15,174 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Country, Language } from '@/lib/api/schemas';
-
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Next.js',
-  },
-  {
-    value: 'sveltekit',
-    label: 'SvelteKit',
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nuxt.js',
-  },
-  {
-    value: 'remix',
-    label: 'Remix',
-  },
-  {
-    value: 'astro',
-    label:
-      'AemptyPlaceho lderemptyPlaceholderemptyPlaceholderempty PlaceholderemptyPlaceholderemptyPlaceholderemptyPlaceholder',
-  },
-];
+import { StationFilters, StationSortingOption } from '@/app/stations/schemas';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface ComboboxProps {
+  value: string | StationSortingOption;
+  filters: StationFilters;
+  setFilters: Dispatch<SetStateAction<StationFilters>>;
   label: string;
   placeholder: string;
   emptyPlaceholder: string;
   options?: Language[] | Country[] | string[];
+  longestLabel?: string;
 }
 
-const Combobox = ({ label, placeholder, emptyPlaceholder }: ComboboxProps): React.JSX.Element => {
+const Combobox = ({
+  value,
+  filters,
+  setFilters,
+  label,
+  placeholder,
+  emptyPlaceholder,
+  options,
+  longestLabel,
+}: ComboboxProps): React.JSX.Element => {
   const [open, setOpen] = React.useState<boolean>(false);
-  const [value, setValue] = React.useState<string>('');
-  const ghostRef = React.useRef<HTMLDivElement>(null);
   const [triggerWidth, setTriggerWidth] = React.useState<number>();
+  const ghostRef: React.RefObject<HTMLDivElement | null> = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  /*
+    This side effect gets the widest item of the dropdown options and 
+    sets the width of the menu trigger to match.
+  */
+  React.useLayoutEffect(() => {
     if (ghostRef.current) {
       const width = ghostRef.current.offsetWidth;
-      console.log('width', width);
+      console.log(width, 'width');
       setTriggerWidth(width);
+      console.log(longestLabel);
     }
-  }, []);
+  }, [longestLabel]);
 
   return (
     <>
+      {/* Ghost div to measure the wideest dropdown option. */}
       <div
         ref={ghostRef}
         className="invisible absolute max-w-[450px] border px-3 py-2 text-sm font-normal whitespace-nowrap"
-        style={{ visibility: 'hidden', position: 'absolute' }}
       >
-        {frameworks.reduce((a, b) => (a.label.length > b.label.length ? a : b)).label}
+        {longestLabel}
       </div>
-      <div className="flex items-center gap-2">
-        <label>{label}</label>
+
+      <div className="flex flex-1 items-center gap-2">
+        <label>{label}:</label>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              style={{ maxWidth: triggerWidth ? `${triggerWidth + 22}px` : '286px' }}
-              className="bg-background text-foreground flex h-fit w-full justify-between p-2 text-start text-wrap break-all whitespace-normal"
+              style={
+                {
+                  '--combobox-trigger-width': triggerWidth ? `${triggerWidth + 32}px` : '300px',
+                  // width: triggerWidth ? `${triggerWidth + 32}px` : '300px',
+                } as React.CSSProperties
+              }
+              className="bg-background text-foreground flex h-fit w-full max-w-[var(--combobox-trigger-width)] min-w-[300px] shrink justify-between border-2 p-2 text-start text-wrap break-words whitespace-normal sm:w-[var(--combobox-trigger-width)]"
             >
-              {value
-                ? frameworks.find((framework) => framework.value === value)?.label
-                : 'Select framework...'}
+              {value ? capitalize(value) : 'All'}
               <ChevronDown className="opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="bg-background flex w-[var(--radix-popover-trigger-width)] p-0">
+          <PopoverContent className="bg-background flex w-[var(--radix-popover-trigger-width)] border-2 p-0">
             <Command>
               <CommandInput placeholder={placeholder} className="h-9" />
               <CommandList>
                 <CommandEmpty>{emptyPlaceholder}</CommandEmpty>
                 <CommandGroup>
-                  {frameworks.map((framework) => (
+                  {label === 'Country' && (
+                    <>
+                      <CommandItem
+                        key={'all'}
+                        className="flex text-wrap break-words whitespace-normal"
+                        value={'All'}
+                        onSelect={() => {
+                          setFilters({
+                            ...filters,
+                            country: '',
+                          });
+                          setOpen(false);
+                        }}
+                      >
+                        All
+                        <Check
+                          className={cn('ml-auto', value === '' ? 'opacity-100' : 'opacity-0')}
+                        />
+                      </CommandItem>
+                      {(options as Country[])?.map((country) => {
+                        return (
+                          <CommandItem
+                            key={country.name}
+                            className="flex text-wrap break-words whitespace-normal"
+                            value={country.name}
+                            onSelect={(currentValue) => {
+                              setFilters({
+                                ...filters,
+                                country: currentValue === value ? '' : currentValue,
+                              });
+                              setOpen(false);
+                            }}
+                          >
+                            {capitalize(country.name)}
+                            <Check
+                              className={cn(
+                                'ml-auto',
+                                value === country.name ? 'opacity-100' : 'opacity-0'
+                              )}
+                            />
+                          </CommandItem>
+                        );
+                      })}
+                    </>
+                  )}
+                  {label === 'Language' && (
+                    <>
+                      <CommandItem
+                        key={'all'}
+                        className="flex text-wrap break-words whitespace-normal"
+                        value={'All'}
+                        onSelect={() => {
+                          setFilters({
+                            ...filters,
+                            language: '',
+                          });
+                          setOpen(false);
+                        }}
+                      >
+                        All
+                        <Check
+                          className={cn('ml-auto', value === '' ? 'opacity-100' : 'opacity-0')}
+                        />
+                      </CommandItem>
+                      {(options as Language[])?.map((language) => {
+                        return (
+                          <CommandItem
+                            key={language.name}
+                            className="flex text-wrap break-words whitespace-normal"
+                            value={language.name}
+                            onSelect={(currentValue) => {
+                              setFilters({
+                                ...filters,
+                                language: currentValue === value ? '' : currentValue,
+                              });
+                              setOpen(false);
+                            }}
+                          >
+                            {capitalize(language.name)}
+                            <Check
+                              className={cn(
+                                'ml-auto',
+                                value === language.name ? 'opacity-100' : 'opacity-0'
+                              )}
+                            />
+                          </CommandItem>
+                        );
+                      })}
+                    </>
+                  )}
+                  {/* {frameworks.map((framework) => (
                     <CommandItem
                       className="flex text-wrap break-all whitespace-normal"
                       key={framework.value}
@@ -111,7 +200,7 @@ const Combobox = ({ label, placeholder, emptyPlaceholder }: ComboboxProps): Reac
                         )}
                       />
                     </CommandItem>
-                  ))}
+                  ))} */}
                 </CommandGroup>
               </CommandList>
             </Command>

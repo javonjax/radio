@@ -2,6 +2,7 @@ import { StationFilters, StationSortingOption } from '@/app/stations/schemas';
 import { Country, Language } from '@/lib/api/schemas';
 import { Search } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
+import Combobox from '../ui/Combobox/Combobox';
 
 export interface FiltersProps {
   filters: StationFilters;
@@ -9,6 +10,8 @@ export interface FiltersProps {
   languages: Language[];
   countries: Country[];
   onSearch: () => void;
+  longestCountryLabel: string;
+  longestLanguageLabel: string;
 }
 
 const Filters = ({
@@ -17,6 +20,8 @@ const Filters = ({
   languages,
   countries,
   onSearch,
+  longestCountryLabel,
+  longestLanguageLabel,
 }: FiltersProps): React.JSX.Element => {
   return (
     <div className="flex w-full flex-col">
@@ -68,58 +73,34 @@ const Filters = ({
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label htmlFor="station-search-country">Country: </label>
-          <select
-            id="station-search-country"
-            className="rounded-lg border-2 p-2"
+        {countries.length > 0 && (
+          <Combobox
+            label="Country"
+            options={countries}
+            emptyPlaceholder="Country not found."
+            placeholder="Search country..."
             value={filters.country}
-            onChange={(e) => {
-              setFilters({
-                ...filters,
-                country: e.target.value,
-              });
-            }}
-          >
-            <option value="">All</option>
-            {countries?.map((country) => {
-              if (!country.name) return null;
-              return (
-                <option key={country.name} value={country.name}>
-                  {country.name}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <label htmlFor="station-search-language">Language: </label>
-          <select
-            id="station-search-language"
-            className="rounded-lg border-2 p-2"
+            filters={filters}
+            setFilters={setFilters}
+            longestLabel={longestCountryLabel}
+          />
+        )}
+        {languages.length > 0 && (
+          <Combobox
+            label="Language"
+            options={languages}
+            emptyPlaceholder="Language not found."
+            placeholder="Search language..."
             value={filters.language}
-            onChange={(e) => {
-              setFilters({
-                ...filters,
-                language: e.target.value,
-              });
-            }}
-          >
-            <option value="">All</option>
-            {languages?.map((language) => {
-              return (
-                <option key={language.name} value={language.name}>
-                  {language.name}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+            filters={filters}
+            setFilters={setFilters}
+            longestLabel={longestLanguageLabel}
+          />
+        )}
       </div>
 
       <button
-        className="bg-accent flex w-fit cursor-pointer gap-2 rounded-lg p-4"
+        className="flex w-fit cursor-pointer gap-2 rounded-lg bg-linear-(--accent-gradient) p-4"
         onClick={onSearch}
       >
         Search <Search />

@@ -7,7 +7,6 @@ import { Country, Language, RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserDropdownOptions, setStationBrowserSearchParams } from './utils';
 import { StationFilters } from './schemas';
-import Combobox from '../../components/ui/Combobox/Combobox';
 
 const StationsPage = (): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
@@ -22,6 +21,8 @@ const StationsPage = (): React.JSX.Element => {
   });
   const [languages, setLanguages] = useState<Language[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [longestLanguage, setLongestLanguage] = useState<string>('');
+  const [longestCountry, setLongestCountry] = useState<string>('');
 
   // Init.
   useEffect(() => {
@@ -31,6 +32,10 @@ const StationsPage = (): React.JSX.Element => {
       const res: globalThis.Response = await fetch(url);
       const data: Country[] = await res.json();
       setCountries(data);
+      const longestLabel: string = data.reduce((a, b) =>
+        a.name.length > b.name.length ? a : b
+      ).name;
+      setLongestCountry(longestLabel);
     };
 
     const fetchLanguages = async (): Promise<void> => {
@@ -38,6 +43,10 @@ const StationsPage = (): React.JSX.Element => {
       const res: globalThis.Response = await fetch(url);
       const data: Language[] = await res.json();
       setLanguages(data);
+      const longestLabel: string = data.reduce((a, b) =>
+        a.name.length > b.name.length ? a : b
+      ).name;
+      setLongestLanguage(longestLabel);
     };
 
     fetchCountries();
@@ -51,6 +60,7 @@ const StationsPage = (): React.JSX.Element => {
       console.log(searchParams);
       let url: string = `http://localhost:3000/api/stations/search?limit=100&hidebroken=true`;
       const paramString: string = searchParams.toString();
+      console.log('lowercase params', paramString);
       if (paramString.length) {
         url += `&${paramString}`;
       }
@@ -77,13 +87,14 @@ const StationsPage = (): React.JSX.Element => {
   return (
     <div className="flex h-full w-full flex-col gap-y-4">
       <h1 className="text-heading text-2xl">Station Browser</h1>
-      <Combobox />
       <Filters
         filters={filters}
         setFilters={setFilters}
         onSearch={onSearch}
         countries={countries}
         languages={languages}
+        longestCountryLabel={longestCountry}
+        longestLanguageLabel={longestLanguage}
       />
       <StationList stations={stations} />
     </div>
