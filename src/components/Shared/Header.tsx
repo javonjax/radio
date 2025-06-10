@@ -9,7 +9,7 @@ const Header = () => {
         <Link href="/" className="flex items-center gap-2 text-3xl">
           TuneTide <SeaWaves className="text-accent" />
         </Link>
-        <div className="flex grow items-center justify-center gap-x-6">
+        <div className="hidden grow items-center justify-center gap-x-6 xl:flex">
           <div>Top</div>
           <div>Trending</div>
           <div>New</div>
