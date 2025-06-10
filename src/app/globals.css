@@ -6,6 +6,16 @@
   --accent: #219ce5;
   --heading: #219ce5;
   --accent-gradient: to right, var(--color-blue-500), var(--color-cyan-500);
+  --list-alt: var(--color-gray-300);
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --accent: #219ce5;
+  --heading: #219ce5;
+  --accent-gradient: to right, var(--color-blue-500), var(--color-cyan-500);
+  --list-alt: var(--color-neutral-900);
 }
 
 @theme inline {
@@ -14,25 +24,13 @@
   --color-accent: var(--accent);
   --color-accent-gradient: var(--accent-gradient);
   --color-heading: var(--heading);
+  --color-list-alt: var(--list-alt);
   --font-sans: var(--font-nunito);
   --font-mono: var(--font-roboto-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-nunito), sans-serif;
-}
-
-@layer base {
-  th {
-    @apply text-left;
-  }
 }

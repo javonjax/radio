@@ -11,7 +11,7 @@ const StationListItem = ({ station }: StationListItemProps) => {
   return (
     <li
       key={station.stationuuid}
-      className="flex min-h-[100px] w-full items-center gap-4 rounded-xl p-4 odd:bg-neutral-900"
+      className="odd:bg-list-alt flex min-h-[100px] w-full items-center gap-4 rounded-xl p-4"
     >
       <div className="flex w-[30%] flex-col">
         <div id="station-name" className="flex w-full items-center">

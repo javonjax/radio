@@ -3,6 +3,7 @@ import { Nunito, Roboto_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Shared/Header';
 import Footer from '@/components/Shared/Footer';
+import { ThemeProvider } from '@/components/Shared/ThemeProvider';
 
 // Fonts.
 const nunito = Nunito({
@@ -26,13 +27,20 @@ const RootLayout = ({
   children: React.ReactNode;
 }>): React.JSX.Element => {
   return (
-    <html className="h-full" lang="en">
+    <html className="h-full" lang="en" suppressHydrationWarning>
       <body
         className={`${nunito.variable} ${robotoMono.variable} relative flex min-h-screen w-full flex-col`}
       >
-        <Header />
-        <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
-        <Footer />
+        <ThemeProvider
+          attribute="class"
+          enableSystem
+          defaultTheme="system"
+          disableTransitionOnChange
+        >
+          <Header />
+          <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

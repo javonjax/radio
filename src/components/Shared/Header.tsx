@@ -1,6 +1,7 @@
 import { SeaWaves } from 'iconoir-react';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
+import { ModeToggle } from './ModeToggle';
 
 const Header = () => {
   return (
@@ -16,6 +17,7 @@ const Header = () => {
           <div>Random</div>
           <div>Map</div>
         </div>
+        <ModeToggle />
         <Menu />
       </div>
     </header>
