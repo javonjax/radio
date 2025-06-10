@@ -3,9 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --accent: var(--color-cyan-500);
-  --heading: var(--color-cyan-500);
-  --accent-gradient: to right, var(--color-cyan-500), var(--color-blue-500);
+  --accent: #219ce5;
+  --heading: #219ce5;
+  --accent-gradient: to right, var(--color-blue-500), var(--color-cyan-500);
 }
 
 @theme inline {

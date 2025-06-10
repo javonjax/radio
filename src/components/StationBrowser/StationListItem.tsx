@@ -1,4 +1,5 @@
 import { RadioStation } from '@/lib/api/schemas';
+import { capitalize } from '@/lib/utils';
 import { Heart, Info, Play } from 'lucide-react';
 import Image from 'next/image';
 
@@ -35,7 +36,15 @@ const StationListItem = ({ station }: StationListItemProps) => {
       </div>
       <div id="station-info" className="flex w-[30%] flex-col justify-center text-wrap">
         {station.country && <div>Country: {station.country}</div>}
-        {station.language && <div>Language: {station.language}</div>}
+        {station.language && (
+          <div>
+            Language:{' '}
+            {station.language
+              .split(',')
+              .map((lang) => capitalize(lang))
+              .join(',')}
+          </div>
+        )}
         {station.clickcount !== null && station.clickcount > 0 && (
           <div>Clicks: {station.clickcount}</div>
         )}
@@ -51,17 +60,17 @@ const StationListItem = ({ station }: StationListItemProps) => {
         {station.tags
           ?.split(',')
           .slice(0, 5)
-          .map((tag) => <div key={tag}>{tag}</div>)}
+          .map((tag) => <div key={tag}>{capitalize(tag)}</div>)}
       </div>
 
       <div className="flex w-[20%] flex-wrap items-center justify-center gap-4">
-        <button className="bg-accent rounded-xl p-4">
+        <button className="rounded-xl bg-linear-(--accent-gradient) p-4">
           <Play />
         </button>
-        <button className="bg-accent rounded-xl p-4">
+        <button className="rounded-xl bg-linear-(--accent-gradient) p-4">
           <Heart />
         </button>
-        <button className="bg-accent rounded-xl p-4">
+        <button className="rounded-xl bg-linear-(--accent-gradient) p-4">
           <Info />
         </button>
       </div>
