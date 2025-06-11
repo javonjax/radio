@@ -1,8 +1,9 @@
-import { StationFilters, StationSortingOption } from '@/app/stations/schemas';
+import { DropdownMenuOption, StationFilters } from '@/app/stations/schemas';
 import { Country, Language } from '@/lib/api/schemas';
 import { Search } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
-import Combobox from '../ui/Combobox/Combobox';
+import Combobox from '../ui/Custom/Combobox/Combobox';
+import DropdownMenu from './DropdownMenu';
 
 export interface FiltersProps {
   filters: StationFilters;
@@ -14,6 +15,18 @@ export interface FiltersProps {
   longestLanguageLabel: string;
 }
 
+/*
+  Sorting options to be passed into dropdown menu.
+*/
+const sortingOptions: DropdownMenuOption[] = [
+  { label: 'Most Clicked', value: 'clickcount' },
+  { label: 'Most Favorited', value: 'votes' },
+  { label: 'Name: Alphabetical', value: 'name' },
+  { label: 'Recently Played', value: 'clicktimestamp' },
+  { label: 'Recently Added', value: 'changetimestamp' },
+  { label: 'Trending', value: 'clicktrend' },
+];
+
 const Filters = ({
   filters,
   setFilters,
@@ -24,7 +37,13 @@ const Filters = ({
   longestLanguageLabel,
 }: FiltersProps): React.JSX.Element => {
   return (
-    <div className="flex w-full flex-col">
+    <form
+      className="flex w-full flex-col"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSearch();
+      }}
+    >
       <div className="flex w-full flex-wrap items-center gap-4 py-4">
         <div className="flex items-center gap-2">
           <label htmlFor="station-search-name">Name: </label>
@@ -35,7 +54,7 @@ const Filters = ({
               setFilters({ ...filters, name: e.target.value });
             }}
             type="search"
-            className="rounded-xl border-2 p-2"
+            className="rounded-md border-2 p-2"
             placeholder="Enter a search term..."
           ></input>
         </div>
@@ -49,29 +68,19 @@ const Filters = ({
               setFilters({ ...filters, tag: e.target.value });
             }}
             type="search"
-            className="rounded-xl border-2 p-2"
+            className="rounded-md border-2 p-2"
             placeholder="Enter a search term..."
           ></input>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label htmlFor="station-search-sorting">Sort by: </label>
-          <select
-            id="station-search-sorting"
-            className="rounded-lg border-2 p-2"
-            value={filters.order}
-            onChange={(e) =>
-              setFilters({ ...filters, order: e.target.value as StationSortingOption })
-            }
-          >
-            <option value="clickcount">Most Clicked</option>
-            <option value="votes">Most Favorited</option>
-            <option value="name">Name: Alphabetical</option>
-            <option value="clicktimestamp">Recently Played</option>
-            <option value="changetimestamp">Recently Added/Updated</option>
-            <option value="clicktrend">Trending</option>
-          </select>
-        </div>
+        <DropdownMenu
+          label="Sort by"
+          value={filters.order ?? 'name'}
+          filters={filters}
+          setFilters={setFilters}
+          options={sortingOptions}
+          type="order"
+        />
 
         {countries.length > 0 && (
           <Combobox
@@ -101,11 +110,11 @@ const Filters = ({
 
       <button
         className="flex w-fit cursor-pointer gap-2 rounded-lg bg-linear-(--accent-gradient) p-4"
-        onClick={onSearch}
+        type="submit"
       >
         Search <Search />
       </button>
-    </div>
+    </form>
   );
 };
 

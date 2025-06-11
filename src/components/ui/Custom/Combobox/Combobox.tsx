@@ -71,13 +71,11 @@ const Combobox = ({
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
-              variant="outline"
               role="combobox"
               aria-expanded={open}
               style={
                 {
                   '--combobox-trigger-width': triggerWidth ? `${triggerWidth + 32}px` : '300px',
-                  // width: triggerWidth ? `${triggerWidth + 32}px` : '300px',
                 } as React.CSSProperties
               }
               className="bg-background text-foreground flex h-fit w-full max-w-[var(--combobox-trigger-width)] min-w-[300px] shrink justify-between border-2 p-2 text-start text-wrap break-words whitespace-normal sm:w-[var(--combobox-trigger-width)]"

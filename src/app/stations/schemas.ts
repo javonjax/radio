@@ -13,3 +13,8 @@ export type StationSortingOption =
   | 'clicktimestamp'
   | 'changetimestamp'
   | 'clicktrend';
+
+export type DropdownMenuOption = {
+  label: string;
+  value: string;
+};
