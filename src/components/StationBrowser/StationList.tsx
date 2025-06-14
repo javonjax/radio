@@ -1,7 +1,7 @@
 import { RadioStation } from '@/lib/api/schemas';
 import React from 'react';
 import StationListItem from './StationListItem';
-import ListHeaders from './ListHeaders';
+import StationListHeaders from './StationListHeaders';
 
 export interface StationListProps {
   stations: RadioStation[];
@@ -10,7 +10,7 @@ export interface StationListProps {
 const StationList = ({ stations }: StationListProps) => {
   return (
     <div className="flex w-full flex-col">
-      <ListHeaders />
+      <StationListHeaders />
       <ul className="flex flex-col">
         {stations.map((station) => (
           <StationListItem key={station.stationuuid} station={station} />

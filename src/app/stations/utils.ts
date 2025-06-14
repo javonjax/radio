@@ -58,7 +58,7 @@ export const setStationBrowserDropdownOptions = (
     tag: searchParams.get('tag') || '',
     order: isValidSortingOption(searchParams.get('order'))
       ? (searchParams.get('order') as StationSortingOption)
-      : 'clickcount',
+      : 'name',
     country: searchParams.get('country') || '',
     language: searchParams.get('language') || '',
   };

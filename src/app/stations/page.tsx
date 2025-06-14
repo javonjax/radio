@@ -15,7 +15,7 @@ const StationsPage = (): React.JSX.Element => {
   const [filters, setFilters] = useState<StationFilters>({
     name: '',
     tag: '',
-    order: 'clickcount',
+    order: 'name',
     country: '',
     language: '',
   });
