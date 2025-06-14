@@ -1,6 +1,4 @@
-import React from 'react';
-
-const ListHeaders = () => {
+const StationListHeaders = (): React.JSX.Element => {
   return (
     <div className="bg-background sticky top-0 flex w-full p-4">
       <div className="w-[30%]">Name</div>
@@ -11,4 +9,4 @@ const ListHeaders = () => {
   );
 };
 
-export default ListHeaders;
+export default StationListHeaders;

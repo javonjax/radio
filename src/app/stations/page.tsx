@@ -51,6 +51,7 @@ const StationsPage = (): React.JSX.Element => {
 
     fetchCountries();
     fetchLanguages();
+    setStationBrowserSearchParams(filters, router);
   }, []);
 
   // Event handlers.

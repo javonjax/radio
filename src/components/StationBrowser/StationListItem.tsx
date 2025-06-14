@@ -11,12 +11,14 @@ import {
   SquareArrowOutUpRight,
 } from 'lucide-react';
 import Image from 'next/image';
+import Favicon from './Favicon';
 
 export interface StationListItemProps {
   station: RadioStation;
 }
 
 const StationListItem = ({ station }: StationListItemProps) => {
+  console.log(station);
   return (
     <li
       key={station.stationuuid}
@@ -24,22 +26,34 @@ const StationListItem = ({ station }: StationListItemProps) => {
     >
       <div className="flex w-[30%] flex-col">
         <div id="station-name" className="flex w-full items-center">
-          {station.homepage !== null && station.homepage.length > 0 ? (
-            station.favicon !== null && station.favicon !== 'null' && station.favicon.length > 0 ? (
-              <a
-                href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src={station.favicon.trim()}
-                  className="mr-4 min-w-[40px]"
-                  width={40}
-                  height={40}
-                  alt={`${station.name} icon`}
-                />
-              </a>
+          {/*
+            Render a the favicon as link if both a homepage link and a favicon are available.
+            If there is a homepage link but no favicon, render an svg icon.
+            If there is a favicon but no homepage, render the favicon.
+          */}
+          {station.homepage !== null && !!station.homepage.length ? (
+            station.favicon !== null && station.favicon !== 'null' && !!station.favicon.length ? (
+              <Favicon
+                alt={`${station.name} icon`}
+                src={station.favicon.trim()}
+                height={40}
+                width={40}
+                key={`${station.name} icon`}
+              />
             ) : (
+              // <a
+              //   href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
+              //   target="_blank"
+              //   rel="noopener noreferrer"
+              // >
+              //   <Image
+              //     src={station.favicon.trim()}
+              //     className="mr-4 min-w-[40px]"
+              //     width={40}
+              //     height={40}
+              //     alt={`${station.name} icon`}
+              //   />
+              // </a>
               <a
                 href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
                 target="_blank"
@@ -48,10 +62,20 @@ const StationListItem = ({ station }: StationListItemProps) => {
                 <SquareArrowOutUpRight className="mr-4" width={40} height={40} />
               </a>
             )
+          ) : station.favicon !== null &&
+            station.favicon !== 'null' &&
+            station.favicon.length > 0 ? (
+            <Image
+              src={station.favicon.trim()}
+              className="mr-4 min-w-[40px]"
+              width={40}
+              height={40}
+              alt={`${station.name} icon`}
+            />
           ) : null}
 
-          {station.name && station?.name?.length > 0 ? (
-            station.clicktrend && station.clicktrend > 10 ? (
+          {station.name && !!station?.name?.length ? (
+            !!station.clicktrend && station.clicktrend > 10 ? (
               <p className="text-accent flex">
                 {station.name}
                 <Flame height={20} width={20} className="ml-2" />
@@ -79,20 +103,19 @@ const StationListItem = ({ station }: StationListItemProps) => {
               .map((lang) => capitalize(lang))
               .join(',')}
           </div>
-        )}
-        {station.clickcount !== null && station.clickcount > 0 && (
+        )}{' '}
+        {!!station.clickcount && (
           <div className="flex items-center gap-x-2">
             <MousePointerClick size={20} />
             Clicks: {station.clickcount}
           </div>
-        )}
+        )}{' '}
         {station.votes !== null && (
           <div className="flex items-center gap-x-2">
             <Heart size={20} />
             Favorites: {station.votes}
           </div>
         )}
-
         {/* {station.clicktimestamp_iso8601 && (
           <div>Last listener: {station.clicktimestamp_iso8601}</div>
         )} */}
