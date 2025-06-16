@@ -52,6 +52,7 @@ const Player = () => {
           <X />
         </button>
       </div>
+
       <div className="flex flex-col gap-4">
         {stationContext?.station.url ? (
           <>
@@ -82,7 +83,7 @@ const Player = () => {
               </button>
               <button
                 style={{ backgroundImage: 'var(--accent-gradient)' }}
-                className="w-fit cursor-pointer rounded-md bg-linear-(--accent-gradient) bg-clip-text p-2 text-transparent"
+                className="w-fit cursor-pointer rounded-md p-2"
               >
                 <Heart />
               </button>

@@ -64,9 +64,15 @@ const StationListItem = ({ station, context }: StationListItemProps) => {
 
           {station.name && !!station?.name?.length ? (
             !!station.clicktrend && station.clicktrend > 10 ? (
-              <p className="text-accent flex">
+              <p className="flex">
                 {station.name}
-                <Flame height={20} width={20} className="ml-2" />
+                <Flame
+                  height={20}
+                  width={20}
+                  className="ml-2"
+                  stroke="url(#accent-gradient-stroke)"
+                  strokeWidth={2}
+                />
               </p>
             ) : (
               <p className="text-wrap">{station.name} </p>

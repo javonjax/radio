@@ -6,6 +6,7 @@ import Footer from '@/components/Shared/Footer';
 import { ThemeProvider } from '@/components/Shared/ThemeProvider';
 import Player from '@/components/Shared/Player';
 import StationContextProvider from '@/components/Providers/StationContext';
+import IconGradient from '@/components/Shared/IconGradient';
 
 // Fonts.
 const nunito = Nunito({
@@ -40,6 +41,7 @@ const RootLayout = ({
             defaultTheme="system"
             disableTransitionOnChange
           >
+            <IconGradient />
             <Header />
             <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
             <Footer />
