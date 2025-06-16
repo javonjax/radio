@@ -80,7 +80,10 @@ const Player = () => {
               >
                 {stationContext.isPlaying ? <Pause /> : <Play />}
               </button>
-              <button className="w-fit cursor-pointer rounded-md p-2">
+              <button
+                style={{ backgroundImage: 'var(--accent-gradient)' }}
+                className="w-fit cursor-pointer rounded-md bg-linear-(--accent-gradient) bg-clip-text p-2 text-transparent"
+              >
                 <Heart />
               </button>
               <button className="w-fit rounded-md p-2">

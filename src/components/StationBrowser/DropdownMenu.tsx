@@ -7,7 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Check, ChevronDown } from 'lucide-react';
 
 import * as React from 'react';
 
@@ -76,6 +77,9 @@ const DropdownMenu = ({ label, value, filters, setFilters, options, type }: Drop
                 }}
               >
                 {option.label}
+                <Check
+                  className={cn('ml-auto', value === option.value ? 'opacity-100' : 'opacity-0')}
+                />
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

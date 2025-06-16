@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Filters from '../../components/StationBrowser/Filters';
 import StationList from '../../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
@@ -23,6 +23,10 @@ const StationsPage = (): React.JSX.Element => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [longestLanguage, setLongestLanguage] = useState<string>('');
   const [longestCountry, setLongestCountry] = useState<string>('');
+
+  const handleSearch = useCallback(() => {
+    setStationBrowserSearchParams(filters, router);
+  }, [filters, router]);
 
   // Init.
   useEffect(() => {
@@ -51,8 +55,8 @@ const StationsPage = (): React.JSX.Element => {
 
     fetchCountries();
     fetchLanguages();
-    setStationBrowserSearchParams(filters, router);
-  }, []);
+    handleSearch();
+  }, [handleSearch]);
 
   // Event handlers.
   useEffect(() => {
@@ -81,9 +85,9 @@ const StationsPage = (): React.JSX.Element => {
     fetchStations();
   }, [searchParams]);
 
-  const onSearch = (): void => {
-    setStationBrowserSearchParams(filters, router);
-  };
+  useEffect(() => {
+    handleSearch();
+  }, [handleSearch]);
 
   return (
     <div className="flex h-full w-full flex-col gap-y-4">
@@ -91,7 +95,7 @@ const StationsPage = (): React.JSX.Element => {
       <Filters
         filters={filters}
         setFilters={setFilters}
-        onSearch={onSearch}
+        onSearch={handleSearch}
         countries={countries}
         languages={languages}
         longestCountryLabel={longestCountry}

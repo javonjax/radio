@@ -45,7 +45,7 @@ const Filters = ({
       }}
     >
       <div className="flex w-full flex-wrap items-center gap-4 py-4">
-        <div className="flex items-center gap-2">
+        <div className="relative flex items-center gap-2">
           <label htmlFor="station-search-name">Name: </label>
           <input
             id="station-search-name"
@@ -54,12 +54,15 @@ const Filters = ({
               setFilters({ ...filters, name: e.target.value });
             }}
             type="search"
-            className="rounded-md border-2 p-2"
+            className="rounded-md border-2 p-2 pr-8"
             placeholder="Enter a search term..."
           ></input>
+          <button className="hover:text-accent absolute right-2 cursor-pointer" type="submit">
+            <Search size={16} />
+          </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="relative flex items-center gap-2">
           <label htmlFor="station-search-tag">Tag: </label>
           <input
             id="station-search-tag"
@@ -68,9 +71,12 @@ const Filters = ({
               setFilters({ ...filters, tag: e.target.value });
             }}
             type="search"
-            className="rounded-md border-2 p-2"
+            className="rounded-md border-2 p-2 pr-8"
             placeholder="Enter a search term..."
           ></input>
+          <button className="hover:text-accent absolute right-2 cursor-pointer" type="submit">
+            <Search size={16} />
+          </button>
         </div>
 
         <DropdownMenu
@@ -108,12 +114,12 @@ const Filters = ({
         )}
       </div>
 
-      <button
+      {/* <button
         className="flex w-fit cursor-pointer gap-2 rounded-lg bg-linear-(--accent-gradient) p-4"
         type="submit"
       >
         Search <Search />
-      </button>
+      </button> */}
     </form>
   );
 };

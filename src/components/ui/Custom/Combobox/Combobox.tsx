@@ -180,25 +180,6 @@ const Combobox = ({
                       })}
                     </>
                   )}
-                  {/* {frameworks.map((framework) => (
-                    <CommandItem
-                      className="flex text-wrap break-all whitespace-normal"
-                      key={framework.value}
-                      value={framework.value}
-                      onSelect={(currentValue) => {
-                        setValue(currentValue === value ? '' : currentValue);
-                        setOpen(false);
-                      }}
-                    >
-                      {framework.label}
-                      <Check
-                        className={cn(
-                          'ml-auto',
-                          value === framework.value ? 'opacity-100' : 'opacity-0'
-                        )}
-                      />
-                    </CommandItem>
-                  ))} */}
                 </CommandGroup>
               </CommandList>
             </Command>
