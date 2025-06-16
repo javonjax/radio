@@ -12,13 +12,14 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Favicon from './Favicon';
+import { StationContextType } from '../Providers/StationContext';
 
 export interface StationListItemProps {
   station: RadioStation;
+  context?: StationContextType | undefined;
 }
 
-const StationListItem = ({ station }: StationListItemProps) => {
-  console.log(station);
+const StationListItem = ({ station, context }: StationListItemProps) => {
   return (
     <li
       key={station.stationuuid}
@@ -41,19 +42,6 @@ const StationListItem = ({ station }: StationListItemProps) => {
                 key={`${station.name} icon`}
               />
             ) : (
-              // <a
-              //   href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
-              //   target="_blank"
-              //   rel="noopener noreferrer"
-              // >
-              //   <Image
-              //     src={station.favicon.trim()}
-              //     className="mr-4 min-w-[40px]"
-              //     width={40}
-              //     height={40}
-              //     alt={`${station.name} icon`}
-              //   />
-              // </a>
               <a
                 href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
                 target="_blank"
@@ -116,9 +104,6 @@ const StationListItem = ({ station }: StationListItemProps) => {
             Favorites: {station.votes}
           </div>
         )}
-        {/* {station.clicktimestamp_iso8601 && (
-          <div>Last listener: {station.clicktimestamp_iso8601}</div>
-        )} */}
       </div>
       <ul id="station-tags" className="w-[20%] text-wrap break-words">
         {station.tags
@@ -131,7 +116,8 @@ const StationListItem = ({ station }: StationListItemProps) => {
         <button
           className="rounded-xl bg-linear-(--accent-gradient) p-4"
           onClick={() => {
-            console.log(station.url);
+            context?.setStation(station);
+            context?.play();
           }}
         >
           <Play />

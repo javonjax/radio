@@ -4,6 +4,8 @@ import './globals.css';
 import Header from '@/components/Shared/Header';
 import Footer from '@/components/Shared/Footer';
 import { ThemeProvider } from '@/components/Shared/ThemeProvider';
+import Player from '@/components/Shared/Player';
+import StationContextProvider from '@/components/Providers/StationContext';
 
 // Fonts.
 const nunito = Nunito({
@@ -31,16 +33,19 @@ const RootLayout = ({
       <body
         className={`${nunito.variable} ${robotoMono.variable} relative flex min-h-screen w-full flex-col`}
       >
-        <ThemeProvider
-          attribute="class"
-          enableSystem
-          defaultTheme="system"
-          disableTransitionOnChange
-        >
-          <Header />
-          <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <StationContextProvider>
+          <ThemeProvider
+            attribute="class"
+            enableSystem
+            defaultTheme="system"
+            disableTransitionOnChange
+          >
+            <Header />
+            <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
+            <Footer />
+            <Player />
+          </ThemeProvider>
+        </StationContextProvider>
       </body>
     </html>
   );
