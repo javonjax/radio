@@ -1,6 +1,7 @@
 import { SeaWaves } from 'iconoir-react';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
+import { ModeToggle } from './ModeToggle';
 
 const Header = () => {
   return (
@@ -9,14 +10,17 @@ const Header = () => {
         <Link href="/" className="flex items-center gap-2 text-3xl">
           TuneTide <SeaWaves className="text-accent" />
         </Link>
-        <div className="flex grow items-center justify-center gap-x-6">
+        <div className="hidden grow items-center justify-center gap-x-6 xl:flex">
           <div>Top</div>
           <div>Trending</div>
           <div>New</div>
           <div>Random</div>
           <div>Map</div>
         </div>
-        <Menu />
+        <div className="flex items-center">
+          <ModeToggle />
+          <Menu />
+        </div>
       </div>
     </header>
   );

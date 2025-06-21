@@ -1,26 +1,30 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Filters from '../components/StationBrowser/Filters';
-import StationList from '../components/StationBrowser/StationList';
+import Filters from '../../components/StationBrowser/Filters';
+import StationList from '../../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { Country, Language, RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserDropdownOptions, setStationBrowserSearchParams } from './utils';
-import { StationFilters } from './schemas';
+import { StationFilters, StationSearchInputs } from './schemas';
 
 const StationsPage = (): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
   const [stations, setStations] = useState<RadioStation[]>([]);
-  const [filters, setFilters] = useState<StationFilters>({
+  const [searchInputs, setSearchInputs] = useState<StationSearchInputs>({
     name: '',
     tag: '',
-    order: 'clickcount',
+  });
+  const [filters, setFilters] = useState<StationFilters>({
+    order: 'name',
     country: '',
     language: '',
   });
   const [languages, setLanguages] = useState<Language[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [longestLanguage, setLongestLanguage] = useState<string>('');
+  const [longestCountry, setLongestCountry] = useState<string>('');
 
   // Init.
   useEffect(() => {
@@ -30,6 +34,10 @@ const StationsPage = (): React.JSX.Element => {
       const res: globalThis.Response = await fetch(url);
       const data: Country[] = await res.json();
       setCountries(data);
+      const longestLabel: string = data.reduce((a, b) =>
+        a.name.length > b.name.length ? a : b
+      ).name;
+      setLongestCountry(longestLabel);
     };
 
     const fetchLanguages = async (): Promise<void> => {
@@ -37,10 +45,15 @@ const StationsPage = (): React.JSX.Element => {
       const res: globalThis.Response = await fetch(url);
       const data: Language[] = await res.json();
       setLanguages(data);
+      const longestLabel: string = data.reduce((a, b) =>
+        a.name.length > b.name.length ? a : b
+      ).name;
+      setLongestLanguage(longestLabel);
     };
 
     fetchCountries();
     fetchLanguages();
+    handleSearch();
   }, []);
 
   // Event handlers.
@@ -50,11 +63,13 @@ const StationsPage = (): React.JSX.Element => {
       console.log(searchParams);
       let url: string = `http://localhost:3000/api/stations/search?limit=100&hidebroken=true`;
       const paramString: string = searchParams.toString();
+      console.log('lowercase params', paramString);
       if (paramString.length) {
         url += `&${paramString}`;
       }
       /* 
         Numerical data from the radio-browser API is sorted in ascending order.
+        Because of this all sorting, with the exception of name based alphabetical sorting, should be reversed.
         Add the param 'reverse=true' to retrieve numerical data in descending order. 
       */
       if (!searchParams.toString().includes('order=name')) {
@@ -65,12 +80,16 @@ const StationsPage = (): React.JSX.Element => {
       setStations(data);
     };
 
-    setStationBrowserDropdownOptions(searchParams, setFilters);
+    setStationBrowserDropdownOptions(searchParams, setSearchInputs, setFilters);
     fetchStations();
   }, [searchParams]);
 
-  const onSearch = (): void => {
-    setStationBrowserSearchParams(filters, router);
+  useEffect(() => {
+    handleSearch();
+  }, [filters]);
+
+  const handleSearch = () => {
+    setStationBrowserSearchParams(searchInputs, filters, router);
   };
 
   return (
@@ -79,9 +98,13 @@ const StationsPage = (): React.JSX.Element => {
       <Filters
         filters={filters}
         setFilters={setFilters}
-        onSearch={onSearch}
+        searchInputs={searchInputs}
+        setSearchInputs={setSearchInputs}
+        onSearch={handleSearch}
         countries={countries}
         languages={languages}
+        longestCountryLabel={longestCountry}
+        longestLanguageLabel={longestLanguage}
       />
       <StationList stations={stations} />
     </div>

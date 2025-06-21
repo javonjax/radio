@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  capitalize,
   getBaseUrl,
   HTTPError,
   isValidName,
@@ -47,12 +46,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     */
     for (const l of languages) {
       if (!languageNames.has(l.name) && isValidName(l.name)) {
-        const capitalizedName: string = capitalize(l.name);
-        const language: Language = {
-          ...l,
-          name: capitalizedName,
-        };
-        filteredLanguages.push(language);
+        filteredLanguages.push(l);
       }
       languageNames.add(l.name);
     }

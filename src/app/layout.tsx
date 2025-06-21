@@ -1,8 +1,16 @@
 import type { Metadata } from 'next';
 import { Nunito, Roboto_Mono } from 'next/font/google';
 import './globals.css';
-import Header from './components/shared/Header/Header';
-import Footer from './components/shared/Footer/Footer';
+import Header from '@/components/Shared/Header';
+import Footer from '@/components/Shared/Footer';
+import { ThemeProvider } from '@/components/Shared/ThemeProvider';
+import Player from '@/components/Shared/Player';
+import StationContextProvider from '@/components/ContextProviders/StationContext';
+import IconGradient from '@/components/Shared/IconGradient';
+import {
+  LocationContext,
+  LocationContextProvider,
+} from '@/components/ContextProviders/LocationContext';
 
 // Fonts.
 const nunito = Nunito({
@@ -26,13 +34,26 @@ const RootLayout = ({
   children: React.ReactNode;
 }>): React.JSX.Element => {
   return (
-    <html className="h-full" lang="en">
+    <html className="h-full" lang="en" suppressHydrationWarning>
       <body
-        className={`${nunito.variable} ${robotoMono.variable} flex min-h-screen w-full flex-col`}
+        className={`${nunito.variable} ${robotoMono.variable} relative flex min-h-screen w-full flex-col`}
       >
-        <Header />
-        <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
-        <Footer />
+        <LocationContextProvider>
+          <StationContextProvider>
+            <ThemeProvider
+              attribute="class"
+              enableSystem
+              defaultTheme="system"
+              disableTransitionOnChange
+            >
+              <IconGradient />
+              <Header />
+              <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
+              <Footer />
+              <Player />
+            </ThemeProvider>
+          </StationContextProvider>
+        </LocationContextProvider>
       </body>
     </html>
   );
