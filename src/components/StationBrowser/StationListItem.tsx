@@ -64,16 +64,14 @@ const StationListItem = ({ station, context }: StationListItemProps) => {
 
           {station.name && !!station?.name?.length ? (
             !!station.clicktrend && station.clicktrend > 10 ? (
-              <p className="flex">
-                {station.name}
+              <div className="flex items-center">
+                <p>{station.name}</p>
                 <Flame
                   height={20}
                   width={20}
-                  className="ml-2"
-                  stroke="url(#accent-gradient-stroke)"
-                  strokeWidth={2}
+                  className="text-accent ml-2 h-[20px] min-h-[20px] w-[20px] min-w-[20px]"
                 />
-              </p>
+              </div>
             ) : (
               <p className="text-wrap">{station.name} </p>
             )
@@ -85,29 +83,32 @@ const StationListItem = ({ station, context }: StationListItemProps) => {
       <div id="station-info" className="flex w-[30%] flex-col justify-center text-wrap">
         {station.country && (
           <div className="flex items-center gap-x-2">
-            <MapPinned size={20} className="min-h-[20px] min-w-[20px]" /> Country: {station.country}
+            <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
+            <p>Country: {station.country}</p>
           </div>
         )}
         {station.language && (
           <div className="flex items-center gap-x-2">
             <Languages size={20} />
-            Language:{' '}
-            {station.language
-              .split(',')
-              .map((lang) => capitalize(lang))
-              .join(',')}
+            <p>
+              Language:{' '}
+              {station.language
+                .split(',')
+                .map((lang) => capitalize(lang))
+                .join(', ')}
+            </p>
           </div>
         )}{' '}
         {!!station.clickcount && (
           <div className="flex items-center gap-x-2">
             <MousePointerClick size={20} />
-            Clicks: {station.clickcount}
+            <p>Clicks: {station.clickcount}</p>
           </div>
         )}{' '}
         {station.votes !== null && (
           <div className="flex items-center gap-x-2">
             <Heart size={20} />
-            Favorites: {station.votes}
+            <p>Favorites: {station.votes}</p>
           </div>
         )}
       </div>

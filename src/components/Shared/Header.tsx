@@ -17,8 +17,10 @@ const Header = () => {
           <div>Random</div>
           <div>Map</div>
         </div>
-        <ModeToggle />
-        <Menu />
+        <div className="flex items-center">
+          <ModeToggle />
+          <Menu />
+        </div>
       </div>
     </header>
   );

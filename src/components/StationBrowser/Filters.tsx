@@ -1,4 +1,4 @@
-import { DropdownMenuOption, StationFilters } from '@/app/stations/schemas';
+import { DropdownMenuOption, StationFilters, StationSearchInputs } from '@/app/stations/schemas';
 import { Country, Language } from '@/lib/api/schemas';
 import { Search } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
@@ -10,6 +10,8 @@ export interface FiltersProps {
   setFilters: Dispatch<SetStateAction<StationFilters>>;
   languages: Language[];
   countries: Country[];
+  searchInputs: StationSearchInputs;
+  setSearchInputs: Dispatch<SetStateAction<StationSearchInputs>>;
   onSearch: () => void;
   longestCountryLabel: string;
   longestLanguageLabel: string;
@@ -32,6 +34,8 @@ const Filters = ({
   setFilters,
   languages,
   countries,
+  searchInputs,
+  setSearchInputs,
   onSearch,
   longestCountryLabel,
   longestLanguageLabel,
@@ -45,16 +49,17 @@ const Filters = ({
       }}
     >
       <div className="flex w-full flex-wrap items-center gap-4 py-4">
-        <div className="relative flex items-center gap-2">
+        <div className="relative flex flex-1 items-center gap-2">
           <label htmlFor="station-search-name">Name: </label>
           <input
             id="station-search-name"
-            value={filters.name}
+            value={searchInputs.name}
             onChange={(e) => {
-              setFilters({ ...filters, name: e.target.value });
+              setSearchInputs({ ...searchInputs, name: e.target.value });
+              // setFilters({ ...filters, name: e.target.value });
             }}
             type="search"
-            className="rounded-md border-2 p-2 pr-8"
+            className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
             placeholder="Enter a search term..."
           ></input>
           <button className="hover:text-accent absolute right-2 cursor-pointer" type="submit">
@@ -62,16 +67,17 @@ const Filters = ({
           </button>
         </div>
 
-        <div className="relative flex items-center gap-2">
+        <div className="relative flex flex-1 items-center gap-2">
           <label htmlFor="station-search-tag">Tag: </label>
           <input
             id="station-search-tag"
-            value={filters.tag}
+            value={searchInputs.tag}
             onChange={(e) => {
-              setFilters({ ...filters, tag: e.target.value });
+              setSearchInputs({ ...searchInputs, tag: e.target.value });
+              // setFilters({ ...filters, tag: e.target.value });
             }}
             type="search"
-            className="rounded-md border-2 p-2 pr-8"
+            className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
             placeholder="Enter a search term..."
           ></input>
           <button className="hover:text-accent absolute right-2 cursor-pointer" type="submit">

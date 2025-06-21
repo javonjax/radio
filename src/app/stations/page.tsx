@@ -1,20 +1,22 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Filters from '../../components/StationBrowser/Filters';
 import StationList from '../../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { Country, Language, RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserDropdownOptions, setStationBrowserSearchParams } from './utils';
-import { StationFilters } from './schemas';
+import { StationFilters, StationSearchInputs } from './schemas';
 
 const StationsPage = (): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
   const [stations, setStations] = useState<RadioStation[]>([]);
-  const [filters, setFilters] = useState<StationFilters>({
+  const [searchInputs, setSearchInputs] = useState<StationSearchInputs>({
     name: '',
     tag: '',
+  });
+  const [filters, setFilters] = useState<StationFilters>({
     order: 'name',
     country: '',
     language: '',
@@ -23,10 +25,6 @@ const StationsPage = (): React.JSX.Element => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [longestLanguage, setLongestLanguage] = useState<string>('');
   const [longestCountry, setLongestCountry] = useState<string>('');
-
-  const handleSearch = useCallback(() => {
-    setStationBrowserSearchParams(filters, router);
-  }, [filters, router]);
 
   // Init.
   useEffect(() => {
@@ -56,7 +54,7 @@ const StationsPage = (): React.JSX.Element => {
     fetchCountries();
     fetchLanguages();
     handleSearch();
-  }, [handleSearch]);
+  }, []);
 
   // Event handlers.
   useEffect(() => {
@@ -71,6 +69,7 @@ const StationsPage = (): React.JSX.Element => {
       }
       /* 
         Numerical data from the radio-browser API is sorted in ascending order.
+        Because of this all sorting, with the exception of name based alphabetical sorting, should be reversed.
         Add the param 'reverse=true' to retrieve numerical data in descending order. 
       */
       if (!searchParams.toString().includes('order=name')) {
@@ -81,13 +80,17 @@ const StationsPage = (): React.JSX.Element => {
       setStations(data);
     };
 
-    setStationBrowserDropdownOptions(searchParams, setFilters);
+    setStationBrowserDropdownOptions(searchParams, setSearchInputs, setFilters);
     fetchStations();
   }, [searchParams]);
 
   useEffect(() => {
     handleSearch();
-  }, [handleSearch]);
+  }, [filters]);
+
+  const handleSearch = () => {
+    setStationBrowserSearchParams(searchInputs, filters, router);
+  };
 
   return (
     <div className="flex h-full w-full flex-col gap-y-4">
@@ -95,6 +98,8 @@ const StationsPage = (): React.JSX.Element => {
       <Filters
         filters={filters}
         setFilters={setFilters}
+        searchInputs={searchInputs}
+        setSearchInputs={setSearchInputs}
         onSearch={handleSearch}
         countries={countries}
         languages={languages}

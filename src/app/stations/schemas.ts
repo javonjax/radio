@@ -1,9 +1,12 @@
 export type StationFilters = {
-  name: string;
-  tag: string;
   order: StationSortingOption;
   country: string;
   language: string;
+};
+
+export type StationSearchInputs = {
+  name: string;
+  tag: string;
 };
 
 export type StationSortingOption =

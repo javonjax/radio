@@ -1,22 +1,23 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
-import { StationFilters, StationSortingOption } from './schemas';
+import { StationFilters, StationSearchInputs, StationSortingOption } from './schemas';
 
 /*
   Updates url search params when a search is submitted.
 */
 export const setStationBrowserSearchParams = (
+  searchInputs: StationSearchInputs,
   filters: StationFilters,
   router: AppRouterInstance
 ): void => {
   const searchParams: string[] = [];
-  if (filters.name.length) {
-    searchParams.push(`name=${filters.name}`);
+  if (searchInputs.name.length) {
+    searchParams.push(`name=${searchInputs.name}`);
   }
 
-  if (filters.tag.length) {
-    searchParams.push(`tag=${filters.tag}`);
+  if (searchInputs.tag.length) {
+    searchParams.push(`tag=${searchInputs.tag}`);
   }
 
   if (filters.country.length) {
@@ -32,7 +33,7 @@ export const setStationBrowserSearchParams = (
   }
 
   const searchParamsString: string = `?${searchParams.join('&')}`;
-
+  console.log('paramstring', searchParamsString);
   router.push(searchParamsString);
 };
 
@@ -42,8 +43,12 @@ export const setStationBrowserSearchParams = (
 */
 export const setStationBrowserDropdownOptions = (
   searchParams: ReadonlyURLSearchParams,
+  setSearchInputs: Dispatch<SetStateAction<StationSearchInputs>>,
   setFilters: Dispatch<SetStateAction<StationFilters>>
 ): void => {
+  /*
+    Check if the sorting option is valid, otherwise sort by name by default.
+  */
   const isValidSortingOption = (str: string | null): boolean => {
     return (
       str !== null &&
@@ -53,9 +58,12 @@ export const setStationBrowserDropdownOptions = (
     );
   };
 
-  const updatedFilters: StationFilters = {
+  const updatedSearchInputs: StationSearchInputs = {
     name: searchParams.get('name') || '',
     tag: searchParams.get('tag') || '',
+  };
+
+  const updatedFilters: StationFilters = {
     order: isValidSortingOption(searchParams.get('order'))
       ? (searchParams.get('order') as StationSortingOption)
       : 'name',
@@ -63,4 +71,5 @@ export const setStationBrowserDropdownOptions = (
     language: searchParams.get('language') || '',
   };
   setFilters({ ...updatedFilters });
+  setSearchInputs({ ...updatedSearchInputs });
 };

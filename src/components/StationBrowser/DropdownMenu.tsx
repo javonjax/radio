@@ -53,8 +53,8 @@ const DropdownMenu = ({ label, value, filters, setFilters, options, type }: Drop
         {longestLabel}
       </div>
 
-      <div className="flex items-center gap-2">
-        <label className="">{label}:</label>
+      <div className="flex w-full flex-1 items-center gap-2">
+        <label className="whitespace-nowrap">{label}:</label>
         <Menu modal={false} open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger
             style={
