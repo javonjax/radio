@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Favicon from './Favicon';
-import { StationContextType } from '../Providers/StationContext';
+import { StationContextType } from '../ContextProviders/StationContext';
 
 export interface StationListItemProps {
   station: RadioStation;
@@ -20,6 +20,7 @@ export interface StationListItemProps {
 }
 
 const StationListItem = ({ station, context }: StationListItemProps) => {
+  console.log(station);
   return (
     <li
       key={station.stationuuid}
@@ -121,7 +122,7 @@ const StationListItem = ({ station, context }: StationListItemProps) => {
 
       <div className="flex w-[20%] flex-wrap items-center justify-center gap-4">
         <button
-          className="rounded-xl bg-linear-(--accent-gradient) p-4"
+          className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
           onClick={() => {
             context?.setStation(station);
             context?.play();
@@ -129,10 +130,10 @@ const StationListItem = ({ station, context }: StationListItemProps) => {
         >
           <Play />
         </button>
-        <button className="rounded-xl bg-linear-(--accent-gradient) p-4">
+        <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
           <Heart />
         </button>
-        <button className="rounded-xl bg-linear-(--accent-gradient) p-4">
+        <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
           <Info />
         </button>
       </div>

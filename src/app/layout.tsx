@@ -5,8 +5,12 @@ import Header from '@/components/Shared/Header';
 import Footer from '@/components/Shared/Footer';
 import { ThemeProvider } from '@/components/Shared/ThemeProvider';
 import Player from '@/components/Shared/Player';
-import StationContextProvider from '@/components/Providers/StationContext';
+import StationContextProvider from '@/components/ContextProviders/StationContext';
 import IconGradient from '@/components/Shared/IconGradient';
+import {
+  LocationContext,
+  LocationContextProvider,
+} from '@/components/ContextProviders/LocationContext';
 
 // Fonts.
 const nunito = Nunito({
@@ -34,20 +38,22 @@ const RootLayout = ({
       <body
         className={`${nunito.variable} ${robotoMono.variable} relative flex min-h-screen w-full flex-col`}
       >
-        <StationContextProvider>
-          <ThemeProvider
-            attribute="class"
-            enableSystem
-            defaultTheme="system"
-            disableTransitionOnChange
-          >
-            <IconGradient />
-            <Header />
-            <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
-            <Footer />
-            <Player />
-          </ThemeProvider>
-        </StationContextProvider>
+        <LocationContextProvider>
+          <StationContextProvider>
+            <ThemeProvider
+              attribute="class"
+              enableSystem
+              defaultTheme="system"
+              disableTransitionOnChange
+            >
+              <IconGradient />
+              <Header />
+              <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
+              <Footer />
+              <Player />
+            </ThemeProvider>
+          </StationContextProvider>
+        </LocationContextProvider>
       </body>
     </html>
   );

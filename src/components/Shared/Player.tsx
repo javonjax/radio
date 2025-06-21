@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { StationContext, StationContextType } from '../Providers/StationContext';
+import { StationContext, StationContextType } from '../ContextProviders/StationContext';
 import { Heart, Info, PanelLeftClose, PanelRightClose, Pause, Play, X } from 'lucide-react';
 import { Slider } from '../ui/slider';
 

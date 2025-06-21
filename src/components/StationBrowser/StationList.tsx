@@ -2,7 +2,7 @@ import { RadioStation } from '@/lib/api/schemas';
 import React, { useContext, useEffect } from 'react';
 import StationListItem from './StationListItem';
 import StationListHeaders from './StationListHeaders';
-import { StationContext, StationContextType } from '../Providers/StationContext';
+import { StationContext, StationContextType } from '../ContextProviders/StationContext';
 
 export interface StationListProps {
   stations: RadioStation[];
