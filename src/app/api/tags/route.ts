@@ -10,6 +10,7 @@ import { TagsAPIResponse, Tag } from '../../../lib/api/schemas';
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
+    console.log(baseUrl, 'base');
     const searchTerm: string = request.nextUrl.searchParams.get('search') || '';
     const queryParams: URLSearchParams = request.nextUrl.searchParams;
     const filteredParams: URLSearchParams = new URLSearchParams();
