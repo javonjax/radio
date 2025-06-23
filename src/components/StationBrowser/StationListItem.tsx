@@ -16,10 +16,10 @@ import { StationContextType } from '../ContextProviders/StationContext';
 
 export interface StationListItemProps {
   station: RadioStation;
-  context?: StationContextType | undefined;
+  stationContext?: StationContextType | undefined;
 }
 
-const StationListItem = ({ station, context }: StationListItemProps) => {
+const StationListItem = ({ station, stationContext }: StationListItemProps) => {
   console.log(station);
   return (
     <li
@@ -124,8 +124,8 @@ const StationListItem = ({ station, context }: StationListItemProps) => {
         <button
           className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
           onClick={() => {
-            context?.setStation(station);
-            context?.play();
+            stationContext?.setStation(station);
+            stationContext?.play();
           }}
         >
           <Play />

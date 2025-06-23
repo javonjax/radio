@@ -15,7 +15,11 @@ const StationList = ({ stations }: StationListProps) => {
       <StationListHeaders />
       <ul className="flex flex-col">
         {stations.map((station) => (
-          <StationListItem key={station.stationuuid} station={station} context={stationContext} />
+          <StationListItem
+            key={station.stationuuid}
+            station={station}
+            stationContext={stationContext}
+          />
         ))}
       </ul>
     </div>
