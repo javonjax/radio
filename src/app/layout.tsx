@@ -5,10 +5,10 @@ import Header from '@/components/Shared/Header';
 import Footer from '@/components/Shared/Footer';
 import { ThemeProvider } from '@/components/Shared/ThemeProvider';
 import Player from '@/components/Shared/Player';
-import StationContextProvider from '@/components/ContextProviders/StationContext';
 import IconGradient from '@/components/Shared/IconGradient';
-import { LocationContextType } from '@/components/ContextProviders/LocationContext';
 import { Toaster } from '@/components/ui/sonner';
+import { StationContextProvider } from '@/components/ContextProviders/StationContext';
+import { LocationContextProvider } from '@/components/ContextProviders/LocationContext';
 
 // Fonts.
 const nunito = Nunito({
@@ -36,7 +36,7 @@ const RootLayout = ({
       <body
         className={`${nunito.variable} ${robotoMono.variable} relative flex min-h-screen w-full flex-col`}
       >
-        <LocationContextType>
+        <LocationContextProvider>
           <StationContextProvider>
             <ThemeProvider
               attribute="class"
@@ -52,7 +52,7 @@ const RootLayout = ({
               <Player />
             </ThemeProvider>
           </StationContextProvider>
-        </LocationContextType>
+        </LocationContextProvider>
       </body>
     </html>
   );

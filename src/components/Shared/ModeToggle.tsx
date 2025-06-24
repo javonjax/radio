@@ -21,7 +21,7 @@ export function ModeToggle() {
   return (
     <Button
       size="icon"
-      className="mx-4 cursor-pointer border-2"
+      className="cursor-pointer border-2"
       onClick={() => (darkMode ? setTheme('light') : setTheme('dark'))}
     >
       {darkMode ? (

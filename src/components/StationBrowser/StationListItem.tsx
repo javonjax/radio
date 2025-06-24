@@ -65,13 +65,16 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
 
           {station.name && !!station?.name?.length ? (
             !!station.clicktrend && station.clicktrend > 10 ? (
-              <div className="flex items-center">
-                <p>{station.name}</p>
-                <Flame
-                  height={20}
-                  width={20}
-                  className="text-accent ml-2 h-[20px] min-h-[20px] w-[20px] min-w-[20px]"
-                />
+              <div className="flex flex-col items-start">
+                <p>{station.name} </p>
+                <div className="flex items-center">
+                  <Flame
+                    height={20}
+                    width={20}
+                    className="text-accent mb-[2px] -ml-[2px] h-[16px] min-h-[18px] w-[16px] min-w-[16px]"
+                  />
+                  <span className="text-accent">Trending</span>
+                </div>
               </div>
             ) : (
               <p className="text-wrap">{station.name} </p>

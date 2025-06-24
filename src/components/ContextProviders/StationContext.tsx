@@ -14,10 +14,10 @@ export interface StationContextType {
 
 export const StationContext = createContext<StationContextType | undefined>(undefined);
 
-const StationContextProvider = ({ children }: { children: React.ReactNode }) => {
+export const StationContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [station, setStation] = useState<RadioStation | undefined>(undefined);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [volume, setVolume] = useState<number>(50);
+  const [volume, setVolume] = useState<number>(25);
 
   const play = (): void => {
     setIsPlaying(true);
@@ -35,5 +35,3 @@ const StationContextProvider = ({ children }: { children: React.ReactNode }) => 
     </StationContext.Provider>
   );
 };
-
-export default StationContextProvider;

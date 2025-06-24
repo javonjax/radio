@@ -33,7 +33,7 @@ import { StationContext, StationContextType } from '@/components/ContextProvider
 const HomePage = (): React.JSX.Element => {
   const locationContext = useContext<LocationContextType | undefined>(LocationContext);
   const stationContext = useContext<StationContextType | undefined>(StationContext);
-  const [tags, setTags] = useState<Tag[] | undefined>();
+  const [tags, setTags] = useState<Tag[]>([]);
   const [recentlyClickedStations, setRecentlyClickedStations] = useState<RadioStation[]>([]);
   const [localStations, setLocalStations] = useState<RadioStation[]>([]);
   console.log(locationContext);
@@ -44,6 +44,7 @@ const HomePage = (): React.JSX.Element => {
       const res: globalThis.Response = await fetch(
         'http://localhost:3000/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12'
       );
+      if (!res.ok) return null;
       const tags: Tag[] = await res.json();
       setTags(tags);
     };
@@ -51,6 +52,7 @@ const HomePage = (): React.JSX.Element => {
       const res: globalThis.Response = await fetch(
         'http://localhost:3000/api/stations/recent/clicked?limit=12'
       );
+      if (!res.ok) return null;
       const recentlyClickedStations: RadioStation[] = await res.json();
       setRecentlyClickedStations(recentlyClickedStations);
     };
@@ -101,179 +103,148 @@ const HomePage = (): React.JSX.Element => {
             className="w-full p-4"
           >
             <CarouselContent>
-              {recentlyClickedStations?.map((station) => (
-                <CarouselItem key={station.stationuuid} className="p-2 md:basis-1/2 lg:basis-1/3">
-                  <div className="m-2 h-full min-h-[400px] rounded-md border-2">
-                    <div className="flex h-full w-full flex-col justify-between p-6">
-                      <div className="flex flex-col gap-4">
-                        <div id="station-name" className="flex w-full items-center">
-                          {/*
+              {recentlyClickedStations.length > 0 &&
+                recentlyClickedStations?.map((station) => (
+                  <CarouselItem
+                    key={station.stationuuid}
+                    className="-mt-2 pb-2 md:basis-1/2 lg:basis-1/3"
+                  >
+                    <div className="m-2 h-full min-h-[400px] rounded-md border-2">
+                      <div className="flex h-full w-full flex-col justify-between p-6">
+                        <div className="flex flex-col gap-4">
+                          <div id="station-name" className="flex w-full items-center">
+                            {/*
                           Render a the favicon as link if both a homepage link and a favicon are available.
                           If there is a homepage link but no favicon, render an svg icon.
                           If there is a favicon but no homepage, render the favicon.
                         */}
-                          {station.homepage !== null && !!station.homepage.length ? (
-                            station.favicon !== null &&
-                            station.favicon !== 'null' &&
-                            !!station.favicon.length ? (
-                              <Favicon
-                                alt={`${station.name} icon`}
-                                src={station.favicon.trim()}
-                                height={40}
-                                width={40}
-                                key={`${station.name} icon`}
-                              />
-                            ) : (
-                              <a
-                                href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <SquareArrowOutUpRight className="mr-4" width={40} height={40} />
-                              </a>
-                            )
-                          ) : station.favicon !== null &&
-                            station.favicon !== 'null' &&
-                            station.favicon.length > 0 ? (
-                            <Image
-                              src={station.favicon.trim()}
-                              className="mr-4 min-w-[40px]"
-                              width={40}
-                              height={40}
-                              alt={`${station.name} icon`}
-                            />
-                          ) : null}
-
-                          {station.name && !!station?.name?.length ? (
-                            !!station.clicktrend && station.clicktrend > 10 ? (
-                              <div className="flex items-center">
-                                <p>{station.name}</p>
-                                <Flame
-                                  height={20}
-                                  width={20}
-                                  className="text-accent ml-2 h-[20px] min-h-[20px] w-[20px] min-w-[20px]"
+                            {station.homepage !== null && !!station.homepage.length ? (
+                              station.favicon !== null &&
+                              station.favicon !== 'null' &&
+                              !!station.favicon.length ? (
+                                <Favicon
+                                  alt={`${station.name} icon`}
+                                  src={station.favicon.trim()}
+                                  height={40}
+                                  width={40}
+                                  key={`${station.name} icon`}
                                 />
-                              </div>
-                            ) : (
-                              <p className="text-wrap">{station.name}</p>
-                            )
-                          ) : (
-                            <p>Station name not found</p>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-4">
-                          {station.country && (
-                            <div className="flex items-center gap-x-2">
-                              <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
-                              <p>Country: {station.country}</p>
-                            </div>
-                          )}
-                          {station.language && (
-                            <div className="flex items-center gap-x-2">
-                              <Languages size={20} />
-                              <p>
-                                Language:{' '}
-                                {station.language
-                                  .split(',')
-                                  .map((lang) => capitalize(lang))
-                                  .join(', ')}
-                              </p>
-                            </div>
-                          )}{' '}
-                          {!!station.clickcount && (
-                            <div className="flex items-center gap-x-2">
-                              <MousePointerClick size={20} />
-                              <p>Clicks: {station.clickcount}</p>
-                            </div>
-                          )}{' '}
-                          {station.votes !== null && (
-                            <div className="flex items-center gap-x-2">
-                              <Heart size={20} />
-                              <p>Favorites: {station.votes}</p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                              ) : (
+                                <a
+                                  href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <SquareArrowOutUpRight className="mr-4" width={40} height={40} />
+                                </a>
+                              )
+                            ) : station.favicon !== null &&
+                              station.favicon !== 'null' &&
+                              station.favicon.length > 0 ? (
+                              <Image
+                                src={station.favicon.trim()}
+                                className="mr-4 min-w-[40px]"
+                                width={40}
+                                height={40}
+                                alt={`${station.name} icon`}
+                              />
+                            ) : null}
 
-                      <div className="flex w-full flex-wrap items-center justify-center gap-4">
-                        <button
-                          className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
-                          onClick={() => {
-                            stationContext?.setStation(station);
-                            stationContext?.play();
-                          }}
-                        >
-                          <Play />
-                        </button>
-                        <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
-                          <Heart />
-                        </button>
-                        <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
-                          <Info />
-                        </button>
+                            {station.name && !!station?.name?.length ? (
+                              !!station.clicktrend && station.clicktrend > 10 ? (
+                                <div className="flex flex-col items-start">
+                                  <p>{station.name} </p>
+                                  <div className="flex items-center">
+                                    <Flame
+                                      height={20}
+                                      width={20}
+                                      className="text-accent mb-[2px] -ml-[2px] h-[16px] min-h-[18px] w-[16px] min-w-[16px]"
+                                    />
+                                    <span className="text-accent">Trending</span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <p className="text-wrap">{station.name}</p>
+                              )
+                            ) : (
+                              <p>Station name not found</p>
+                            )}
+                          </div>
+                          <div className="flex flex-col gap-4">
+                            {station.country && (
+                              <div className="flex items-center gap-x-2">
+                                <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
+                                <p>Country: {station.country}</p>
+                              </div>
+                            )}
+                            {station.language && (
+                              <div className="flex items-center gap-x-2">
+                                <Languages size={20} />
+                                <p>
+                                  Language:{' '}
+                                  {station.language
+                                    .split(',')
+                                    .map((lang) => capitalize(lang))
+                                    .join(', ')}
+                                </p>
+                              </div>
+                            )}{' '}
+                            {!!station.clickcount && (
+                              <div className="flex items-center gap-x-2">
+                                <MousePointerClick size={20} />
+                                <p>Clicks: {station.clickcount}</p>
+                              </div>
+                            )}{' '}
+                            {station.votes !== null && (
+                              <div className="flex items-center gap-x-2">
+                                <Heart size={20} />
+                                <p>Favorites: {station.votes}</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex w-full flex-wrap items-center justify-center gap-4">
+                          <button
+                            className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
+                            onClick={() => {
+                              stationContext?.setStation(station);
+                              stationContext?.play();
+                            }}
+                          >
+                            <Play />
+                          </button>
+                          <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
+                            <Heart />
+                          </button>
+                          <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
+                            <Info />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CarouselItem>
-              ))}
+                  </CarouselItem>
+                ))}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
-          {/* <Carousel className="flex h-full w-[80%] items-center border-2 border-red-500">
-            <CarouselContent className="bg-accent">
-              {recentlyClickedStations.map((station) => (
-                <CarouselItem key={station.stationuuid} className="lg:basis-1/2 xl:basis-1/3">
-                  <div className="flex flex-col items-center justify-center border-2 bg-green-500">
-                    <div className="flex aspect-square items-center justify-center">
-                      {station.name}
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel> */}
-          {/* <Carousel className="flex h-full w-full items-center justify-center border-2 bg-green-400">
-            <CarouselContent className="bg-accent flex h-full w-[90%]">
-              {recentlyClickedStations.map((station) => {
-                return (
-                  <CarouselItem
-                    key={station.stationuuid}
-                    className="flex h-full border-2 border-red-500 text-wrap"
-                  >
-                    <div className="h-full w-full bg-yellow-300">
-                      {station.name}
-                      {station.name}
-                      {station.name}
-                      {station.name}
-                      {station.name}
-                      {station.name}
-                      {station.name}
-                    </div>
-                  </CarouselItem>
-                );
-              })}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel> */}
         </div>
       </div>
       <div className="col-span-full flex min-h-[500px] flex-col items-center gap-6 xl:col-span-6">
         <h2 className="text-heading mr-auto text-xl">Popular categories</h2>
         <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-3">
-          {tags?.map((tag) => (
-            <a
-              key={tag.name}
-              className="hover:text-accent cursor-pointer rounded-md border-2 p-4"
-              href={`/stations?tag=${tag.name}&order=clickcount`}
-            >
-              <h3>{capitalize(tag?.name || '')}</h3>
-              <h4>{tag.stationcount} live stations</h4>
-            </a>
-          ))}
+          {tags.length > 0 &&
+            tags?.map((tag) => (
+              <a
+                key={tag.name}
+                className="hover:text-accent cursor-pointer rounded-md border-2 p-4"
+                href={`/stations?tag=${tag.name}&order=clickcount`}
+              >
+                <h3>{capitalize(tag?.name || '')}</h3>
+                <h4>{tag.stationcount} live stations</h4>
+              </a>
+            ))}
         </div>
         <a className="hover:text-accent rounded-md border-2 p-4" href="/stations?order=clickcount">
           Browse all

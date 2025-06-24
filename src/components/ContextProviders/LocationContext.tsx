@@ -15,7 +15,7 @@ export interface LocationContextType {
 // Tracks and updates location data.
 export const LocationContext = createContext<LocationContextType | undefined>(undefined);
 
-export const LocationContextType = ({ children }: { children: React.ReactNode }) => {
+export const LocationContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [location, setLocation] = useState<Coordinates>();
   const [error, setError] = useState<string>();
 
