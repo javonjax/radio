@@ -1,15 +1,27 @@
 import { promises as dns, SrvRecord } from 'dns';
 
 let baseUrl: string | null = null;
+const goodBaseUrls = new Set<string>();
 
 /*
   GET all available radio-browser server urls.
 */
-export const getRadioBrowserBaseUrls = async (): Promise<string[]> => {
+export const getRadioBrowserBaseUrls = async (): Promise<Set<string>> => {
   try {
     const servers: SrvRecord[] = await dns.resolveSrv('_api._tcp.radio-browser.info');
     servers.sort();
-    return servers.map((host) => 'https://' + host.name + '/json');
+    const serverUrls: string[] = servers.map((host) => 'https://' + host.name + '/json');
+    // Quickly test each server.
+    for (const url of serverUrls) {
+      const isWorking: boolean = await isServerWorking(url);
+      if (isWorking) {
+        goodBaseUrls.add(url);
+      }
+    }
+    console.log('goodurls', goodBaseUrls);
+    console.log('servers', servers);
+    console.log('serverurls', serverUrls);
+    return goodBaseUrls;
   } catch (error) {
     if (error instanceof Error) {
       console.error('DNS lookup for radio-browser servers failed:/n', error);
@@ -23,11 +35,11 @@ export const getRadioBrowserBaseUrls = async (): Promise<string[]> => {
 */
 export const getRandomRadioBrowserBaseUrl = async (): Promise<string> => {
   try {
-    const servers: string[] = await getRadioBrowserBaseUrls();
-    if (!servers.length) {
+    const servers: Set<string> = await getRadioBrowserBaseUrls();
+    if (!servers.size) {
       throw new RadioBrowserServerError('Failed to find an active server.');
     }
-    const randomServer: string = servers[Math.floor(Math.random() * (servers.length - 1))];
+    const randomServer: string = Array.from(servers)[Math.floor(Math.random() * servers.size)];
     return randomServer;
   } catch (error) {
     if (error instanceof Error) {
@@ -54,6 +66,22 @@ export const getBaseUrl = async (): Promise<string> => {
       console.error(error.message);
     }
     throw error;
+  }
+};
+
+/* 
+  Test a base url to make sure it is actually responding to requests.
+*/
+const isServerWorking = async (serverUrl: string): Promise<boolean> => {
+  try {
+    const res: globalThis.Response = await fetch(`${serverUrl}/stations?limit=1`);
+    if (!res.ok) {
+      throw new Error(`Failed to establish connection to ${serverUrl}`);
+    }
+    return true;
+  } catch (error) {
+    console.warn(error);
+    return false;
   }
 };
 
