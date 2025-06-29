@@ -1,7 +1,12 @@
 'use client';
 import { RadioStation, Tag } from '../lib/api/schemas';
 import Header from '../components/HomePage/Header';
-import { capitalize } from '@/lib/utils';
+import {
+  capitalize,
+  handleAPIError,
+  handleAPIFetch,
+  toastServerConnectionError,
+} from '@/lib/utils';
 import { useContext, useEffect, useState } from 'react';
 import {
   LocationContext,
@@ -31,33 +36,41 @@ import Image from 'next/image';
 import { StationContext, StationContextType } from '@/components/ContextProviders/StationContext';
 
 const HomePage = (): React.JSX.Element => {
+  const thisComponent: string = HomePage.name;
   const locationContext = useContext<LocationContextType | undefined>(LocationContext);
   const stationContext = useContext<StationContextType | undefined>(StationContext);
   const [tags, setTags] = useState<Tag[]>([]);
   const [recentlyClickedStations, setRecentlyClickedStations] = useState<RadioStation[]>([]);
-  const [localStations, setLocalStations] = useState<RadioStation[]>([]);
-  console.log(locationContext);
+  // const [localStations, setLocalStations] = useState<RadioStation[]>([]);
 
   // Init.
   useEffect(() => {
-    const fetchMostPopularTags = async () => {
-      const res: globalThis.Response = await fetch(
-        'http://localhost:3000/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12'
-      );
-      if (!res.ok) return null;
-      const tags: Tag[] = await res.json();
-      setTags(tags);
-    };
-    const fetchRecentlyClickedStations = async () => {
-      const res: globalThis.Response = await fetch(
-        'http://localhost:3000/api/stations/recent/clicked?limit=12'
-      );
-      if (!res.ok) return null;
-      const recentlyClickedStations: RadioStation[] = await res.json();
-      setRecentlyClickedStations(recentlyClickedStations);
-    };
-    fetchMostPopularTags();
-    fetchRecentlyClickedStations();
+    try {
+      const fetchMostPopularTags = async () => {
+        const url: string =
+          'http://localhost:3000/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12';
+        const res: globalThis.Response = await handleAPIFetch(await fetch(url), thisComponent);
+        const tags: Tag[] = await res.json();
+        setTags(tags);
+      };
+
+      const fetchRecentlyClickedStations = async () => {
+        const url: string = 'http://localhost:3000/api/stations/recent/clicked?limit=12';
+        const res: globalThis.Response = await handleAPIFetch(await fetch(url), thisComponent);
+        const recentlyClickedStations: RadioStation[] = await res.json();
+        setRecentlyClickedStations(recentlyClickedStations);
+      };
+
+      fetchMostPopularTags();
+      fetchRecentlyClickedStations();
+    } catch (error) {
+      if (error instanceof Error) {
+        handleAPIError(error, thisComponent);
+      } else {
+        console.warn(`Unknown error in ${thisComponent}.`);
+      }
+      toastServerConnectionError();
+    }
   }, []);
 
   // Get stations near the user.

@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -49,10 +50,21 @@ export const handleAPIFetch = async (
   return res;
 };
 
+/*
+  Handle errors thrown by frontend API fetches.
+*/
 export const handleAPIError = (error: unknown, context: string): void => {
   if (error instanceof APIError) {
     console.warn(`Status: ${error.status}`, error.message);
   } else {
     console.warn(`API fetch error occured in ${context}.`);
   }
+};
+
+export const toastServerConnectionError = (): void => {
+  toast.warning('Uh-oh.', {
+    position: 'top-center',
+    duration: 7000,
+    description: 'There was an issue connecting to the servers.',
+  });
 };
