@@ -4,7 +4,7 @@ import './globals.css';
 import Header from '@/components/Shared/Header';
 import Footer from '@/components/Shared/Footer';
 import { ThemeProvider } from '@/components/Shared/ThemeProvider';
-import Player from '@/components/Shared/Player';
+import Player from '@/components/Shared/Player/Player';
 import IconGradient from '@/components/Shared/IconGradient';
 import { Toaster } from '@/components/ui/sonner';
 import { StationContextProvider } from '@/components/ContextProviders/StationContext';

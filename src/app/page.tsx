@@ -114,10 +114,10 @@ const HomePage = (): React.JSX.Element => {
                         <div className="flex flex-col gap-4">
                           <div id="station-name" className="flex w-full items-center">
                             {/*
-                          Render a the favicon as link if both a homepage link and a favicon are available.
-                          If there is a homepage link but no favicon, render an svg icon.
-                          If there is a favicon but no homepage, render the favicon.
-                        */}
+                              Render the favicon as link if both a homepage link and a favicon are available.
+                              If there is a homepage link but no favicon, render the SquareArrowOutUpRight icon.
+                              If there is a favicon but no homepage, render the favicon.
+                            */}
                             {station.homepage !== null && !!station.homepage.length ? (
                               station.favicon !== null &&
                               station.favicon !== 'null' &&
@@ -135,17 +135,17 @@ const HomePage = (): React.JSX.Element => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <SquareArrowOutUpRight className="mr-4" width={40} height={40} />
+                                  <SquareArrowOutUpRight className="mr-4 h-[40px] min-h-[40px] w-[40px] min-w-[40px]" />
                                 </a>
                               )
                             ) : station.favicon !== null &&
                               station.favicon !== 'null' &&
                               station.favicon.length > 0 ? (
                               <Image
-                                src={station.favicon.trim()}
-                                className="mr-4 min-w-[40px]"
                                 width={40}
                                 height={40}
+                                src={station.favicon.trim()}
+                                className="mr-4 h-[40px] min-h-[40px] w-[40px] min-w-[40px]"
                                 alt={`${station.name} icon`}
                               />
                             ) : null}
@@ -155,11 +155,7 @@ const HomePage = (): React.JSX.Element => {
                                 <div className="flex flex-col items-start">
                                   <p>{station.name} </p>
                                   <div className="flex items-center">
-                                    <Flame
-                                      height={20}
-                                      width={20}
-                                      className="text-accent mb-[2px] -ml-[2px] h-[16px] min-h-[18px] w-[16px] min-w-[16px]"
-                                    />
+                                    <Flame className="text-accent mb-[2px] -ml-[2px] h-[16px] min-h-[16px] w-[16px] min-w-[16px]" />
                                     <span className="text-accent">Trending</span>
                                   </div>
                                 </div>
@@ -173,13 +169,13 @@ const HomePage = (): React.JSX.Element => {
                           <div className="flex flex-col gap-4">
                             {station.country && (
                               <div className="flex items-center gap-x-2">
-                                <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
+                                <MapPinned className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
                                 <p>Country: {station.country}</p>
                               </div>
                             )}
                             {station.language && (
                               <div className="flex items-center gap-x-2">
-                                <Languages size={20} />
+                                <Languages className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
                                 <p>
                                   Language:{' '}
                                   {station.language
@@ -191,13 +187,13 @@ const HomePage = (): React.JSX.Element => {
                             )}{' '}
                             {!!station.clickcount && (
                               <div className="flex items-center gap-x-2">
-                                <MousePointerClick size={20} />
+                                <MousePointerClick className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
                                 <p>Clicks: {station.clickcount}</p>
                               </div>
                             )}{' '}
                             {station.votes !== null && (
                               <div className="flex items-center gap-x-2">
-                                <Heart size={20} />
+                                <Heart className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
                                 <p>Favorites: {station.votes}</p>
                               </div>
                             )}
@@ -212,13 +208,13 @@ const HomePage = (): React.JSX.Element => {
                               stationContext?.play();
                             }}
                           >
-                            <Play />
+                            <Play className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
                           </button>
                           <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
-                            <Heart />
+                            <Heart className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
                           </button>
                           <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
-                            <Info />
+                            <Info className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
                           </button>
                         </div>
                       </div>

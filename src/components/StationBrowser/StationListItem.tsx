@@ -20,7 +20,6 @@ export interface StationListItemProps {
 }
 
 const StationListItem = ({ station, stationContext }: StationListItemProps) => {
-  console.log(station);
   return (
     <li
       key={station.stationuuid}
@@ -93,7 +92,7 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
         )}
         {station.language && (
           <div className="flex items-center gap-x-2">
-            <Languages size={20} />
+            <Languages height={20} width={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
             <p>
               Language:{' '}
               {station.language

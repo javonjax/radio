@@ -7,8 +7,10 @@ import { Country, Language, RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserDropdownOptions, setStationBrowserSearchParams } from './utils';
 import { StationFilters, StationSearchInputs } from './schemas';
+import { handleAPIError, handleAPIFetch } from '@/lib/utils';
 
 const StationsPage = (): React.JSX.Element => {
+  const thisComponent: string = StationsPage.name;
   const router: AppRouterInstance = useRouter();
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
   const [stations, setStations] = useState<RadioStation[]>([]);
@@ -28,60 +30,72 @@ const StationsPage = (): React.JSX.Element => {
 
   // Init.
   useEffect(() => {
-    console.log('init fetch');
-    const fetchCountries = async (): Promise<void> => {
-      const url: string = `http://localhost:3000/api/countries`;
-      const res: globalThis.Response = await fetch(url);
-      const data: Country[] = await res.json();
-      setCountries(data);
-      const longestLabel: string = data.reduce((a, b) =>
-        a.name.length > b.name.length ? a : b
-      ).name;
-      setLongestCountry(longestLabel);
-    };
+    try {
+      const fetchCountries = async (): Promise<void> => {
+        const url: string = `http://localhost:3000/api/countries`;
+        const res: globalThis.Response = await handleAPIFetch(await fetch(url), thisComponent);
+        const data: Country[] = await res.json();
+        setCountries(data);
+        const longestLabel: string = data.reduce((a, b) =>
+          a.name.length > b.name.length ? a : b
+        ).name;
+        setLongestCountry(longestLabel);
+      };
 
-    const fetchLanguages = async (): Promise<void> => {
-      const url: string = `http://localhost:3000/api/languages`;
-      const res: globalThis.Response = await fetch(url);
-      const data: Language[] = await res.json();
-      setLanguages(data);
-      const longestLabel: string = data.reduce((a, b) =>
-        a.name.length > b.name.length ? a : b
-      ).name;
-      setLongestLanguage(longestLabel);
-    };
+      const fetchLanguages = async (): Promise<void> => {
+        const url: string = `http://localhost:3000/api/languages`;
+        const res: globalThis.Response = await handleAPIFetch(await fetch(url), thisComponent);
+        const data: Language[] = await res.json();
+        setLanguages(data);
+        const longestLabel: string = data.reduce((a, b) =>
+          a.name.length > b.name.length ? a : b
+        ).name;
+        setLongestLanguage(longestLabel);
+      };
 
-    fetchCountries();
-    fetchLanguages();
-    handleSearch();
+      fetchCountries();
+      fetchLanguages();
+      handleSearch();
+    } catch (error) {
+      if (error instanceof Error) {
+        handleAPIError(error, thisComponent);
+      } else {
+        console.warn(`Unknown error in ${thisComponent}.`);
+      }
+    }
   }, []);
 
   // Event handlers.
   useEffect(() => {
-    console.log('param fetch');
-    const fetchStations = async (): Promise<void> => {
-      console.log(searchParams);
-      let url: string = `http://localhost:3000/api/stations/search?limit=100&hidebroken=true`;
-      const paramString: string = searchParams.toString();
-      console.log('lowercase params', paramString);
-      if (paramString.length) {
-        url += `&${paramString}`;
-      }
-      /* 
+    try {
+      const fetchStations = async (): Promise<void> => {
+        let url: string = `http://localhost:3000/api/stations/search?limit=100&hidebroken=true`;
+        const paramString: string = searchParams.toString();
+        if (paramString.length) {
+          url += `&${paramString}`;
+        }
+        /* 
         Numerical data from the radio-browser API is sorted in ascending order.
         Because of this all sorting, with the exception of name based alphabetical sorting, should be reversed.
         Add the param 'reverse=true' to retrieve numerical data in descending order. 
       */
-      if (!searchParams.toString().includes('order=name')) {
-        url += '&reverse=true';
-      }
-      const res = await fetch(url);
-      const data = await res.json();
-      setStations(data);
-    };
+        if (!searchParams.toString().includes('order=name')) {
+          url += '&reverse=true';
+        }
+        const res: globalThis.Response = await handleAPIFetch(await fetch(url), thisComponent);
+        const data = await res.json();
+        setStations(data);
+      };
 
-    setStationBrowserDropdownOptions(searchParams, setSearchInputs, setFilters);
-    fetchStations();
+      setStationBrowserDropdownOptions(searchParams, setSearchInputs, setFilters);
+      fetchStations();
+    } catch (error) {
+      if (error instanceof Error) {
+        handleAPIError(error, thisComponent);
+      } else {
+        console.warn(`Unknown error in ${thisComponent}.`);
+      }
+    }
   }, [searchParams]);
 
   useEffect(() => {

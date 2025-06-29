@@ -20,3 +20,39 @@ export const capitalize = (str: string): string => {
   }
   return res.join('');
 };
+
+/*
+  Custom frontend error class.
+*/
+export class APIError extends Error {
+  public status: number;
+  constructor(message: string = 'Backend API error.', status: number = 500) {
+    super(message);
+    this.status = status;
+    this.name = 'APIError';
+  }
+}
+
+/*
+  Handle API fetches and create error object if necessary.
+*/
+export const handleAPIFetch = async (
+  res: globalThis.Response,
+  context: string
+): Promise<globalThis.Response> => {
+  if (!res.ok) {
+    const body = await res.json();
+    const message: string = body?.error || 'API fetch error.';
+    const status: number = body?.status ?? res.status;
+    throw new APIError(`${context}: ${message}.`, status);
+  }
+  return res;
+};
+
+export const handleAPIError = (error: unknown, context: string): void => {
+  if (error instanceof APIError) {
+    console.warn(`Status: ${error.status}`, error.message);
+  } else {
+    console.warn(`API fetch error occured in ${context}.`);
+  }
+};
