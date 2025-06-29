@@ -26,7 +26,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     return NextResponse.json({ message: `Vote count updated for stationUUID: ${stationUUID}` });
   } catch (error) {
     let message: string = 'Internal server error';
-    let status: number | undefined = undefined;
+    let status: number = 500;
 
     if (error instanceof Error) {
       message = error.message;

@@ -10,7 +10,7 @@ export const GET = async () => {
     return Response.json({ server: res });
   } catch (error) {
     let message: string = 'Internal server error';
-    let status: number | undefined = undefined;
+    let status: number = 500;
 
     if (error instanceof Error) {
       message = error.message;

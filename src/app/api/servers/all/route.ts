@@ -4,13 +4,13 @@ import { getRadioBrowserBaseUrls, HTTPError } from '../../../../lib/api/utils';
 /*
   GET all available radio-browser server urls.
 */
-export const GET = async () => {
+export const GET = async (): Promise<NextResponse> => {
   try {
-    const res: string[] = await getRadioBrowserBaseUrls();
+    const res: Set<string> = await getRadioBrowserBaseUrls();
     return NextResponse.json({ servers: res });
   } catch (error) {
     let message: string = 'Internal server error';
-    let status: number | undefined = undefined;
+    let status: number = 500;
 
     if (error instanceof Error) {
       message = error.message;
