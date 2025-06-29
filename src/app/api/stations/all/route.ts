@@ -27,7 +27,7 @@ export const GET = async (): Promise<NextResponse> => {
     return NextResponse.json(allStations);
   } catch (error) {
     let message: string = 'Internal server error';
-    let status: number | undefined = undefined;
+    let status: number = 500;
 
     if (error instanceof Error) {
       message = error.message;
