@@ -21,13 +21,13 @@ export function ModeToggle() {
   return (
     <Button
       size="icon"
-      className="mx-4 cursor-pointer border-2"
+      className="cursor-pointer border-2"
       onClick={() => (darkMode ? setTheme('light') : setTheme('dark'))}
     >
       {darkMode ? (
-        <Moon className="absolute h-[1.2rem] w-[1.2rem]" />
-      ) : (
         <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all" />
+      ) : (
+        <Moon className="absolute h-[1.2rem] w-[1.2rem]" />
       )}
     </Button>
   );

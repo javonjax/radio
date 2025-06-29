@@ -25,7 +25,7 @@ const Favicon = ({ src, className, width, height, alt }: FaviconProps) => {
     <a href={src} target="_blank" rel="noopener noreferrer">
       <Image
         src={src}
-        className={`mr-4 min-w-[40px] ${className}`}
+        className={`mr-4 max-h-[40px] min-h-[40px] max-w-[40px] min-w-[40px] ${className}`}
         width={width}
         height={height}
         alt={alt}

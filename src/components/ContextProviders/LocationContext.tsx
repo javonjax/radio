@@ -6,14 +6,14 @@ export type Coordinates = {
   longitude: number;
 };
 
-export interface LocationContextProvider {
+export interface LocationContextType {
   location?: Coordinates;
   error?: string;
   requestLocation: () => Promise<Coordinates>;
 }
 
 // Tracks and updates location data.
-export const LocationContext = createContext<LocationContextProvider | undefined>(undefined);
+export const LocationContext = createContext<LocationContextType | undefined>(undefined);
 
 export const LocationContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [location, setLocation] = useState<Coordinates>();
