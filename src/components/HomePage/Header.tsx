@@ -1,6 +1,7 @@
 import { RadioStation } from '@/lib/api/schemas';
 import { useContext } from 'react';
 import { StationContext, StationContextType } from '../ContextProviders/StationContext';
+import Link from 'next/link';
 
 const Header = () => {
   const stationContext = useContext<StationContextType | undefined>(StationContext);
@@ -40,12 +41,12 @@ const Header = () => {
         </h2>
       </div>
       <div className="col-span-full flex items-center justify-center gap-6">
-        <a
+        <Link
           className="rounded-md bg-linear-(--accent-gradient) p-4"
           href="/stations?order=clickcount"
         >
           Browse Stations
-        </a>
+        </Link>
         <button className="cursor-pointer rounded-md border-2 p-4" onClick={fetchRandomStation}>
           I&apos;m feeling lucky
         </button>

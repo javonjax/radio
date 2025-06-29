@@ -16,7 +16,9 @@ const Favicon = ({ src, className, width, height, alt }: FaviconProps) => {
   if (imgError) {
     return (
       <a href={src} target="_blank" rel="noopener noreferrer">
-        <SquareArrowOutUpRight className={`mr-4 ${className}`} width={width} height={height} />
+        <SquareArrowOutUpRight
+          className={`mr-4 ${className} h-[${height}px] w-[${width}px] min-h-[${height}px] min-w-[${width}px]`}
+        />
       </a>
     );
   }
@@ -25,7 +27,7 @@ const Favicon = ({ src, className, width, height, alt }: FaviconProps) => {
     <a href={src} target="_blank" rel="noopener noreferrer">
       <Image
         src={src}
-        className={`mr-4 max-h-[40px] min-h-[40px] max-w-[40px] min-w-[40px] ${className}`}
+        className={`mr-4 h-[${height}px] w-[${width}px] min-h-[${height}px] min-w-[${width}px] ${className}`}
         width={width}
         height={height}
         alt={alt}
