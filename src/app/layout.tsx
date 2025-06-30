@@ -9,6 +9,7 @@ import IconGradient from '@/components/Shared/IconGradient';
 import { Toaster } from '@/components/ui/sonner';
 import { StationContextProvider } from '@/components/ContextProviders/StationContext';
 import { LocationContextProvider } from '@/components/ContextProviders/LocationContext';
+import QueryProvider from '@/components/QueryProvider/QueryProvider';
 
 // Fonts.
 const nunito = Nunito({
@@ -36,23 +37,25 @@ const RootLayout = ({
       <body
         className={`${nunito.variable} ${robotoMono.variable} relative flex min-h-screen w-full flex-col`}
       >
-        <LocationContextProvider>
-          <StationContextProvider>
-            <ThemeProvider
-              attribute="class"
-              enableSystem
-              defaultTheme="system"
-              disableTransitionOnChange
-            >
-              <IconGradient />
-              <Toaster richColors closeButton />
-              <Header />
-              <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
-              <Footer />
-              <Player />
-            </ThemeProvider>
-          </StationContextProvider>
-        </LocationContextProvider>
+        <QueryProvider>
+          <LocationContextProvider>
+            <StationContextProvider>
+              <ThemeProvider
+                attribute="class"
+                enableSystem
+                defaultTheme="system"
+                disableTransitionOnChange
+              >
+                <IconGradient />
+                <Toaster richColors closeButton visibleToasts={1} />
+                <Header />
+                <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
+                <Footer />
+                <Player />
+              </ThemeProvider>
+            </StationContextProvider>
+          </LocationContextProvider>
+        </QueryProvider>
       </body>
     </html>
   );

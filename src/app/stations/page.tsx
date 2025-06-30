@@ -7,7 +7,7 @@ import { Country, Language, RadioStation } from '../../lib/api/schemas';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserDropdownOptions, setStationBrowserSearchParams } from './utils';
 import { StationFilters, StationSearchInputs } from './schemas';
-import { handleAPIError, handleAPIFetch } from '@/lib/utils';
+import { handleAPIError, handleAPIFetch, toastServerConnectionError } from '@/lib/utils';
 
 const StationsPage = (): React.JSX.Element => {
   const thisComponent: string = StationsPage.name;
@@ -62,6 +62,7 @@ const StationsPage = (): React.JSX.Element => {
       } else {
         console.warn(`Unknown error in ${thisComponent}.`);
       }
+      toastServerConnectionError();
     }
   }, []);
 
@@ -95,6 +96,7 @@ const StationsPage = (): React.JSX.Element => {
       } else {
         console.warn(`Unknown error in ${thisComponent}.`);
       }
+      toastServerConnectionError();
     }
   }, [searchParams]);
 
