@@ -37,15 +37,12 @@ export class APIError extends Error {
 /*
   Handle API fetches and create error object if necessary.
 */
-export const handleAPIFetch = async (
-  res: globalThis.Response,
-  context: string
-): Promise<globalThis.Response> => {
+export const handleAPIFetch = async (res: globalThis.Response): Promise<globalThis.Response> => {
   if (!res.ok) {
     const body = await res.json();
     const message: string = body?.error || 'API fetch error.';
     const status: number = body?.status ?? res.status;
-    throw new APIError(`${context}: ${message}.`, status);
+    throw new APIError(message, status);
   }
   return res;
 };
@@ -53,18 +50,22 @@ export const handleAPIFetch = async (
 /*
   Handle errors thrown by frontend API fetches.
 */
-export const handleAPIError = (error: unknown, context: string): void => {
+export const handleAPIError = (error: unknown): void => {
+  let toastDescription: string = '';
   if (error instanceof APIError) {
-    console.warn(`Status: ${error.status}`, error.message);
+    console.warn(error.message);
+    toastDescription = error.message;
   } else {
-    console.warn(`API fetch error occured in ${context}.`);
+    console.warn(`API fetch error.`);
+    toastDescription = 'There was an issue connecting to the servers.';
   }
+  warningToast('Uh-oh.', toastDescription);
 };
 
-export const toastServerConnectionError = (): void => {
-  toast.warning('Uh-oh.', {
+export const warningToast = (message: string = 'Uh-oh.', description: string): void => {
+  toast.warning(message, {
     position: 'top-center',
     duration: 7000,
-    description: 'There was an issue connecting to the servers.',
+    description: description,
   });
 };
