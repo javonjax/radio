@@ -8,27 +8,13 @@ import {
   LocationContextType,
 } from '@/components/ContextProviders/LocationContext';
 import {
-  Flame,
-  Heart,
-  Info,
-  Languages,
-  MapPinned,
-  MousePointerClick,
-  Navigation,
-  Play,
-  SquareArrowOutUpRight,
-  Tag as TagIcon,
-} from 'lucide-react';
-import { toast } from 'sonner';
-import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import Favicon from '@/components/StationBrowser/Favicon';
-import Image from 'next/image';
+
 import { StationContext, StationContextType } from '@/components/ContextProviders/StationContext';
 
 import { useQuery } from '@tanstack/react-query';
