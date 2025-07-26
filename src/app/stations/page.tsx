@@ -12,8 +12,8 @@ import { useFetchCountries } from './hooks/useFetchCountries';
 import { useFetchLanguages } from './hooks/useFetchLanguages';
 import { useFetchStations } from './hooks/useFetchStations';
 
-const StationsPage = (): React.JSX.Element => {
-  const thisComponent: string = StationsPage.name;
+const StationBrowserPage = (): React.JSX.Element => {
+  const thisComponent: string = StationBrowserPage.name;
   const router: AppRouterInstance = useRouter();
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
   const [searchInputs, setSearchInputs] = useState<StationSearchInputs>({
@@ -111,4 +111,4 @@ const StationsPage = (): React.JSX.Element => {
   );
 };
 
-export default StationsPage;
+export default StationBrowserPage;
