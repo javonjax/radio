@@ -2,7 +2,7 @@ import { DropdownMenuOption, StationFilters, StationSearchInputs } from '@/app/s
 import { Country, Language } from '@/lib/api/schemas';
 import { Search } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
-import Combobox from '../ui/Custom/Combobox/Combobox';
+import Combobox from '../ui/Custom/Combobox';
 import DropdownMenu from './DropdownMenu';
 
 export interface FiltersProps {
@@ -94,7 +94,7 @@ const Filters = ({
           type="order"
         />
 
-        {countries.length > 0 && (
+        {countries && countries.length > 0 && (
           <Combobox
             label="Country"
             options={countries}
@@ -106,7 +106,7 @@ const Filters = ({
             longestLabel={longestCountryLabel}
           />
         )}
-        {languages.length > 0 && (
+        {languages && languages.length > 0 && (
           <Combobox
             label="Language"
             options={languages}

@@ -10,7 +10,9 @@ export const getRadioBrowserBaseUrls = async (): Promise<Set<string>> => {
   try {
     const servers: SrvRecord[] = await dns.resolveSrv('_api._tcp.radio-browser.info');
     servers.sort();
-    const serverUrls: string[] = servers.map((host) => 'https://' + host.name + '/json');
+    const serverUrls: string[] = servers
+      .filter((host) => host.name[0] === 'd') // NOTE: only 'de' servers are working for now. Update server refetch logic.
+      .map((host) => 'https://' + host.name + '/json');
     // Quickly test each server.
     for (const url of serverUrls) {
       const isWorking: boolean = await isServerWorking(url);
@@ -37,7 +39,9 @@ export const getRandomRadioBrowserBaseUrl = async (): Promise<string> => {
   try {
     const servers: Set<string> = await getRadioBrowserBaseUrls();
     if (!servers.size) {
-      throw new RadioBrowserServerError('Failed to find an active server.');
+      throw new RadioBrowserServerError(
+        'Failed to find an active radio-browser API server.\nPlease try again later.'
+      );
     }
     const randomServer: string = Array.from(servers)[Math.floor(Math.random() * servers.size)];
     return randomServer;
@@ -57,7 +61,9 @@ export const getBaseUrl = async (): Promise<string> => {
   try {
     const res: string = await getRandomRadioBrowserBaseUrl();
     if (!res.length) {
-      throw new RadioBrowserServerError('Failed to find an active server.');
+      throw new RadioBrowserServerError(
+        'Failed to find an active radio-browser API server.\nPlease try again later.'
+      );
     }
     baseUrl = res;
     return baseUrl;

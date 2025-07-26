@@ -13,27 +13,26 @@ export const setStationBrowserSearchParams = (
 ): void => {
   const searchParams: string[] = [];
   if (searchInputs.name.length) {
-    searchParams.push(`name=${searchInputs.name}`);
+    searchParams.push(`name=${encodeURIComponent(searchInputs.name)}`);
   }
 
   if (searchInputs.tag.length) {
-    searchParams.push(`tag=${searchInputs.tag}`);
+    searchParams.push(`tag=${encodeURIComponent(searchInputs.tag)}`);
   }
 
   if (filters.country.length) {
-    searchParams.push(`country=${filters.country}`);
+    searchParams.push(`country=${encodeURIComponent(filters.country)}`);
   }
 
   if (filters.language.length) {
-    searchParams.push(`language=${filters.language}`);
+    searchParams.push(`language=${encodeURIComponent(filters.language)}`);
   }
 
   if (filters.order.length) {
-    searchParams.push(`order=${filters.order}`);
+    searchParams.push(`order=${encodeURIComponent(filters.order)}`);
   }
 
   const searchParamsString: string = `?${searchParams.join('&')}`;
-  console.log('paramstring', searchParamsString);
   router.push(searchParamsString);
 };
 

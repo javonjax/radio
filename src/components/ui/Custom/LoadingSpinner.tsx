@@ -2,7 +2,7 @@ import { Spinner } from '../spinner';
 
 const LoadingSpinner = () => {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-full w-full grow items-center justify-center">
       <Spinner size="large" />
     </div>
   );
