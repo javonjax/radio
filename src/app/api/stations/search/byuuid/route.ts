@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, SchemaError } from '../../../../lib/api/utils';
-import { RadioAPIFetch } from '../../../../lib/api/utils';
-import { RadioStation, RadioStationsAPIResponse } from '../../../../lib/api/schemas';
+import { getBaseUrl, HTTPError, SchemaError } from '../../../../../lib/api/utils';
+import { RadioAPIFetch } from '../../../../../lib/api/utils';
+import { RadioStation, RadioStationsAPIResponse } from '../../../../../lib/api/schemas';
 
 /*
-  GET stations using query params.
-  Possible params listed here: https://fi1.api.radio-browser.info/#Advanced_station_search
+  GET stations by uuid.
+  Params:
+    uuids: comma-separated list of UUIDs (required)
 */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
     const queryParams: string = request.nextUrl.searchParams.toString();
-    const url: string = `${baseUrl}/stations/search?${queryParams}`;
-
+    console.log(queryParams);
+    const url: string = `${baseUrl}/stations/byuuid?${queryParams}`;
     const res: globalThis.Response = await RadioAPIFetch(url);
     if (!res.ok) {
-      throw new HTTPError('Unable to get radio stations at this time.', 404);
+      throw new HTTPError('Unable to get radio station at this time.', 404);
     }
 
     const data: unknown = await res.json();
@@ -25,6 +26,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }
 
     const stations: RadioStation[] = parsedData.data;
+    console.log(stations);
     return NextResponse.json(stations);
   } catch (error) {
     let message: string = 'Internal server error';
