@@ -47,8 +47,15 @@ const Header = () => {
         >
           Browse Stations
         </Link>
-        <button className="cursor-pointer rounded-md border-2 p-4" onClick={fetchRandomStation}>
-          I&apos;m feeling lucky
+        <button
+          className="cursor-pointer rounded-md bg-linear-(--accent-gradient) p-[2px]"
+          onClick={fetchRandomStation}
+        >
+          <div className="bg-background rounded-md px-6 py-3">
+            <div className="bg-linear-(--accent-gradient) bg-clip-text text-transparent">
+              I&apos;m Feeling Lucky
+            </div>
+          </div>
         </button>
       </div>
     </>
