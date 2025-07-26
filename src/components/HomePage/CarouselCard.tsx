@@ -13,23 +13,29 @@ import {
   Info,
 } from 'lucide-react';
 import { StationContextType } from '@/components/ContextProviders/StationContext';
+import Link from 'next/link';
 
 export interface HomePageCarouselCardProps {
   station: RadioStation;
   stationContext?: StationContextType | undefined;
+  variant?: 'horizontal' | 'vertical';
 }
 
-const CarouselCard = ({ station, stationContext }: HomePageCarouselCardProps) => {
+const CarouselCard = ({
+  station,
+  stationContext,
+  variant = 'horizontal',
+}: HomePageCarouselCardProps) => {
   return (
-    <div className="m-2 h-[450px] rounded-md border-2">
+    <div className={`m-2 h-[450px] rounded-md border-2 ${variant === 'vertical' ? 'w-full' : ''}`}>
       <div className="flex h-full w-full flex-col justify-between gap-y-4 p-6">
         <div className="flex flex-col gap-4 overflow-y-auto">
           <div id="station-name" className="flex w-full items-center">
             {/*
-                              Render the favicon as link if both a homepage link and a favicon are available.
-                              If there is a homepage link but no favicon, render the SquareArrowOutUpRight icon.
-                              If there is a favicon but no homepage, render the favicon.
-                            */}
+                Render the favicon as link if both a homepage link and a favicon are available.
+                If there is a homepage link but no favicon, render the SquareArrowOutUpRight icon.
+                If there is a favicon but no homepage, render the favicon.
+              */}
             {station.homepage !== null && !!station.homepage.length ? (
               station.favicon !== null && station.favicon !== 'null' && !!station.favicon.length ? (
                 <Favicon
@@ -108,20 +114,19 @@ const CarouselCard = ({ station, stationContext }: HomePageCarouselCardProps) =>
               </div>
             )}
             {station.tags && station.tags.length > 0 && (
-              <div className="flex gap-x-2">
+              <div className="flex items-center gap-x-2">
                 <TagIcon size={20} />
                 <ul
                   id="station-tags"
                   className="flex w-full flex-wrap gap-x-2 text-wrap break-words"
                 >
-                  {station.tags
-                    ?.split(',')
-                    .slice(0, 5)
-                    .map((tag) => (
-                      <li key={tag} className="text-wrap break-words">
+                  {station.tags?.split(',').map((tag) => (
+                    <li key={tag} className="hover:text-accent text-wrap break-words">
+                      <Link href={`/stations?tag=${encodeURIComponent(tag)}&order=votes`}>
                         {capitalize(tag)}
-                      </li>
-                    ))}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
@@ -133,6 +138,7 @@ const CarouselCard = ({ station, stationContext }: HomePageCarouselCardProps) =>
             onClick={() => {
               stationContext?.setStation(station);
               stationContext?.play();
+              console.log(station);
             }}
           >
             <Play className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
@@ -140,9 +146,12 @@ const CarouselCard = ({ station, stationContext }: HomePageCarouselCardProps) =>
           <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
             <Heart className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
           </button>
-          <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
+          <Link
+            className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
+            href={`/stations/${station.stationuuid}`}
+          >
             <Info className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
-          </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 import { SeaWaves } from 'iconoir-react';
 import Link from 'next/link';
 import { ModeToggle } from './ModeToggle';
+import { Menu } from 'lucide-react';
 
 const Header = () => {
   return (
@@ -22,8 +23,9 @@ const Header = () => {
           </Link>
           <div>Map</div>
         </div>
-        <div className="m-0 flex items-center">
+        <div className="m-0 flex items-center justify-center gap-4">
           <ModeToggle />
+          <Menu className="xl:hidden" />
         </div>
       </div>
     </header>
