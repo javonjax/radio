@@ -4,35 +4,91 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StationContext, StationContextType } from '../../ContextProviders/StationContext';
 import { RadioStation } from '@/lib/api/schemas';
 import PlayerControls from './PlayerControls';
+import Hls from 'hls.js';
 
 const Player = () => {
   const stationContext = useContext<StationContextType | undefined>(StationContext);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [playerType, setPlayerType] = useState<'default' | 'hls'>('default');
   const audioRef = useRef<HTMLAudioElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const station: RadioStation | undefined = stationContext?.station;
 
+  // Adjust the volume to match previously set level when the radio station changes.
   useEffect(() => {
-    if (audioRef.current && stationContext) {
-      audioRef.current.volume = stationContext.volume / 100;
+    if (stationContext) {
+      if (audioRef.current) {
+        audioRef.current.volume = stationContext.volume / 100;
+      }
+      if (videoRef.current) {
+        videoRef.current.volume = stationContext.volume / 100;
+      }
       setIsError(false);
     }
   }, [stationContext]);
 
-  const handlePlay = (): void => {
-    if (audioRef.current) {
-      audioRef.current.play();
+  useEffect(() => {
+    let hls: Hls | null = null;
+    if (
+      playerType === 'hls' &&
+      stationContext &&
+      stationContext.station?.url_resolved &&
+      videoRef.current
+    ) {
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(stationContext?.station?.url_resolved);
+        hls.attachMedia(videoRef.current);
+      } else if (videoRef.current?.canPlayType('application/vnd.apple.mpegurl')) {
+        videoRef.current.src = stationContext?.station?.url_resolved;
+      } else {
+        setIsError(true);
+      }
     }
+
+    return () => {
+      if (hls) {
+        hls.destroy();
+      }
+    };
+  }, [playerType]);
+
+  useEffect(() => {
+    setPlayerType('default');
+  }, [stationContext?.station]);
+
+  const handlePlay = (): void => {
+    console.log('fallback', playerType);
+    console.log('audioref', audioRef.current);
+    console.log('videoref', videoRef.current);
+    if (playerType === 'default') {
+      if (audioRef.current) {
+        audioRef.current.play();
+      }
+    } else {
+      if (videoRef.current) {
+        videoRef.current.play();
+      }
+    }
+
     if (stationContext) {
       stationContext.play();
     }
   };
 
   const handlePause = (): void => {
-    if (audioRef.current) {
-      audioRef.current.pause();
+    if (playerType === 'default') {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    } else {
+      if (videoRef.current) {
+        videoRef.current.pause();
+      }
     }
+
     if (stationContext) {
       stationContext.pause();
     }
@@ -57,17 +113,37 @@ const Player = () => {
       {station?.url_resolved ? (
         <>
           <audio
+            className="hidden"
             autoPlay
             ref={audioRef}
+            controls={false}
             src={station.url_resolved}
             onLoadStart={() => setIsLoading(true)}
             onCanPlay={() => setIsLoading(false)}
             onError={() => {
-              setIsError(true);
+              setPlayerType('hls');
               setIsLoading(false);
+              console.warn(
+                'Stream cannot be played in HTML audio element. Attempting to use fallback player.'
+              );
             }}
           ></audio>
         </>
+      ) : null}
+
+      {playerType && station?.url_resolved ? (
+        <video
+          className="hidden"
+          autoPlay
+          ref={videoRef}
+          controls={false}
+          onLoadStart={() => setIsLoading(true)}
+          onCanPlay={() => setIsLoading(false)}
+          onError={() => {
+            setIsError(true);
+            setIsLoading(false);
+          }}
+        />
       ) : null}
     </>
   );
