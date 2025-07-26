@@ -102,14 +102,17 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
 
           <div
             id="station-info"
-            className="flex w-full flex-col text-wrap xl:mb-0 xl:h-[300px] xl:min-h-0 xl:w-[37.5%] xl:gap-y-2 xl:overflow-y-auto xl:p-2"
+            className="mb-4 flex w-full flex-col text-wrap xl:mb-0 xl:h-[300px] xl:min-h-0 xl:w-[37.5%] xl:gap-y-2 xl:overflow-y-auto xl:p-2"
           >
             <div className="my-auto flex flex-col gap-y-4">
               {station.country && (
                 <div className="flex items-center gap-x-2">
                   <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
                   <div>Country:</div>
-                  <Link className="hover:text-accent" href={`/stations?country=${station.country}`}>
+                  <Link
+                    className="hover:text-accent"
+                    href={`/stations?country=${station.country}&order=clickcount`}
+                  >
                     {station.country}
                   </Link>
                 </div>
@@ -125,7 +128,10 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
                   <ul className="flex flex-wrap gap-x-2">
                     {station.language.split(',').map((lang) => (
                       <li key={`${station.name}-${lang}`}>
-                        <Link className="hover:text-accent" href={`/stations?language=${lang}`}>
+                        <Link
+                          className="hover:text-accent"
+                          href={`/stations?language=${lang}&order=clickcount`}
+                        >
                           {capitalize(lang)}
                         </Link>
                       </li>
@@ -163,7 +169,7 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
                     >
                       <Link
                         className="h-full w-full"
-                        href={`/stations?tag=${encodeURIComponent(tag)}&order=votes`}
+                        href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
                         onClick={() => console.log(tag)}
                       >
                         {capitalize(tag)}
