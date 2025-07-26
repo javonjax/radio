@@ -36,7 +36,7 @@ const CarouselCard = ({
                 If there is a homepage link but no favicon, render the SquareArrowOutUpRight icon.
                 If there is a favicon but no homepage, render the favicon.
               */}
-            {station.homepage !== null && !!station.homepage.length ? (
+            {station.homepage !== null && station.homepage.length > 0 ? (
               station.favicon !== null && station.favicon !== 'null' && !!station.favicon.length ? (
                 <Favicon
                   alt={`${station.name} icon`}
@@ -46,61 +46,87 @@ const CarouselCard = ({
                   key={`${station.name} icon`}
                 />
               ) : (
-                <a
+                <Link
                   href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <SquareArrowOutUpRight className="mr-4 h-[40px] min-h-[40px] w-[40px] min-w-[40px]" />
-                </a>
+                  <SquareArrowOutUpRight className="mr-4" width={40} height={40} />
+                </Link>
               )
             ) : station.favicon !== null &&
               station.favicon !== 'null' &&
               station.favicon.length > 0 ? (
               <Image
+                src={station.favicon.trim()}
+                className="mr-4 min-w-[40px]"
                 width={40}
                 height={40}
-                src={station.favicon.trim()}
-                className="mr-4 h-[40px] min-h-[40px] w-[40px] min-w-[40px]"
                 alt={`${station.name} icon`}
               />
             ) : null}
 
-            {station.name && !!station?.name?.length ? (
-              !!station.clicktrend && station.clicktrend > 10 ? (
-                <div className="flex flex-col items-start">
-                  <p>{station.name} </p>
-                  <div className="flex items-center">
-                    <Flame className="text-accent mb-[2px] -ml-[2px] h-[16px] min-h-[16px] w-[16px] min-w-[16px]" />
-                    <span className="text-accent">Trending</span>
-                  </div>
-                </div>
+            <div className="flex flex-col items-start">
+              {station.name && !!station?.name?.length ? (
+                station.homepage !== null && station.homepage.length > 0 ? (
+                  <Link
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-accent"
+                    href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
+                  >
+                    {station.name}
+                  </Link>
+                ) : (
+                  <p>{station.name}</p>
+                )
               ) : (
-                <p className="text-wrap">{station.name}</p>
-              )
-            ) : (
-              <p>Station name not found</p>
-            )}
+                <p>Unknown Station</p>
+              )}
+
+              {!!station.clicktrend && station.clicktrend > 10 && (
+                <div className="flex items-center">
+                  <Flame
+                    height={20}
+                    width={20}
+                    className="text-accent mb-[2px] -ml-[2px] h-[16px] min-h-[18px] w-[16px] min-w-[16px]"
+                  />
+                  <span className="text-accent">Trending</span>
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             {station.country && (
               <div className="flex items-center gap-x-2">
-                <MapPinned className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
-                <p>Country: {station.country}</p>
+                <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
+                <div>Country:</div>
+                <Link
+                  className="hover:text-accent"
+                  href={`/stations?country=${station.country}&order=clickcount`}
+                >
+                  {station.country}
+                </Link>
               </div>
             )}
             {station.language && (
-              <div className="flex items-center gap-x-2">
-                <Languages className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
-                <p>
-                  Language:{' '}
-                  {station.language
-                    .split(',')
-                    .map((lang) => capitalize(lang))
-                    .join(', ')}
-                </p>
+              <div className="flex w-full items-center gap-x-2">
+                <Languages height={20} width={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
+                <div>Language: </div>
+                <ul className="flex flex-wrap gap-x-2">
+                  {station.language.split(',').map((lang) => (
+                    <li key={`${station.name}-${lang}`}>
+                      <Link
+                        className="hover:text-accent"
+                        href={`/stations?language=${lang}&order=clickcount`}
+                      >
+                        {capitalize(lang)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            )}{' '}
+            )}
             {!!station.clickcount && (
               <div className="flex items-center gap-x-2">
                 <MousePointerClick className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
@@ -114,15 +140,16 @@ const CarouselCard = ({
               </div>
             )}
             {station.tags && station.tags.length > 0 && (
-              <div className="flex items-center gap-x-2">
+              <div className="flex gap-x-2">
                 <TagIcon size={20} />
+                <div>Tags:</div>
                 <ul
                   id="station-tags"
                   className="flex w-full flex-wrap gap-x-2 text-wrap break-words"
                 >
                   {station.tags?.split(',').map((tag) => (
                     <li key={tag} className="hover:text-accent text-wrap break-words">
-                      <Link href={`/stations?tag=${encodeURIComponent(tag)}&order=votes`}>
+                      <Link href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}>
                         {capitalize(tag)}
                       </Link>
                     </li>

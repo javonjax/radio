@@ -1,5 +1,6 @@
 import { SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export interface FaviconProps {
@@ -15,16 +16,16 @@ const Favicon = ({ src, className, width, height, alt }: FaviconProps) => {
 
   if (imgError) {
     return (
-      <a href={src} target="_blank" rel="noopener noreferrer">
+      <Link href={src} target="_blank" rel="noopener noreferrer">
         <SquareArrowOutUpRight
           className={`mr-4 ${className} h-[${height}px] w-[${width}px] min-h-[${height}px] min-w-[${width}px]`}
         />
-      </a>
+      </Link>
     );
   }
 
   return (
-    <a href={src} target="_blank" rel="noopener noreferrer">
+    <Link href={src} target="_blank" rel="noopener noreferrer">
       <Image
         src={src}
         className={`mr-4 h-[${height}px] w-[${width}px] min-h-[${height}px] min-w-[${width}px] ${className}`}
@@ -33,7 +34,7 @@ const Favicon = ({ src, className, width, height, alt }: FaviconProps) => {
         alt={alt}
         onError={() => setImageError(true)}
       />
-    </a>
+    </Link>
   );
 };
 

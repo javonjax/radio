@@ -5,6 +5,7 @@ import { RadioStation } from '@/lib/api/schemas';
 import { capitalize } from '@/lib/utils';
 import { Expand, Heart, Info, Minus, Pause, Play, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import Link from 'next/link';
 
 export interface PlayerControlsProps {
   stationContext: StationContextType;
@@ -134,9 +135,12 @@ const PlayerControls = ({
                     >
                       <Heart />
                     </button>
-                    <button className="w-fit rounded-md p-2">
+                    <Link
+                      className="w-fit rounded-md p-2"
+                      href={`/stations/${station.stationuuid}`}
+                    >
                       <Info />
-                    </button>
+                    </Link>
                   </div>
                 </>
               )}
