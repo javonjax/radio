@@ -30,15 +30,30 @@ import {
 import Favicon from '@/components/StationBrowser/Favicon';
 import Image from 'next/image';
 import { StationContext, StationContextType } from '@/components/ContextProviders/StationContext';
+<<<<<<< Updated upstream
 import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
 import CarouselCard from '@/components/ui/Custom/CarouselCard';
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
 
 const HomePage = (): React.JSX.Element => {
   const thisComponent: string = HomePage.name;
   const locationContext = useContext<LocationContextType | undefined>(LocationContext);
+=======
+import { useQuery } from '@tanstack/react-query';
+import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
+import CarouselCard from '@/components/HomePage/CarouselCard';
+import Link from 'next/link';
+
+const HomePage = (): React.JSX.Element => {
+  const thisComponent: string = HomePage.name;
+  // const locationContext = useContext<LocationContextType | undefined>(LocationContext);
+>>>>>>> Stashed changes
   const stationContext = useContext<StationContextType | undefined>(StationContext);
 
+<<<<<<< Updated upstream
   const fetchMostPopularTags = async (): Promise<Tag[]> => {
     const url: string =
       'http://localhost:3000/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12';
@@ -77,6 +92,104 @@ const HomePage = (): React.JSX.Element => {
     retry: false,
   });
 
+=======
+<<<<<<< Updated upstream
+  // Init.
+>>>>>>> Stashed changes
+  useEffect(() => {
+    if (isTagsFetchError) {
+      console.log(tagsFetchError.message);
+      if (tagsFetchError instanceof Error) {
+        handleAPIError(tagsFetchError);
+      } else {
+        console.warn(`Unknown error in ${thisComponent}.`);
+      }
+    }
+  }, [isTagsFetchError]);
+
+<<<<<<< Updated upstream
+  useEffect(() => {
+    if (isRecentFetchError) {
+      console.log(recentFetchError);
+      if (recentFetchError instanceof Error) {
+        handleAPIError(recentFetchError);
+=======
+=======
+  const fetchTrendingStations = async (): Promise<RadioStation[]> => {
+    const url: string =
+      'http://localhost:3000/api/stations/search?order=clicktrend&limit=12&reverse=true';
+    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
+    const trendingStations: RadioStation[] = await res.json();
+    console.log(trendingStations);
+    return trendingStations;
+  };
+
+  const fetchMostPopularTags = async (): Promise<Tag[]> => {
+    const url: string =
+      'http://localhost:3000/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12';
+    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
+    const tags: Tag[] = await res.json();
+    return tags;
+  };
+
+  const fetchRecentlyClickedStations = async (): Promise<RadioStation[]> => {
+    const url: string = 'http://localhost:3000/api/stations/recent/clicked?limit=12';
+    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
+    const recentlyClickedStations: RadioStation[] = await res.json();
+    return recentlyClickedStations;
+  };
+
+  //#TODO: tanstack queries
+  const {
+    isLoading: trendingStationsLoading,
+    error: trendingStationsFetchError,
+    isError: isTrendingStationsFetchError,
+    data: trendingStations,
+  } = useQuery<RadioStation[]>({
+    queryKey: ['fetchTrendingStations'],
+    queryFn: fetchTrendingStations,
+    retry: false,
+  });
+
+  const {
+    isLoading: tagsLoading,
+    error: tagsFetchError,
+    isError: isTagsFetchError,
+    data: tags,
+  } = useQuery<Tag[]>({
+    queryKey: ['fetchMostPopularTags'],
+    queryFn: fetchMostPopularTags,
+    retry: false,
+  });
+
+  const {
+    isLoading: recentlyClickedStationsLoading,
+    error: recentlyClickedStationsFetchError,
+    isError: isRecentlyClickedStationsFetchError,
+    data: recentlyClickedStations,
+  } = useQuery<RadioStation[]>({
+    queryKey: ['fetchRecentlyClickedStations'],
+    queryFn: fetchRecentlyClickedStations,
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (isTrendingStationsFetchError) {
+      console.log(trendingStationsFetchError);
+      if (trendingStationsFetchError instanceof Error) {
+        handleAPIError(trendingStationsFetchError);
+>>>>>>> Stashed changes
+      } else {
+        console.warn(`Unknown error in ${thisComponent}.`);
+      }
+    }
+<<<<<<< Updated upstream
+  }, [isRecentFetchError]);
+
+  // TODO: API seems to be bugged when searching with a geo_distance.
+=======
+  }, [isTrendingStationsFetchError]);
+
   useEffect(() => {
     if (isTagsFetchError) {
       console.log(tagsFetchError.message);
@@ -89,17 +202,19 @@ const HomePage = (): React.JSX.Element => {
   }, [isTagsFetchError]);
 
   useEffect(() => {
-    if (isRecentFetchError) {
-      console.log(recentFetchError);
-      if (recentFetchError instanceof Error) {
-        handleAPIError(recentFetchError);
+    if (isRecentlyClickedStationsFetchError) {
+      console.log(recentlyClickedStationsFetchError);
+      if (recentlyClickedStationsFetchError instanceof Error) {
+        handleAPIError(recentlyClickedStationsFetchError);
       } else {
         console.warn(`Unknown error in ${thisComponent}.`);
       }
     }
-  }, [isRecentFetchError]);
+  }, [isRecentlyClickedStationsFetchError]);
 
   // TODO: API seems to be bugged when searching with a geo_distance.
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   // Get stations near the user.
   // useEffect(() => {
   //   if (locationContext?.location) {
@@ -132,8 +247,13 @@ const HomePage = (): React.JSX.Element => {
   return (
     <div className="grid h-full w-full grid-cols-12 gap-4">
       <Header />
+<<<<<<< Updated upstream
 
       <div className="col-span-full flex min-h-[500px] flex-col items-center">
+=======
+<<<<<<< Updated upstream
+      <div className="col-span-full flex flex-col items-center">
+>>>>>>> Stashed changes
         <h2 className="text-heading mr-auto text-xl">Recently clicked stations</h2>
         {recentLoading && <LoadingSpinner />}
         {isRecentFetchError && recentFetchError && (
@@ -230,6 +350,205 @@ const HomePage = (): React.JSX.Element => {
           </div>
         )}
       </div>
+=======
+      <div className="col-span-full flex min-h-[500px] flex-col items-center">
+        <h2 className="text-heading mr-auto text-xl">Trending Stations</h2>
+        {trendingStationsLoading && <LoadingSpinner />}
+        {isTrendingStationsFetchError && trendingStationsFetchError && (
+          <div className="flex h-full w-full items-center justify-center">
+            {trendingStationsFetchError.message}
+          </div>
+        )}
+        {!isTrendingStationsFetchError && trendingStations && (
+          <div className="flex w-[82%] items-center justify-center md:w-[90%] xl:w-[95%]">
+            <Carousel
+              opts={{
+                align: 'start',
+              }}
+              className="w-full p-4"
+            >
+              <CarouselContent>
+                {trendingStations.length > 0 &&
+                  trendingStations?.map((station) => (
+                    <CarouselItem
+                      key={station.stationuuid}
+                      className="-mt-2 pb-2 md:basis-1/2 lg:basis-1/3"
+                    >
+                      <CarouselCard station={station} stationContext={stationContext} />
+                    </CarouselItem>
+                  ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        )}
+      </div>
+      <div className="col-span-full flex min-h-[500px] flex-col items-center gap-y-4 lg:col-span-6">
+        <h2 className="text-heading mr-auto text-xl">Popular Categories</h2>
+        {tagsLoading && <LoadingSpinner />}
+        {isTagsFetchError && tagsFetchError && (
+          <div className="flex h-full w-full items-center justify-center">
+            {tagsFetchError.message}
+          </div>
+        )}
+        {tags && (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-y-4">
+            <div className="grid h-full w-full grid-cols-2 gap-4 md:grid-cols-3">
+              {tags.length > 0 &&
+                tags?.map((tag) => (
+                  <Link
+                    rel="noopener noreferrer"
+                    key={tag.name}
+                    className="hover:text-accent cursor-pointer rounded-md border-2 p-4"
+                    href={`/stations?tag=${tag.name}&order=clickcount`}
+                  >
+                    <h3>{capitalize(tag?.name || '')}</h3>
+                    <h4>{tag.stationcount} Live Stations</h4>
+                  </Link>
+                ))}
+            </div>
+            <Link
+              rel="noopener noreferrer"
+              className="rounded-md bg-linear-(--accent-gradient) p-4"
+              href="/stations?order=clickcount"
+            >
+              Browse All
+            </Link>
+          </div>
+        )}
+      </div>
+      {/* <div className="col-span-full flex flex-col items-center justify-center lg:col-span-6">
+        <h2 className="text-heading mr-auto text-xl">Recently Clicked Stations</h2>
+        {recentLoading && <LoadingSpinner />}
+        {isRecentFetchError && recentFetchError && (
+          <div className="flex h-full w-full items-center justify-center">
+            {recentFetchError.message}
+          </div>
+        )}
+        {!isRecentFetchError && recentlyClickedStations && (
+          <div className="my-[56px] flex items-center justify-center">
+            <Carousel
+              opts={{
+                align: 'start',
+              }}
+              className="h-full w-full p-0"
+            >
+              <CarouselContent className="m-0 -mt-10 -mb-10 h-[550px] w-full">
+                {recentlyClickedStations.length > 0 &&
+                  recentlyClickedStations?.map((station) => (
+                    <CarouselItem
+                      key={station.stationuuid}
+                      className="m-0 flex items-center justify-center p-0"
+                    >
+                      <CarouselCard station={station} stationContext={stationContext} />
+                    </CarouselItem>
+                  ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        )}
+      </div> */}
+      <div className="col-span-full flex min-h-[500px] flex-col items-center lg:col-span-6">
+        <h2 className="text-heading mr-auto text-xl">Recently Clicked Stations</h2>
+        {recentlyClickedStationsLoading && <LoadingSpinner />}
+        {isRecentlyClickedStationsFetchError && recentlyClickedStationsFetchError && (
+          <div className="flex h-full w-full items-center justify-center">
+            {recentlyClickedStationsFetchError.message}
+          </div>
+        )}
+        {!isRecentlyClickedStationsFetchError && recentlyClickedStations && (
+          <div className="flex w-[82%] items-center justify-center md:w-[90%] lg:w-[82%]">
+            <Carousel
+              opts={{
+                align: 'start',
+              }}
+              className="w-full p-4"
+            >
+              <CarouselContent>
+                {recentlyClickedStations.length > 0 &&
+                  recentlyClickedStations?.map((station) => (
+                    <CarouselItem
+                      key={station.stationuuid}
+                      className="-mt-2 md:basis-1/2 lg:basis-1/1"
+                    >
+                      <CarouselCard station={station} stationContext={stationContext} />
+                    </CarouselItem>
+                  ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        )}
+      </div>
+      {/* <div className="col-span-full flex w-full flex-col gap-6 xl:col-span-6 xl:min-h-[500px]">
+        <h2 className="text-heading mr-auto text-xl">Stations Hosted Near You</h2>
+        {locationContext?.location ? (
+          <div>{locationContext.location.latitude}</div>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <button
+              className="flex items-center rounded-md bg-linear-(--accent-gradient) p-4"
+              onClick={async () => {
+                try {
+                  if (!locationContext?.location) {
+                    await locationContext?.requestLocation();
+                  }
+                } catch (error) {
+                  console.warn(error);
+                  toast.warning('Location services required.', {
+                    position: 'top-center',
+                    duration: 7000,
+                    description:
+                      'Please enable location services in your browser to use this feature.',
+                  });
+                }
+              }}
+            >
+              {' '}
+              Coming Soon! Search near me
+              <Navigation className="mt-1 ml-2" size={16} />
+            </button>
+          </div>
+        )}
+      </div> */}
+      <div className="col-span-full flex min-h-[500px] flex-col items-center">
+        <h2 className="text-heading mr-auto text-xl">Recently Clicked Stations</h2>
+        {recentlyClickedStationsLoading && <LoadingSpinner />}
+        {isRecentlyClickedStationsFetchError && recentlyClickedStationsFetchError && (
+          <div className="flex h-full w-full items-center justify-center">
+            {recentlyClickedStationsFetchError.message}
+          </div>
+        )}
+        {!isRecentlyClickedStationsFetchError && recentlyClickedStations && (
+          <div className="flex w-[82%] items-center justify-center md:w-[90%] xl:w-[95%]">
+            <Carousel
+              opts={{
+                align: 'start',
+              }}
+              className="w-full p-4"
+            >
+              <CarouselContent>
+                {recentlyClickedStations.length > 0 &&
+                  recentlyClickedStations?.map((station) => (
+                    <CarouselItem
+                      key={station.stationuuid}
+                      className="-mt-2 pb-2 md:basis-1/2 lg:basis-1/3"
+                    >
+                      <CarouselCard station={station} stationContext={stationContext} />
+                    </CarouselItem>
+                  ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        )}
+      </div>
+>>>>>>> Stashed changes
     </div>
   );
 };
