@@ -4,6 +4,14 @@ import Link from 'next/link';
 import { ModeToggle } from './ModeToggle';
 import { Menu } from 'lucide-react';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
 const Header = () => {
   return (
     <header className="relative mx-auto flex w-full max-w-7xl items-center justify-center rounded-none p-4">
@@ -25,7 +33,39 @@ const Header = () => {
         </div>
         <div className="m-0 flex items-center justify-center gap-4">
           <ModeToggle />
-          <Menu className="xl:hidden" />
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger className="data-[state=open]:bg-accent bg-background hover:bg-accent focus:bg-background mx-0 h-[40px] w-[40px] cursor-pointer rounded-md p-2 xl:hidden">
+              <Menu className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-background mt-1 xl:hidden">
+              <DropdownMenuItem className="p-0">
+                <Link
+                  className="hover:bg-accent h-full w-full rounded-sm p-2"
+                  href="/stations?order=votes"
+                >
+                  Top
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-foreground mx-[2px]" />
+              <DropdownMenuItem className="p-0">
+                <Link
+                  className="hover:bg-accent h-full w-full rounded-sm p-2"
+                  href="/stations?order=clicktrend"
+                >
+                  Trending
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-foreground mx-[2px]" />
+              <DropdownMenuItem className="p-0">
+                <Link
+                  className="hover:bg-accent h-full w-full rounded-sm p-2"
+                  href="/stations?order=changetimestamp"
+                >
+                  New
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
