@@ -106,8 +106,8 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
           >
             <div className="my-auto flex flex-col gap-y-4">
               {station.country && (
-                <div className="flex items-center gap-x-2">
-                  <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
+                <div className="flex gap-x-2">
+                  <MapPinned size={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
                   <div>Country:</div>
                   <Link
                     className="hover:text-accent"
@@ -141,13 +141,13 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
               )}
               {!!station.clickcount && (
                 <div className="flex items-center gap-x-2">
-                  <MousePointerClick size={20} />
+                  <MousePointerClick size={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
                   <p>Clicks: {station.clickcount}</p>
                 </div>
               )}
               {station.votes !== null && (
                 <div className="flex items-center gap-x-2">
-                  <Heart size={20} />
+                  <Heart size={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
                   <p>Favorites: {station.votes}</p>
                 </div>
               )}
@@ -160,23 +160,26 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
           >
             {station.tags && station.tags.length > 0 && (
               <>
-                <Tag size={20} className="xl:hidden" />
-                <ul className="flex h-full w-full flex-wrap gap-x-2 text-wrap break-words xl:max-h-[300px] xl:flex-col xl:flex-nowrap xl:gap-0 xl:overflow-y-auto">
-                  {station.tags?.split(',').map((tag) => (
-                    <li
-                      key={tag}
-                      className="hover:text-accent w-fit max-w-full cursor-pointer text-wrap break-words"
-                    >
-                      <Link
-                        className="h-full w-full"
-                        href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
-                        onClick={() => console.log(tag)}
+                <div className="flex gap-x-2">
+                  <Tag size={20} className="min-h-[20px] w-[20px] min-w-[20px] xl:hidden" />
+                  <div className="xl:hidden">Tags:</div>
+                  <ul className="flex h-full w-full flex-wrap gap-x-2 text-wrap break-words xl:max-h-[300px] xl:flex-col xl:flex-nowrap xl:gap-0 xl:overflow-y-auto">
+                    {station.tags?.split(',').map((tag) => (
+                      <li
+                        key={tag}
+                        className="hover:text-accent w-fit max-w-full cursor-pointer text-wrap break-words"
                       >
-                        {capitalize(tag)}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                        <Link
+                          className="h-full w-full underline"
+                          href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
+                          onClick={() => console.log(tag)}
+                        >
+                          {capitalize(tag)}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </>
             )}
           </div>

@@ -98,7 +98,7 @@ const CarouselCard = ({
           </div>
           <div className="flex flex-col gap-4">
             {station.country && (
-              <div className="flex items-center gap-x-2">
+              <div className="flex gap-x-2">
                 <MapPinned size={20} className="min-h-[20px] min-w-[20px]" />
                 <div>Country:</div>
                 <Link
@@ -149,7 +149,10 @@ const CarouselCard = ({
                 >
                   {station.tags?.split(',').map((tag) => (
                     <li key={tag} className="hover:text-accent text-wrap break-words">
-                      <Link href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}>
+                      <Link
+                        className="underline"
+                        href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
+                      >
                         {capitalize(tag)}
                       </Link>
                     </li>
