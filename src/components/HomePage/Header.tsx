@@ -8,20 +8,10 @@ const Header = () => {
 
   // Sorting by order=random does not appear to work properly, so we improvise.
   const fetchRandomStation = async () => {
-    const sortingOptions: string[] = [
-      'name',
-      'url',
-      'tags',
-      'country',
-      'language',
-      'clickcount',
-      'clicktrend',
-      'changetimestamp',
-    ];
-    const randomSortingOption: string = sortingOptions[Math.floor(Math.random() * 8)];
-    const randomLimit: number = Math.floor(Math.random() * 100) + 1;
-    let queryParams: string = `hidebroken=true&limit=${randomLimit}`;
-    queryParams += `&order=${randomSortingOption}`;
+    stationContext?.pause();
+    const reverse: boolean = Math.random() > 0.5;
+    const randomOffset: string = String(Math.floor(Math.random() * 100));
+    const queryParams: string = `hidebroken=true&limit=100&offset=${randomOffset}&order=clickcount&reverse=${reverse}`;
     const url: string = `http://localhost:3000/api/stations/search?${queryParams}`;
     console.log(url);
     const res: globalThis.Response = await fetch(url, { cache: 'no-store' });
