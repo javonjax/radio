@@ -41,6 +41,11 @@ const Player = () => {
         hls = new Hls();
         hls.loadSource(stationContext?.station?.url_resolved);
         hls.attachMedia(videoRef.current);
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          console.warn(data);
+          setIsError(true);
+          setIsLoading(false);
+        });
       } else if (videoRef.current?.canPlayType('application/vnd.apple.mpegurl')) {
         videoRef.current.src = stationContext?.station?.url_resolved;
       } else {
@@ -60,9 +65,6 @@ const Player = () => {
   }, [stationContext?.station]);
 
   const handlePlay = (): void => {
-    console.log('fallback', playerType);
-    console.log('audioref', audioRef.current);
-    console.log('videoref', videoRef.current);
     if (playerType === 'default') {
       if (audioRef.current) {
         audioRef.current.play();
@@ -131,14 +133,18 @@ const Player = () => {
         </>
       ) : null}
 
-      {playerType && station?.url_resolved ? (
+      {playerType === 'hls' && station?.url_resolved ? (
         <video
           className="hidden"
           autoPlay
           ref={videoRef}
           controls={false}
-          onLoadStart={() => setIsLoading(true)}
-          onCanPlay={() => setIsLoading(false)}
+          onLoadStart={() => {
+            setIsLoading(true);
+          }}
+          onCanPlay={() => {
+            setIsLoading(false);
+          }}
           onError={() => {
             setIsError(true);
             setIsLoading(false);

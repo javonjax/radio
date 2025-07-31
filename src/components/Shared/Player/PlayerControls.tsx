@@ -6,6 +6,7 @@ import { capitalize } from '@/lib/utils';
 import { Expand, Heart, Info, Minus, Pause, Play, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
+import { RefObject, useEffect, useRef } from 'react';
 
 export interface PlayerControlsProps {
   stationContext: StationContextType;
@@ -26,19 +27,28 @@ const PlayerControls = ({
   handlePlay,
   handlePause,
 }: PlayerControlsProps) => {
+  const playerRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null);
   const station: RadioStation | undefined = stationContext?.station;
+
+  useEffect(() => {
+    if (!isOpen && playerRef.current) {
+      playerRef.current.style.width = '';
+      playerRef.current.style.height = '';
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
       <motion.div
         layout
+        ref={playerRef}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{
           layout: { type: 'spring', stiffness: 300, damping: 25 },
           duration: 0.1,
         }}
-        className={`bg-background fixed right-[32px] bottom-[32px] flex-col gap-2 rounded-md border-2 p-4 ${stationContext?.station ? '' : 'hidden'} ${isOpen ? 'flex w-[200px] min-w-[200px]' : 'max-w-[200px]'}`}
+        className={`bg-background fixed right-[32px] bottom-[32px] flex-col gap-2 rounded-md border-2 p-4 ${stationContext?.station ? '' : 'hidden'} ${isOpen ? 'flex h-[250px] min-h-[250px] w-[200px] max-w-[90%] min-w-[200px] resize overflow-y-auto' : 'h-[fit] w-[fit]'}`}
       >
         <>
           {/* Minimize/maximize and close buttons. */}
@@ -97,21 +107,57 @@ const PlayerControls = ({
                       <p className="text-accent">Name not found</p>
                     )}
                     {station.countrycode && (
-                      <p className="text-[12px]">Country: {station.countrycode}</p>
+                      <div className="flex gap-x-1 text-[12px]">
+                        <div>Country:</div>
+                        <Link
+                          className="hover:text-accent"
+                          href={`/stations?country=${station.country}&order=clickcount`}
+                        >
+                          {station.country}
+                        </Link>
+                      </div>
                     )}
                     {station.language && (
-                      <p className="text-[12px]">Language: {capitalize(station.language)}</p>
+                      <div className="flex gap-x-1 text-[12px]">
+                        <div>Language:</div>
+                        <ul className="flex flex-wrap gap-x-2">
+                          {station.language
+                            .split(',')
+                            .slice(0, 3)
+                            .map((lang) => (
+                              <li key={`${station.name}-${lang}`}>
+                                <Link
+                                  className="hover:text-accent"
+                                  href={`/stations?language=${lang}&order=clickcount`}
+                                >
+                                  {capitalize(lang)}
+                                </Link>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
                     )}
-                    {station.tags &&
-                      station.tags.length > 0 &&
-                      (() => {
-                        const tagString: string = station.tags
-                          ?.split(',')
-                          .slice(0, 2)
-                          .map((tag) => capitalize(tag))
-                          .join(', ');
-                        return <p className="text-[12px]">Tags: {tagString}</p>;
-                      })()}
+                    {station.tags && station.tags.length > 0 && (
+                      <div className="flex gap-x-1 text-[12px]">
+                        <div>Tags: </div>
+                        <ul className="flex flex-wrap gap-x-1">
+                          {station.tags
+                            .split(',')
+                            .slice(0, 3)
+                            .map((tag) => (
+                              <li key={tag} className="hover:text-accent">
+                                <Link
+                                  className="h-full w-full underline"
+                                  href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
+                                  onClick={() => console.log(tag)}
+                                >
+                                  {capitalize(tag)}
+                                </Link>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                   <Slider
                     className="bg-accent max-w-[200px] rounded-md"
