@@ -51,6 +51,15 @@ const HomePage = (): React.JSX.Element => {
     return recentlyClickedStations;
   };
 
+  const fetchDiscoverStations = async (): Promise<RadioStation[]> => {
+    const randomOffset: string = String(Math.floor(Math.random() * 1000));
+    const queryParams: string = `limit=12&hidebroken=true&order=clickcount&offset=${randomOffset}`;
+    const url: string = `http://localhost:3000/api/stations/search?${queryParams}`;
+    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
+    const discoverStations: RadioStation[] = await res.json();
+    return discoverStations;
+  };
+
   //#TODO: tanstack queries
   const {
     isLoading: trendingStationsLoading,
@@ -82,6 +91,17 @@ const HomePage = (): React.JSX.Element => {
   } = useQuery<RadioStation[]>({
     queryKey: ['fetchRecentlyClickedStations'],
     queryFn: fetchRecentlyClickedStations,
+    retry: false,
+  });
+
+  const {
+    isLoading: discoverStationsLoading,
+    error: discoverStationsFetchError,
+    isError: isDiscoverStationsFetchError,
+    data: discoverStations,
+  } = useQuery<RadioStation[]>({
+    queryKey: ['fetchDiscoverStations'],
+    queryFn: fetchDiscoverStations,
     retry: false,
   });
 
@@ -166,7 +186,7 @@ const HomePage = (): React.JSX.Element => {
       <Header />
 
       <div className="col-span-full flex min-h-[500px] flex-col items-center">
-        <h2 className="text-heading mr-auto text-xl">Recently clicked stations</h2>
+        <h2 className="text-heading mr-auto text-xl">Trending Stations</h2>
         {trendingStationsLoading && <LoadingSpinner />}
         {isTrendingStationsFetchError && trendingStationsFetchError && (
           <div className="flex h-full w-full items-center justify-center">
@@ -299,14 +319,14 @@ const HomePage = (): React.JSX.Element => {
         )}
       </div> */}
       <div className="col-span-full flex min-h-[500px] flex-col items-center">
-        <h2 className="text-heading mr-auto text-xl">Recently Clicked Stations</h2>
-        {recentlyClickedStationsLoading && <LoadingSpinner />}
-        {isRecentlyClickedStationsFetchError && recentlyClickedStationsFetchError && (
+        <h2 className="text-heading mr-auto text-xl">Discover Something New</h2>
+        {discoverStationsLoading && <LoadingSpinner />}
+        {isDiscoverStationsFetchError && discoverStationsFetchError && (
           <div className="flex h-full w-full items-center justify-center">
-            {recentlyClickedStationsFetchError.message}
+            {discoverStationsFetchError.message}
           </div>
         )}
-        {!isRecentlyClickedStationsFetchError && recentlyClickedStations && (
+        {!isDiscoverStationsFetchError && discoverStations && (
           <div className="flex w-[82%] items-center justify-center md:w-[90%] xl:w-[95%]">
             <Carousel
               opts={{
@@ -315,8 +335,8 @@ const HomePage = (): React.JSX.Element => {
               className="w-full p-4"
             >
               <CarouselContent>
-                {recentlyClickedStations.length > 0 &&
-                  recentlyClickedStations?.map((station) => (
+                {discoverStations.length > 0 &&
+                  discoverStations?.map((station) => (
                     <CarouselItem
                       key={station.stationuuid}
                       className="-mt-2 pb-2 md:basis-1/2 lg:basis-1/3"
