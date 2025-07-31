@@ -118,7 +118,7 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
                 </div>
               )}
               {station.language && (
-                <div className="flex w-full items-center gap-x-2">
+                <div className="flex w-full gap-x-2">
                   <Languages
                     height={20}
                     width={20}
