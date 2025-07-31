@@ -4,8 +4,6 @@ import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
-import { Button } from '@/components/ui/button';
-
 export function ModeToggle() {
   const { setTheme, theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState<boolean>(false);
@@ -19,16 +17,15 @@ export function ModeToggle() {
   const darkMode: boolean = theme === 'dark' || resolvedTheme === 'dark';
 
   return (
-    <Button
-      size="icon"
-      className="cursor-pointer border-2"
+    <button
+      className={`hover:bg-foreground hover:text-background flex h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-md border-2 p-4`}
       onClick={() => (darkMode ? setTheme('light') : setTheme('dark'))}
     >
       {darkMode ? (
-        <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all" />
+        <Sun className="h-[20px] min-h-[20px] w-[20px] min-w-[20px] rotate-0 transition-all" />
       ) : (
-        <Moon className="absolute h-[1.2rem] w-[1.2rem]" />
+        <Moon className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
       )}
-    </Button>
+    </button>
   );
 }
