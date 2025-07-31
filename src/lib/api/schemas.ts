@@ -59,3 +59,19 @@ export const LanguageSchema = z.object({
 export type Language = z.infer<typeof LanguageSchema>;
 
 export const LanguagesAPIResponse = z.array(LanguageSchema);
+
+export const StationClickSchema = z.object({
+  stationuuid: z.string(),
+  clickuuid: z.string(),
+  clicktimestamp_iso8601: z.string(),
+  clicktimestamp: z.string(),
+});
+
+export type StationClick = z.infer<typeof StationClickSchema>;
+
+export const StationClicksAPIResponse = z.array(StationClickSchema);
+
+export type ClickData = {
+  hour: string;
+  clicks: number;
+};
