@@ -16,21 +16,11 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Favicon from '@/components/StationBrowser/Favicon';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart';
-import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { useFetchStationClicks } from './hooks/useFetchStationClicks';
 
 export interface StationInfoPageProps {
   // 'params' is a promise in this version of next.js.
@@ -38,26 +28,6 @@ export interface StationInfoPageProps {
     stationuuid: string;
   }>;
 }
-
-const chartConfig = {
-  desktop: {
-    label: 'Desktop',
-    color: '#2563eb',
-  },
-  mobile: {
-    label: 'Mobile',
-    color: '#60a5fa',
-  },
-} satisfies ChartConfig;
-
-const chartData = [
-  { month: 'January', Clicks: 186, mobile: 80 },
-  { month: 'February', Clicks: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
-];
 
 const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element => {
   const stationuuid: string = use(params).stationuuid;
@@ -69,11 +39,19 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
     data: station,
   } = useFetchStationInfo(stationuuid);
 
+  const {
+    isLoading: stationClicksLoading,
+    error: stationClicksFetchError,
+    isError: isStationClicksFetchError,
+    data: stationClicks,
+  } = useFetchStationClicks(stationuuid);
+
+  console.log(stationClicks);
   return (
     <div className="flex w-full grow flex-col">
       <div className="flex grow flex-col gap-y-4">
         <h1 className="text-heading text-2xl">Station Info</h1>
-        {stationLoading && <LoadingSpinner />}
+        {(stationLoading || stationClicksLoading) && <LoadingSpinner />}
         {isStationFetchError && <div>{stationFetchError.message}</div>}
         {!isStationFetchError && !stationLoading && station && (
           <div className="flex grow flex-col gap-y-2">
@@ -229,54 +207,67 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                 </>
               )}
             </div>
-            <Card className="bg-background text-foreground m-0 border-0 px-0">
-              <CardHeader>
-                <CardTitle className="font-normal">Station Traffic</CardTitle>
-                <CardDescription>Clicks - Last 24 Hours</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig}>
-                  <LineChart
-                    accessibilityLayer
-                    data={chartData}
-                    margin={{
-                      left: 12,
-                      right: 12,
-                    }}
-                  >
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="month"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={8}
-                      tickFormatter={(value) => value.slice(0, 3)}
-                    />
-                    <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                    <Line
-                      dataKey="Clicks"
-                      type="natural"
-                      stroke="var(--accent)"
-                      strokeWidth={2}
-                      dot={{
-                        fill: 'var(--accent)',
+            {isStationClicksFetchError && <div>{stationClicksFetchError.message}</div>}
+            {!isStationClicksFetchError && !stationClicksLoading && stationClicks && (
+              <Card className="bg-background text-foreground m-0 border-0 px-0">
+                <CardHeader>
+                  <CardTitle className="text-xl font-normal">Station Traffic</CardTitle>
+                  <CardDescription>Clicks - Last 24 Hours</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={{}}>
+                    <AreaChart
+                      accessibilityLayer
+                      data={stationClicks}
+                      margin={{
+                        right: 24,
+                        top: 8,
+                        bottom: 32,
                       }}
-                      activeDot={{
-                        r: 6,
-                      }}
-                    />
-                  </LineChart>
-                </ChartContainer>
-              </CardContent>
-              <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 leading-none font-medium">
-                  Trending up by 5.2% this month
-                </div>
-                <div className="text-muted-foreground leading-none">
-                  Showing total visitors for the last 6 months
-                </div>
-              </CardFooter>
-            </Card>
+                    >
+                      <CartesianGrid vertical={false} />
+                      <XAxis
+                        dataKey="hour"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
+                        angle={-45}
+                        fontSize={12}
+                        dy={10}
+                        interval="preserveEnd"
+                        label={{ value: 'Time', position: 'bottom', offset: 20, fontSize: 16 }}
+                      />
+                      <YAxis
+                        domain={[0, 'dataMax']}
+                        tickLine={false}
+                        label={{
+                          value: 'Clicks',
+                          angle: -90,
+                          position: 'insideLeft',
+                          fontSize: 16,
+                        }}
+                      />
+                      <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideLabel className="capitalize" />}
+                      />
+                      <Area
+                        dataKey="clicks"
+                        type="monotone"
+                        stroke="var(--accent)"
+                        strokeWidth={2}
+                        dot={{
+                          fill: 'var(--accent)',
+                        }}
+                        activeDot={{
+                          r: 6,
+                        }}
+                      />
+                    </AreaChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            )}
           </div>
         )}
       </div>
