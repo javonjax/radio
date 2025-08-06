@@ -43,12 +43,13 @@ const Player = () => {
         hls.attachMedia(videoRef.current);
         hls.on(Hls.Events.ERROR, (event, data) => {
           console.warn(data);
-          setIsError(true);
           setIsLoading(false);
+          setIsError(true);
         });
       } else if (videoRef.current?.canPlayType('application/vnd.apple.mpegurl')) {
         videoRef.current.src = stationContext?.station?.url_resolved;
       } else {
+        setIsLoading(false);
         setIsError(true);
       }
     }
@@ -146,8 +147,8 @@ const Player = () => {
             setIsLoading(false);
           }}
           onError={() => {
-            setIsError(true);
             setIsLoading(false);
+            setIsError(true);
           }}
         />
       ) : null}

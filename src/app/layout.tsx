@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Nunito, Roboto_Mono } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/Shared/Header';
+import Header from '@/components/Shared/Header/Header';
 import Footer from '@/components/Shared/Footer';
 import { ThemeProvider } from '@/components/Shared/ThemeProvider';
 import Player from '@/components/Shared/Player/Player';

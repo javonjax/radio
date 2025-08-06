@@ -40,7 +40,7 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className="flex h-full w-full grow items-center justify-center border-2">
+    <div className="flex h-full w-full grow items-center justify-center">
       <div className="my-4 flex w-[400px] flex-col rounded-md border-2 p-4">
         <h1 className="text-accent mb-4 text-xl">Register</h1>
         {registrationError && <p className="m-0 mb-4 text-red-600">{registrationError}</p>}
