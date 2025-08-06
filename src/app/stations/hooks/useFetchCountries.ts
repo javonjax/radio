@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useFetchCountries = () => {
   const fetchCountries = async (): Promise<{ countries: Country[]; longestLabel: string }> => {
-    const url: string = `http://localhost:3000/api/countries`;
+    const url: string = `/api/countries`;
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const countries: Country[] = await res.json();
     const longestLabel: string = countries.reduce((a, b) =>

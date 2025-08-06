@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useFetchStationClicks = (stationuuid: string) => {
   const fetchStationClicks = async () => {
-    const url: string = `http://localhost:3000/api/stations/activity/clicks/${stationuuid}?seconds=86400`;
+    const url: string = `/api/stations/activity/clicks/${stationuuid}?seconds=86400`;
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const stationClicks: ClickData[] = await res.json();
     return stationClicks;

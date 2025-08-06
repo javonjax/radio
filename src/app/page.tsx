@@ -28,8 +28,7 @@ const HomePage = (): React.JSX.Element => {
   const stationContext = useContext<StationContextType | undefined>(StationContext);
 
   const fetchTrendingStations = async (): Promise<RadioStation[]> => {
-    const url: string =
-      'http://localhost:3000/api/stations/search?order=clicktrend&limit=12&reverse=true';
+    const url: string = '/api/stations/search?order=clicktrend&limit=12&reverse=true';
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const trendingStations: RadioStation[] = await res.json();
     console.log(trendingStations);
@@ -37,15 +36,14 @@ const HomePage = (): React.JSX.Element => {
   };
 
   const fetchMostPopularTags = async (): Promise<Tag[]> => {
-    const url: string =
-      'http://localhost:3000/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12';
+    const url: string = '/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12';
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const tags: Tag[] = await res.json();
     return tags;
   };
 
   const fetchRecentlyClickedStations = async (): Promise<RadioStation[]> => {
-    const url: string = 'http://localhost:3000/api/stations/recent/clicked?limit=12';
+    const url: string = '/api/stations/recent/clicked?limit=12';
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const recentlyClickedStations: RadioStation[] = await res.json();
     return recentlyClickedStations;
@@ -54,7 +52,7 @@ const HomePage = (): React.JSX.Element => {
   const fetchDiscoverStations = async (): Promise<RadioStation[]> => {
     const randomOffset: string = String(Math.floor(Math.random() * 1000));
     const queryParams: string = `limit=12&hidebroken=true&order=clickcount&offset=${randomOffset}`;
-    const url: string = `http://localhost:3000/api/stations/search?${queryParams}`;
+    const url: string = `/api/stations/search?${queryParams}`;
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const discoverStations: RadioStation[] = await res.json();
     return discoverStations;
@@ -163,7 +161,7 @@ const HomePage = (): React.JSX.Element => {
   //         queryParams += `&geo_lat=${lat}&geo_lon=${lon}&geo_distance=75000`;
   //       }
   //       const res: globalThis.Response = await fetch(
-  //         `http://localhost:3000/api/stations/search?limit=12${queryParams}`
+  //         `/api/stations/search?limit=12${queryParams}`
   //       );
   //       console.log(res);
   //       const localStations: RadioStation[] = await res.json();

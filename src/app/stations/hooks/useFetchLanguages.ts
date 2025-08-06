@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useFetchLanguages = () => {
   const fetchLanguages = async (): Promise<{ languages: Language[]; longestLabel: string }> => {
-    const url: string = `http://localhost:3000/api/languages`;
+    const url: string = `/api/languages`;
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const languages: Language[] = await res.json();
     const longestLabel: string = languages.reduce((a, b) =>

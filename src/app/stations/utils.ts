@@ -1,7 +1,7 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
-import { StationFilters, StationSearchInputs, StationSortingOption } from './schemas';
+import { StationFilters, StationSearchInputs, StationSortingOption } from '../../lib/schemas';
 
 /*
   Updates url search params when a search is submitted.

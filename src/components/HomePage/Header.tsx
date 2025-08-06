@@ -12,7 +12,7 @@ const Header = () => {
     const reverse: boolean = Math.random() > 0.5;
     const randomOffset: string = String(Math.floor(Math.random() * 100));
     const queryParams: string = `hidebroken=true&limit=100&offset=${randomOffset}&order=clickcount&reverse=${reverse}`;
-    const url: string = `http://localhost:3000/api/stations/search?${queryParams}`;
+    const url: string = `/api/stations/search?${queryParams}`;
     console.log(url);
     const res: globalThis.Response = await fetch(url, { cache: 'no-store' });
     const stations: RadioStation[] = await res.json();
