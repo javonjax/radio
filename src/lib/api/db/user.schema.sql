@@ -1,0 +1,7 @@
+CREATE SCHEMA IF NOT EXISTS users;
+
+CREATE TABLE IF NOT EXISTS users.users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(256) UNIQUE NOT NULL,
+    password_hash CHAR(60) NOT NULL
+);

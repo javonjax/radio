@@ -1,4 +1,7 @@
 import { promises as dns, SrvRecord } from 'dns';
+import { pgPool } from './db/db';
+import { QueryResult } from 'pg';
+import { User } from './schemas';
 
 let baseUrl: string | null = null;
 const goodBaseUrls = new Set<string>();
@@ -165,4 +168,16 @@ export const capitalize = (str: string): string => {
     }
   }
   return res.join('');
+};
+
+/*
+  Check if user exists by passing in a field and value.
+*/
+export const checkIfUserExists = async (field: string, value: string): Promise<User> => {
+  const query = {
+    text: `SELECT * FROM users.users WHERE ${field} = $1;`,
+    values: [value],
+  };
+  const queryRes: QueryResult<User> = await pgPool.query(query);
+  return queryRes.rows[0];
 };

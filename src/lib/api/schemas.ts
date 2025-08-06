@@ -75,3 +75,9 @@ export type ClickData = {
   hour: string;
   clicks: number;
 };
+
+export interface User {
+  id: number;
+  email: string;
+  password_hash: string;
+}
