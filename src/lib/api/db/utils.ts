@@ -1,0 +1,31 @@
+import { pgPool } from './db';
+import path from 'path';
+import fs from 'fs';
+import { QueryResult } from 'pg';
+
+// const NODE_ENV: string = process.env.NODE_ENV as string;
+
+export const initUsersDB = async () => {
+  try {
+    const res: QueryResult<{ exists: boolean }> = await pgPool.query(`
+      SELECT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'users' AND table_name = 'users'
+      )
+    `);
+
+    const tableExists: boolean = res.rows[0].exists;
+
+    if (!tableExists) {
+      const tableSchemaFile: string = path.resolve(__dirname, './user.schema.sql');
+      const schemaSQL: string = fs.readFileSync(tableSchemaFile, 'utf-8');
+      await pgPool.query(schemaSQL);
+      console.log('Users table created.');
+    } else {
+      console.log('Users table already exists.');
+    }
+  } catch (error) {
+    console.error('Error creating users table:', error);
+  }
+};
