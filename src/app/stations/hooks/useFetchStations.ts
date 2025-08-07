@@ -3,7 +3,7 @@ import { setStationBrowserDropdownOptions } from '../utils';
 import { RadioStation } from '@/lib/api/schemas';
 import { handleAPIFetch } from '@/lib/utils';
 import { Dispatch, SetStateAction } from 'react';
-import { StationFilters, StationSearchInputs } from '../schemas';
+import { StationFilters, StationSearchInputs } from '../../../lib/schemas';
 import { useQuery } from '@tanstack/react-query';
 
 export const useFetchStations = (
@@ -14,7 +14,7 @@ export const useFetchStations = (
   const searchParamString: string = searchParams.toString();
   const fetchStations = async (): Promise<RadioStation[]> => {
     setStationBrowserDropdownOptions(searchParams, setSearchInputs, setFilters);
-    let url: string = `http://localhost:3000/api/stations/search?limit=100&hidebroken=true`;
+    let url: string = `/api/stations/search?limit=100&hidebroken=true`;
     const paramString: string = searchParams.toString();
     if (paramString.length) {
       url += `&${paramString}`;

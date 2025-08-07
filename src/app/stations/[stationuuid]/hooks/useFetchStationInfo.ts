@@ -8,7 +8,7 @@ export const useFetchStationInfo = (stationuuid: string) => {
         This API endpoint accepts a list of UUIDs as params and returns a list of stations.
         This page only displays information for a single station so only the first list item is relevant.
       */
-    const url: string = `http://localhost:3000/api/stations/search/byuuid?uuids=${stationuuid}`;
+    const url: string = `/api/stations/search/byuuid?uuids=${stationuuid}`;
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const stations: RadioStation[] = await res.json();
     return stations[0];

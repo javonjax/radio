@@ -5,7 +5,7 @@ import StationList from '../../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserSearchParams } from './utils';
-import { StationFilters, StationSearchInputs } from './schemas';
+import { StationFilters, StationSearchInputs } from '../../lib/schemas';
 import { handleAPIError } from '@/lib/utils';
 import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
 import { useFetchCountries } from './hooks/useFetchCountries';

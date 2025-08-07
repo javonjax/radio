@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Country, Language } from '@/lib/api/schemas';
-import { StationFilters, StationSortingOption } from '@/app/stations/schemas';
+import { StationFilters, StationSortingOption } from '@/lib/schemas';
 import { Dispatch, SetStateAction } from 'react';
 
 export interface ComboboxProps {

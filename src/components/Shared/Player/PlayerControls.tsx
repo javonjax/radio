@@ -48,7 +48,7 @@ const PlayerControls = ({
           layout: { type: 'spring', stiffness: 300, damping: 25 },
           duration: 0.1,
         }}
-        className={`bg-background fixed right-[32px] bottom-[32px] flex-col gap-2 rounded-md border-2 p-4 ${stationContext?.station ? '' : 'hidden'} ${isOpen ? 'flex max-h-[300px] min-h-[200px] w-[200px] max-w-[90%] min-w-[200px] overflow-y-auto' : 'h-[fit] w-[fit]'}`}
+        className={`bg-background fixed right-[20px] bottom-[20px] flex-col gap-2 rounded-md border-2 p-4 ${stationContext?.station ? '' : 'hidden'} ${isOpen ? 'flex max-h-[300px] min-h-[200px] w-[200px] max-w-[90%] min-w-[200px] overflow-y-auto' : 'h-[fit] w-[fit]'}`}
       >
         <>
           {/* Minimize/maximize and close buttons. */}

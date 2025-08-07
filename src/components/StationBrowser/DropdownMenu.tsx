@@ -1,6 +1,6 @@
 'use client';
 
-import { DropdownMenuOption, StationFilters, StationSortingOption } from '@/app/stations/schemas';
+import { DropdownMenuOption, StationFilters, StationSortingOption } from '@/lib/schemas';
 import {
   DropdownMenu as Menu,
   DropdownMenuContent,

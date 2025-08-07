@@ -1,4 +1,4 @@
-import { DropdownMenuOption, StationFilters, StationSearchInputs } from '@/app/stations/schemas';
+import { DropdownMenuOption, StationFilters, StationSearchInputs } from '@/lib/schemas';
 import { Country, Language } from '@/lib/api/schemas';
 import { Search } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
