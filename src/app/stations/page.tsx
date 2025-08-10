@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Filters from '../../components/StationBrowser/Filters';
 import StationList from '../../components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserSearchParams } from './utils';
-import { StationFilters, StationSearchInputs } from '../../lib/schemas';
+import { StationFilters, StationSearchInputs, StationSortingOption } from '../../lib/schemas';
 import { handleAPIError } from '@/lib/utils';
 import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
 import { useFetchCountries } from './hooks/useFetchCountries';
@@ -25,6 +25,7 @@ const StationBrowserPage = (): React.JSX.Element => {
     country: '',
     language: '',
   });
+  const [pageNum, setPageNum] = useState<number>(1);
 
   // Data queries.
   const {
@@ -46,9 +47,8 @@ const StationBrowserPage = (): React.JSX.Element => {
     error: stationsFetchError,
     isError: isStationsFetchError,
     data: stationData,
-  } = useFetchStations(searchParams, setSearchInputs, setFilters);
+  } = useFetchStations(searchParams, pageNum, setSearchInputs, setFilters);
 
-  // Filter error handlers.
   useEffect(() => {
     if (isCountriesFetchError) {
       if (countriesFetchError instanceof Error) {
@@ -69,14 +69,56 @@ const StationBrowserPage = (): React.JSX.Element => {
     }
   }, [isLanguagesFetchError]);
 
-  // Update url search params when filter are updated.
+  // Update url search params when filters or pagenum update.
   useEffect(() => {
-    handleSearch();
-  }, [filters]);
+    updateURLSearchParams();
+  }, [filters, pageNum]);
 
-  const handleSearch = () => {
-    setStationBrowserSearchParams(searchInputs, filters, router);
+  /*
+    Event handlers.
+  */
+
+  // Updates to url search params will trigger a search.
+  const updateURLSearchParams = () => {
+    setStationBrowserSearchParams(searchInputs, filters, pageNum, router);
   };
+
+  // Search happens immediately after filters update. Reset page number when filters are updated.
+  const handleChangeSortingOption = useCallback((sortingOption: StationSortingOption) => {
+    setFilters((prev) => {
+      if (prev.order === sortingOption) {
+        console.log(prev.order, 'was equal', sortingOption);
+        return prev;
+      }
+      return {
+        ...prev,
+        order: sortingOption,
+      };
+    });
+    setPageNum(1);
+  }, []);
+
+  const handleChangeCountry = useCallback((country: string) => {
+    setFilters((prev) => {
+      if (prev.country === country) return prev;
+      return {
+        ...prev,
+        country: country,
+      };
+    });
+    setPageNum(1);
+  }, []);
+
+  const handleChangeLanguage = useCallback((language: string) => {
+    setFilters((prev) => {
+      if (prev.language === language) return prev;
+      return {
+        ...prev,
+        language: language,
+      };
+    });
+    setPageNum(1);
+  }, []);
 
   return (
     <div className="flex w-full grow flex-col gap-y-4">
@@ -89,21 +131,26 @@ const StationBrowserPage = (): React.JSX.Element => {
           <>
             <Filters
               filters={filters}
-              setFilters={setFilters}
               searchInputs={searchInputs}
               setSearchInputs={setSearchInputs}
-              onSearch={handleSearch}
+              updateURLSearchParams={updateURLSearchParams}
+              pageNum={pageNum}
+              setPageNum={setPageNum}
               countries={countryData.countries}
               languages={languageData.languages}
               longestCountryLabel={countryData.longestLabel}
               longestLanguageLabel={languageData.longestLabel}
+              handleChangeSortingOption={handleChangeSortingOption}
+              handleChangeCountry={handleChangeCountry}
+              handleChangeLanguage={handleChangeLanguage}
             />
-
             <StationList
-              stations={stationData}
+              stationData={stationData}
               isLoading={stationsLoading}
               isError={isStationsFetchError}
               error={stationsFetchError}
+              pageNum={pageNum}
+              setPageNum={setPageNum}
             />
           </>
         )}

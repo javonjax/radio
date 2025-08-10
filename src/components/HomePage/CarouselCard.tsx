@@ -103,7 +103,7 @@ const CarouselCard = ({
                 <div>Country:</div>
                 <Link
                   className="hover:text-accent"
-                  href={`/stations?country=${station.country}&order=clickcount`}
+                  href={`/stations?country=${station.country}&order=clickcount&page=1`}
                 >
                   {station.country}
                 </Link>
@@ -118,7 +118,7 @@ const CarouselCard = ({
                     <li key={`${station.name}-${lang}`}>
                       <Link
                         className="hover:text-accent"
-                        href={`/stations?language=${lang}&order=clickcount`}
+                        href={`/stations?language=${lang}&order=clickcount&page=1`}
                       >
                         {capitalize(lang)}
                       </Link>
@@ -151,7 +151,7 @@ const CarouselCard = ({
                     <li key={tag} className="hover:text-accent text-wrap break-words">
                       <Link
                         className="underline"
-                        href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
+                        href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount&page=1`}
                       >
                         {capitalize(tag)}
                       </Link>
