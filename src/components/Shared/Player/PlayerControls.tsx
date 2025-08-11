@@ -111,7 +111,7 @@ const PlayerControls = ({
                         <div>Country:</div>
                         <Link
                           className="hover:text-accent"
-                          href={`/stations?country=${station.country}&order=clickcount`}
+                          href={`/stations?country=${station.country}&order=clickcount&page=1`}
                         >
                           {station.country}
                         </Link>
@@ -128,7 +128,7 @@ const PlayerControls = ({
                               <li key={`${station.name}-${lang}`}>
                                 <Link
                                   className="hover:text-accent"
-                                  href={`/stations?language=${lang}&order=clickcount`}
+                                  href={`/stations?language=${lang}&order=clickcount&page=1`}
                                 >
                                   {capitalize(lang)}
                                 </Link>
@@ -148,7 +148,7 @@ const PlayerControls = ({
                               <li key={tag} className="hover:text-accent">
                                 <Link
                                   className="h-full w-full underline"
-                                  href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
+                                  href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount&page=1`}
                                   onClick={() => console.log(tag)}
                                 >
                                   {capitalize(tag)}

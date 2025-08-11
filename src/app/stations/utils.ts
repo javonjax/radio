@@ -9,9 +9,11 @@ import { StationFilters, StationSearchInputs, StationSortingOption } from '../..
 export const setStationBrowserSearchParams = (
   searchInputs: StationSearchInputs,
   filters: StationFilters,
+  pageNum: number,
   router: AppRouterInstance
 ): void => {
   const searchParams: string[] = [];
+
   if (searchInputs.name.length) {
     searchParams.push(`name=${encodeURIComponent(searchInputs.name)}`);
   }
@@ -32,7 +34,8 @@ export const setStationBrowserSearchParams = (
     searchParams.push(`order=${encodeURIComponent(filters.order)}`);
   }
 
-  const searchParamsString: string = `?${searchParams.join('&')}`;
+  const searchParamsString: string = `?${searchParams.join('&')}&page=${pageNum}`;
+
   router.push(searchParamsString);
 };
 

@@ -3,10 +3,10 @@ import { RadioStation, Tag } from '../lib/api/schemas';
 import Header from '../components/HomePage/Header';
 import { capitalize, handleAPIError, handleAPIFetch } from '@/lib/utils';
 import { useContext, useEffect } from 'react';
-import {
-  LocationContext,
-  LocationContextType,
-} from '@/components/ContextProviders/LocationContext';
+// import {
+//   LocationContext,
+//   LocationContextType,
+// } from '@/components/ContextProviders/LocationContext';
 import {
   Carousel,
   CarouselContent,
@@ -234,7 +234,7 @@ const HomePage = (): React.JSX.Element => {
                     rel="noopener noreferrer"
                     key={tag.name}
                     className="hover:text-accent cursor-pointer rounded-md border-2 p-4"
-                    href={`/stations?tag=${tag.name}&order=clickcount`}
+                    href={`/stations?tag=${tag.name}&order=clickcount&page=1`}
                   >
                     <h3>{capitalize(tag?.name || '')}</h3>
                     <h4>{tag.stationcount} Live Stations</h4>

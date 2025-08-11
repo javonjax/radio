@@ -53,7 +53,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
         <h1 className="text-heading text-2xl">Station Info</h1>
         {(stationLoading || stationClicksLoading) && <LoadingSpinner />}
         {isStationFetchError && <div>{stationFetchError.message}</div>}
-        {!isStationFetchError && !stationLoading && station && (
+        {!isStationFetchError && !stationLoading && !stationClicksLoading && station && (
           <div className="flex grow flex-col gap-y-2">
             <div id="station-name" className="flex w-full items-center xl:p-2">
               {/*
@@ -145,7 +145,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                 <div>Country:</div>
                 <Link
                   className="hover:text-accent"
-                  href={`/stations?country=${station.country}&order=clickcount`}
+                  href={`/stations?country=${station.country}&order=clickcount&page=1`}
                 >
                   {station.country}
                 </Link>
@@ -160,7 +160,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                     <li key={`${station.name}-${lang}`}>
                       <Link
                         className="hover:text-accent"
-                        href={`/stations?language=${lang}&order=clickcount`}
+                        href={`/stations?language=${lang}&order=clickcount&page=1`}
                       >
                         {capitalize(lang)}
                       </Link>
@@ -196,7 +196,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                       >
                         <Link
                           className="h-full w-full underline"
-                          href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
+                          href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount&page=1`}
                           onClick={() => console.log(tag)}
                         >
                           {capitalize(tag)}
@@ -208,66 +208,69 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
               )}
             </div>
             {isStationClicksFetchError && <div>{stationClicksFetchError.message}</div>}
-            {!isStationClicksFetchError && !stationClicksLoading && stationClicks && (
-              <Card className="bg-background text-foreground m-0 border-0 px-0">
-                <CardHeader>
-                  <CardTitle className="text-xl font-normal">Station Traffic</CardTitle>
-                  <CardDescription>Clicks - Last 24 Hours</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ChartContainer config={{}}>
-                    <AreaChart
-                      accessibilityLayer
-                      data={stationClicks}
-                      margin={{
-                        right: 24,
-                        top: 8,
-                        bottom: 32,
-                      }}
-                    >
-                      <CartesianGrid vertical={false} />
-                      <XAxis
-                        dataKey="hour"
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        angle={-45}
-                        fontSize={12}
-                        dy={10}
-                        interval="preserveEnd"
-                        label={{ value: 'Time', position: 'bottom', offset: 20, fontSize: 16 }}
-                      />
-                      <YAxis
-                        domain={[0, 'dataMax']}
-                        tickLine={false}
-                        label={{
-                          value: 'Clicks',
-                          angle: -90,
-                          position: 'insideLeft',
-                          fontSize: 16,
+            {!isStationClicksFetchError &&
+              !stationLoading &&
+              !stationClicksLoading &&
+              stationClicks && (
+                <Card className="bg-background text-foreground m-0 border-0 px-0">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-normal">Station Traffic</CardTitle>
+                    <CardDescription>Clicks - Last 24 Hours</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={{}}>
+                      <AreaChart
+                        accessibilityLayer
+                        data={stationClicks}
+                        margin={{
+                          right: 24,
+                          top: 8,
+                          bottom: 32,
                         }}
-                      />
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent hideLabel className="capitalize" />}
-                      />
-                      <Area
-                        dataKey="clicks"
-                        type="monotone"
-                        stroke="var(--accent)"
-                        strokeWidth={2}
-                        dot={{
-                          fill: 'var(--accent)',
-                        }}
-                        activeDot={{
-                          r: 6,
-                        }}
-                      />
-                    </AreaChart>
-                  </ChartContainer>
-                </CardContent>
-              </Card>
-            )}
+                      >
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                          dataKey="hour"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          angle={-45}
+                          fontSize={12}
+                          dy={10}
+                          interval="preserveEnd"
+                          label={{ value: 'Time', position: 'bottom', offset: 20, fontSize: 16 }}
+                        />
+                        <YAxis
+                          domain={[0, 'dataMax']}
+                          tickLine={false}
+                          label={{
+                            value: 'Clicks',
+                            angle: -90,
+                            position: 'insideLeft',
+                            fontSize: 16,
+                          }}
+                        />
+                        <ChartTooltip
+                          cursor={false}
+                          content={<ChartTooltipContent hideLabel className="capitalize" />}
+                        />
+                        <Area
+                          dataKey="clicks"
+                          type="monotone"
+                          stroke="var(--accent)"
+                          strokeWidth={2}
+                          dot={{
+                            fill: 'var(--accent)',
+                          }}
+                          activeDot={{
+                            r: 6,
+                          }}
+                        />
+                      </AreaChart>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+              )}
           </div>
         )}
       </div>

@@ -15,29 +15,28 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Country, Language } from '@/lib/api/schemas';
-import { StationFilters, StationSortingOption } from '@/lib/schemas';
-import { Dispatch, SetStateAction } from 'react';
+import { StationSortingOption } from '@/lib/schemas';
 
 export interface ComboboxProps {
   value: string | StationSortingOption;
-  filters: StationFilters;
-  setFilters: Dispatch<SetStateAction<StationFilters>>;
   label: string;
   placeholder: string;
   emptyPlaceholder: string;
   options?: Language[] | Country[] | string[];
   longestLabel?: string;
+  handleChangeCountry?: (country: string) => void;
+  handleChangeLanguage?: (language: string) => void;
 }
 
 const Combobox = ({
   value,
-  filters,
-  setFilters,
   label,
   placeholder,
   emptyPlaceholder,
   options,
   longestLabel,
+  handleChangeCountry,
+  handleChangeLanguage,
 }: ComboboxProps): React.JSX.Element => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [triggerWidth, setTriggerWidth] = React.useState<number>();
@@ -97,10 +96,7 @@ const Combobox = ({
                         className="flex text-wrap break-words whitespace-normal"
                         value={'All'}
                         onSelect={() => {
-                          setFilters({
-                            ...filters,
-                            country: '',
-                          });
+                          handleChangeCountry?.('');
                           setOpen(false);
                         }}
                       >
@@ -116,10 +112,10 @@ const Combobox = ({
                             className="flex text-wrap break-words whitespace-normal"
                             value={country.name}
                             onSelect={(currentValue) => {
-                              setFilters({
-                                ...filters,
-                                country: currentValue === value ? '' : currentValue,
-                              });
+                              console.log('current country', currentValue);
+                              handleChangeCountry?.(
+                                `${currentValue === value ? '' : currentValue}`
+                              );
                               setOpen(false);
                             }}
                           >
@@ -142,10 +138,7 @@ const Combobox = ({
                         className="flex text-wrap break-words whitespace-normal"
                         value={'All'}
                         onSelect={() => {
-                          setFilters({
-                            ...filters,
-                            language: '',
-                          });
+                          handleChangeLanguage?.('');
                           setOpen(false);
                         }}
                       >
@@ -161,10 +154,9 @@ const Combobox = ({
                             className="flex text-wrap break-words whitespace-normal"
                             value={language.name}
                             onSelect={(currentValue) => {
-                              setFilters({
-                                ...filters,
-                                language: currentValue === value ? '' : currentValue,
-                              });
+                              handleChangeLanguage?.(
+                                `${currentValue === value ? '' : currentValue}`
+                              );
                               setOpen(false);
                             }}
                           >

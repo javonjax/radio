@@ -111,7 +111,7 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
                   <div>Country:</div>
                   <Link
                     className="hover:text-accent"
-                    href={`/stations?country=${station.country}&order=clickcount`}
+                    href={`/stations?country=${station.country}&order=clickcount&page=1`}
                   >
                     {station.country}
                   </Link>
@@ -130,7 +130,7 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
                       <li key={`${station.name}-${lang}`}>
                         <Link
                           className="hover:text-accent"
-                          href={`/stations?language=${lang}&order=clickcount`}
+                          href={`/stations?language=${lang}&order=clickcount&page=1`}
                         >
                           {capitalize(lang)}
                         </Link>

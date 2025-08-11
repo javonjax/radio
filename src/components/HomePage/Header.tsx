@@ -33,7 +33,7 @@ const Header = () => {
       <div className="col-span-full flex items-center justify-center gap-6">
         <Link
           className="rounded-md bg-linear-(--accent-gradient) p-4"
-          href="/stations?order=clickcount"
+          href="/stations?order=clickcount&page=1"
         >
           Browse Stations
         </Link>

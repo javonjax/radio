@@ -6,18 +6,22 @@ import { Dispatch, SetStateAction } from 'react';
 import { StationFilters, StationSearchInputs } from '../../../lib/schemas';
 import { useQuery } from '@tanstack/react-query';
 
+//TODO: pass in a page num (page num - 1 * page size = offset ex 2 - 1 * 25 = offset 25)
+// return hasMore by checking if pagenum * offset = offset, limit=1 returns radio stations.
 export const useFetchStations = (
   searchParams: ReadonlyURLSearchParams,
+  pageNum: number,
   setSearchInputs: Dispatch<SetStateAction<StationSearchInputs>>,
   setFilters: Dispatch<SetStateAction<StationFilters>>
 ) => {
   const searchParamString: string = searchParams.toString();
-  const fetchStations = async (): Promise<RadioStation[]> => {
+  const fetchStations = async (): Promise<{ stations: RadioStation[]; hasMore: boolean }> => {
     setStationBrowserDropdownOptions(searchParams, setSearchInputs, setFilters);
-    let url: string = `/api/stations/search?limit=100&hidebroken=true`;
-    const paramString: string = searchParams.toString();
-    if (paramString.length) {
-      url += `&${paramString}`;
+    const itemsPerPage: number = 10;
+    const offset: number = (pageNum - 1) * itemsPerPage;
+    let url: string = `/api/stations/search?limit=${itemsPerPage + 1}&offset=${offset}&hidebroken=true`;
+    if (searchParamString.length) {
+      url += `&${searchParamString}`;
     }
     /* 
           Numerical data from the radio-browser API is sorted in ascending order.
@@ -29,10 +33,15 @@ export const useFetchStations = (
     }
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const radioStations: RadioStation[] = await res.json();
-    return radioStations;
+    let hasMore: boolean = false;
+    if (radioStations.length === itemsPerPage + 1) {
+      hasMore = true;
+    }
+
+    return { stations: radioStations.slice(0, -1), hasMore: hasMore };
   };
 
-  return useQuery<RadioStation[]>({
+  return useQuery<{ stations: RadioStation[]; hasMore: boolean }>({
     queryKey: ['fetchStations', searchParamString],
     queryFn: fetchStations,
   });

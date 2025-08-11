@@ -1,4 +1,9 @@
-import { DropdownMenuOption, StationFilters, StationSearchInputs } from '@/lib/schemas';
+import {
+  DropdownMenuOption,
+  StationFilters,
+  StationSearchInputs,
+  StationSortingOption,
+} from '@/lib/schemas';
 import { Country, Language } from '@/lib/api/schemas';
 import { Search } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
@@ -7,14 +12,19 @@ import DropdownMenu from './DropdownMenu';
 
 export interface FiltersProps {
   filters: StationFilters;
-  setFilters: Dispatch<SetStateAction<StationFilters>>;
+
   languages: Language[];
   countries: Country[];
   searchInputs: StationSearchInputs;
   setSearchInputs: Dispatch<SetStateAction<StationSearchInputs>>;
-  onSearch: () => void;
+  pageNum: number;
+  setPageNum: Dispatch<SetStateAction<number>>;
   longestCountryLabel: string;
   longestLanguageLabel: string;
+  handleChangeSortingOption: (sortingOption: StationSortingOption) => void;
+  handleChangeCountry: (country: string) => void;
+  handleChangeLanguage: (language: string) => void;
+  updateURLSearchParams: () => void;
 }
 
 /*
@@ -31,21 +41,32 @@ const sortingOptions: DropdownMenuOption[] = [
 
 const Filters = ({
   filters,
-  setFilters,
   languages,
   countries,
   searchInputs,
   setSearchInputs,
-  onSearch,
+  pageNum,
+  setPageNum,
   longestCountryLabel,
   longestLanguageLabel,
+  handleChangeSortingOption,
+  handleChangeCountry,
+  handleChangeLanguage,
+  updateURLSearchParams,
 }: FiltersProps): React.JSX.Element => {
   return (
     <form
       className="flex w-full flex-col"
       onSubmit={(e) => {
         e.preventDefault();
-        onSearch();
+        // Manually trigger params update if page num is already 1, otherwise the act of resetting page num to 1 will also update other params.
+        // Text inputs should only update search params when the form is submitted.
+        // Other filteer changes such as changing the page number or selecting an option from a dropdown will update search params immediately.
+        if (pageNum === 1) {
+          updateURLSearchParams();
+        } else {
+          setPageNum(1);
+        }
       }}
     >
       <div className="flex w-full flex-wrap items-center gap-4 py-4">
@@ -56,7 +77,6 @@ const Filters = ({
             value={searchInputs.name}
             onChange={(e) => {
               setSearchInputs({ ...searchInputs, name: e.target.value });
-              // setFilters({ ...filters, name: e.target.value });
             }}
             type="search"
             className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
@@ -74,7 +94,6 @@ const Filters = ({
             value={searchInputs.tag}
             onChange={(e) => {
               setSearchInputs({ ...searchInputs, tag: e.target.value });
-              // setFilters({ ...filters, tag: e.target.value });
             }}
             type="search"
             className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
@@ -88,10 +107,8 @@ const Filters = ({
         <DropdownMenu
           label="Sort by"
           value={filters.order ?? 'name'}
-          filters={filters}
-          setFilters={setFilters}
           options={sortingOptions}
-          type="order"
+          handleChangeSortingOption={handleChangeSortingOption}
         />
 
         {countries && countries.length > 0 && (
@@ -101,9 +118,8 @@ const Filters = ({
             emptyPlaceholder="Country not found."
             placeholder="Search country..."
             value={filters.country}
-            filters={filters}
-            setFilters={setFilters}
             longestLabel={longestCountryLabel}
+            handleChangeCountry={handleChangeCountry}
           />
         )}
         {languages && languages.length > 0 && (
@@ -113,19 +129,11 @@ const Filters = ({
             emptyPlaceholder="Language not found."
             placeholder="Search language..."
             value={filters.language}
-            filters={filters}
-            setFilters={setFilters}
             longestLabel={longestLanguageLabel}
+            handleChangeLanguage={handleChangeLanguage}
           />
         )}
       </div>
-
-      {/* <button
-        className="flex w-fit cursor-pointer gap-2 rounded-lg bg-linear-(--accent-gradient) p-4"
-        type="submit"
-      >
-        Search <Search />
-      </button> */}
     </form>
   );
 };

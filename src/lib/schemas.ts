@@ -19,7 +19,7 @@ export type StationSortingOption =
 
 export type DropdownMenuOption = {
   label: string;
-  value: string;
+  value: StationSortingOption;
 };
 
 // Accounts

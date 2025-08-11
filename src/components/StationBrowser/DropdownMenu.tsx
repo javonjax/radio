@@ -1,6 +1,6 @@
 'use client';
 
-import { DropdownMenuOption, StationFilters, StationSortingOption } from '@/lib/schemas';
+import { DropdownMenuOption, StationSortingOption } from '@/lib/schemas';
 import {
   DropdownMenu as Menu,
   DropdownMenuContent,
@@ -15,13 +15,11 @@ import * as React from 'react';
 export interface DropdownMenuProps {
   label: string;
   value: string | StationSortingOption;
-  filters: StationFilters;
-  setFilters: React.Dispatch<React.SetStateAction<StationFilters>>;
   options: DropdownMenuOption[];
-  type: 'name' | 'tag' | 'order' | 'country' | 'language';
+  handleChangeSortingOption?: (sortingOption: StationSortingOption) => void;
 }
 
-const DropdownMenu = ({ label, value, filters, setFilters, options, type }: DropdownMenuProps) => {
+const DropdownMenu = ({ label, value, options, handleChangeSortingOption }: DropdownMenuProps) => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [triggerWidth, setTriggerWidth] = React.useState<number>();
   const [longestLabel, setLongestLabel] = React.useState<string>();
@@ -72,7 +70,8 @@ const DropdownMenu = ({ label, value, filters, setFilters, options, type }: Drop
               <DropdownMenuItem
                 key={option.value}
                 onSelect={() => {
-                  setFilters({ ...filters, [type]: option.value });
+                  console.log('filters set ', label, option.value);
+                  handleChangeSortingOption?.(option.value);
                   setOpen(false);
                 }}
               >
