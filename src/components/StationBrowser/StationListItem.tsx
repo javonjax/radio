@@ -203,7 +203,7 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
           </button>
           <Link
             className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
-            href={`/stations/${station.stationuuid}&page=1`}
+            href={`/stations/${station.stationuuid}`}
           >
             <Info />
           </Link>
