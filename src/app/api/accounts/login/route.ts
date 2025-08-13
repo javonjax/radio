@@ -2,6 +2,7 @@ import { User } from '@/lib/api/schemas';
 import { checkIfUserExists, HTTPError } from '@/lib/api/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
+import { createSession } from '@/lib/session';
 
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
@@ -12,7 +13,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       throw new HTTPError('Missing login parameters.', 400);
     }
 
-    const user: User = await checkIfUserExists('email', email);
+    const user: User | undefined = await checkIfUserExists('email', email);
 
     if (!user) {
       throw new HTTPError('Invalid email or password.', 404);
@@ -24,7 +25,13 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       throw new HTTPError('Invalid email or password.', 404);
     }
 
-    return NextResponse.json({ message: 'User has logged in.' });
+    const sessionCreated: boolean = await createSession(user.id);
+
+    if (!sessionCreated) {
+      throw new HTTPError('Failed to create login session.', 500);
+    }
+
+    return NextResponse.json({ message: 'Login successful.' });
   } catch (error) {
     let message: string = 'Internal server error';
     let status: number | undefined = undefined;

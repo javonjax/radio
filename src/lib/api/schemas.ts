@@ -81,3 +81,8 @@ export interface User {
   email: string;
   password_hash: string;
 }
+
+export interface Session {
+  isAuth: boolean;
+  userId: number | undefined;
+}

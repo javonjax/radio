@@ -25,6 +25,7 @@
     "embla-carousel-react": "^8.6.0",
     "hls.js": "^1.6.7",
     "iconoir-react": "^7.11.0",
+    "jose": "^6.0.12",
     "lucide-react": "^0.511.0",
     "motion": "^12.19.1",
     "next": "^15.3.4",
