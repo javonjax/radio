@@ -1,3 +1,5 @@
+import { JWTPayload } from 'jose';
+
 export type StationFilters = {
   order: StationSortingOption;
   country: string;
@@ -90,3 +92,7 @@ export const loginPasswordValidation = {
 };
 
 export type LoginPasswordValidation = typeof loginPasswordValidation;
+
+export interface SessionPayload extends JWTPayload {
+  userId: number;
+}

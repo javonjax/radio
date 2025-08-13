@@ -173,7 +173,10 @@ export const capitalize = (str: string): string => {
 /*
   Check if user exists by passing in a field and value.
 */
-export const checkIfUserExists = async (field: string, value: string): Promise<User> => {
+export const checkIfUserExists = async (
+  field: string,
+  value: string
+): Promise<User | undefined> => {
   const query = {
     text: `SELECT * FROM users.users WHERE ${field} = $1;`,
     values: [value],

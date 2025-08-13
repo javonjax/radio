@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { QueryResult } from 'pg';
 import bcrypt from 'bcrypt';
 import { User } from '@/lib/api/schemas';
+import { createSession } from '@/lib/session';
 
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
@@ -30,7 +31,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
     console.log('Attempting to register account...');
     query = {
-      text: 'INSERT INTO users.users (email, password_hash) VALUES ($1, $2);',
+      text: 'INSERT INTO users.users (email, password_hash) VALUES ($1, $2) RETURNING id;',
       values: [email, hashedPassword],
     };
 
@@ -38,8 +39,12 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     if (!queryRes.rowCount) {
       throw new HTTPError('Registration failed. Please try again later.', 500);
     }
+    console.log(queryRes);
+    console.log(queryRes.rows[0]);
+    const userId: number = queryRes.rows[0].id;
+    await createSession(userId);
 
-    return NextResponse.json({ message: 'Account created.' });
+    return NextResponse.json({ message: 'Registration successful.' });
   } catch (error) {
     let message: string = 'Internal server error';
     let status: number | undefined = undefined;
