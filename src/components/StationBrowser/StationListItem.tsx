@@ -160,7 +160,7 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
           >
             {station.tags && station.tags.length > 0 && (
               <>
-                <div className="flex gap-x-2">
+                <div className="flex w-full gap-x-2">
                   <Tag size={20} className="min-h-[20px] w-[20px] min-w-[20px] xl:hidden" />
                   <div className="xl:hidden">Tags:</div>
                   <ul className="flex h-full w-full flex-wrap gap-x-2 text-wrap break-words xl:max-h-[300px] xl:flex-col xl:flex-nowrap xl:gap-0 xl:overflow-y-auto">
