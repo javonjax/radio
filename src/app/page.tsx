@@ -126,7 +126,6 @@ const HomePage = (): React.JSX.Element => {
     }
   }, [isTagsFetchError]);
 
-  // TODO: API seems to be bugged when searching with a geo_distance.
   useEffect(() => {
     if (isTagsFetchError) {
       console.log(tagsFetchError.message);
