@@ -62,8 +62,24 @@ export const handleAPIError = (error: unknown): void => {
   warningToast('Uh-oh.', toastDescription);
 };
 
+export const successToast = (message: string = 'Success.', description: string): void => {
+  toast.success(message, {
+    position: 'top-center',
+    duration: 7000,
+    description: description,
+  });
+};
+
 export const warningToast = (message: string = 'Uh-oh.', description: string): void => {
   toast.warning(message, {
+    position: 'top-center',
+    duration: 7000,
+    description: description,
+  });
+};
+
+export const errorToast = (message: string = 'Success.', description: string): void => {
+  toast.error(message, {
     position: 'top-center',
     duration: 7000,
     description: description,

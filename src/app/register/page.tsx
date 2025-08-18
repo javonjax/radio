@@ -1,16 +1,28 @@
 'use client';
 import FormInput from '@/components/Accounts/FormInput';
+import { AuthContextType, AuthContext } from '@/components/ContextProviders/AuthContext';
 import {
   confirmPasswordValidation,
   emailValidation,
   registrationPasswordValidation,
 } from '@/lib/schemas';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
-const RegistrationPage = () => {
-  const [registrationError, setRegistrationError] = useState<string>('');
+const RegistrationPage = (): React.JSX.Element => {
+  const authContext = useContext<AuthContextType | undefined>(AuthContext);
+
+  /*
+      Clears the registration error after navigating away from the registration page.
+      This makes it so the stale error is not still displayed on the registration form later.
+    */
+  useEffect(() => {
+    return () => {
+      authContext?.clearRegistrationError();
+    };
+  }, []);
+
   const {
     register,
     formState: { errors, isValid },
@@ -21,29 +33,17 @@ const RegistrationPage = () => {
   // Watch the 'password' field to compare with the 'confirm password' field.
   const passwordInput = watch('password');
 
-  const onSubmit: SubmitHandler<FieldValues> = async (e) => {
-    const res: globalThis.Response = await fetch('/api/accounts/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify(e),
-    });
-
-    const data = await res.json();
-    console.log(data);
-
-    if (!res.ok) {
-      setRegistrationError(data.error);
-    }
+  const onSubmit: SubmitHandler<FieldValues> = async (e: FieldValues) => {
+    await authContext?.register(e);
   };
 
   return (
     <div className="flex h-full w-full grow items-center justify-center">
       <div className="my-4 flex w-[400px] flex-col rounded-md border-2 p-4">
         <h1 className="text-accent mb-4 text-xl">Register</h1>
-        {registrationError && <p className="m-0 mb-4 text-red-600">{registrationError}</p>}
+        {authContext?.registrationError && (
+          <p className="m-0 mb-4 text-red-600">{authContext?.registrationError}</p>
+        )}
         <form className="flex grow flex-col" onSubmit={handleSubmit(onSubmit)}>
           <FormInput
             register={register}
@@ -51,7 +51,6 @@ const RegistrationPage = () => {
             label="Email Address"
             options={emailValidation}
             validationError={errors.email}
-            submissionError={registrationError}
           />
           <FormInput
             register={register}

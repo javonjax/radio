@@ -9,7 +9,8 @@ import IconGradient from '@/components/Shared/IconGradient';
 import { Toaster } from '@/components/ui/sonner';
 import { StationContextProvider } from '@/components/ContextProviders/StationContext';
 import { LocationContextProvider } from '@/components/ContextProviders/LocationContext';
-import QueryProvider from '@/components/QueryProvider/QueryProvider';
+import QueryProvider from '@/components/ContextProviders/QueryProvider';
+import { AuthContextProvider } from '@/components/ContextProviders/AuthContext';
 
 // Fonts.
 const nunito = Nunito({
@@ -38,23 +39,27 @@ const RootLayout = ({
         className={`${nunito.variable} ${robotoMono.variable} relative flex min-h-screen w-full flex-col`}
       >
         <QueryProvider>
-          <LocationContextProvider>
-            <StationContextProvider>
-              <ThemeProvider
-                attribute="class"
-                enableSystem
-                defaultTheme="system"
-                disableTransitionOnChange
-              >
-                <IconGradient />
-                <Toaster richColors closeButton visibleToasts={1} />
-                <Header />
-                <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">{children}</main>
-                <Footer />
-                <Player />
-              </ThemeProvider>
-            </StationContextProvider>
-          </LocationContextProvider>
+          <AuthContextProvider>
+            <LocationContextProvider>
+              <StationContextProvider>
+                <ThemeProvider
+                  attribute="class"
+                  enableSystem
+                  defaultTheme="system"
+                  disableTransitionOnChange
+                >
+                  <IconGradient />
+                  <Toaster richColors closeButton visibleToasts={1} />
+                  <Header />
+                  <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">
+                    {children}
+                  </main>
+                  <Footer />
+                  <Player />
+                </ThemeProvider>
+              </StationContextProvider>
+            </LocationContextProvider>
+          </AuthContextProvider>
         </QueryProvider>
       </body>
     </html>
