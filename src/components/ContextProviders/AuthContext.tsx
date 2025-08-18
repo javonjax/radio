@@ -13,6 +13,8 @@ export interface AuthContextType {
   logout: () => Promise<void>;
   loginError: string | undefined;
   registrationError: string | undefined;
+  clearLoginError: () => void;
+  clearRegistrationError: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -86,7 +88,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
       setLoginError(undefined);
       const data: { message: string } = await res.json();
       router.push('/');
-      successToast(data.message, 'Enjoy your stay. Share your favs.');
+      successToast(data.message, 'Enjoy your stay. Share your faves.');
     } catch (error) {
       if (error instanceof APIError) {
         handleAPIError(error);
@@ -149,9 +151,27 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     }
   };
 
+  const clearLoginError = (): void => {
+    setLoginError(undefined);
+  };
+
+  const clearRegistrationError = (): void => {
+    setRegistrationError(undefined);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ isAuth, userId, register, login, logout, loginError, registrationError }}
+      value={{
+        isAuth,
+        userId,
+        register,
+        login,
+        logout,
+        loginError,
+        registrationError,
+        clearLoginError,
+        clearRegistrationError,
+      }}
     >
       {children}
     </AuthContext.Provider>

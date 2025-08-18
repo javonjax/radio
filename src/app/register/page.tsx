@@ -7,11 +7,22 @@ import {
   registrationPasswordValidation,
 } from '@/lib/schemas';
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 const RegistrationPage = (): React.JSX.Element => {
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
+
+  /*
+      Clears the registration error after navigating away from the registration page.
+      This makes it so the stale error is not still displayed on the registration form later.
+    */
+  useEffect(() => {
+    return () => {
+      authContext?.clearRegistrationError();
+    };
+  }, []);
+
   const {
     register,
     formState: { errors, isValid },
@@ -31,7 +42,7 @@ const RegistrationPage = (): React.JSX.Element => {
       <div className="my-4 flex w-[400px] flex-col rounded-md border-2 p-4">
         <h1 className="text-accent mb-4 text-xl">Register</h1>
         {authContext?.registrationError && (
-          <p className="m-0 mb-4 text-red-600">{authContext.registrationError}</p>
+          <p className="m-0 mb-4 text-red-600">{authContext?.registrationError}</p>
         )}
         <form className="flex grow flex-col" onSubmit={handleSubmit(onSubmit)}>
           <FormInput

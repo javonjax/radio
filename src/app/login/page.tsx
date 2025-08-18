@@ -3,11 +3,22 @@ import FormInput from '@/components/Accounts/FormInput';
 import { AuthContext, AuthContextType } from '@/components/ContextProviders/AuthContext';
 import { emailValidation, loginPasswordValidation } from '@/lib/schemas';
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 const LoginPage = (): React.JSX.Element => {
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
+
+  /*
+    Clears the login error after navigating away from the login page.
+    This makes it so the stale error is not still displayed on the login form later.
+  */
+  useEffect(() => {
+    return () => {
+      authContext?.clearLoginError();
+    };
+  }, []);
+
   const {
     register,
     formState: { errors, isValid },
