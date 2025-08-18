@@ -6,6 +6,9 @@ import bcrypt from 'bcrypt';
 import { User } from '@/lib/api/schemas';
 import { createSession } from '@/lib/session';
 
+const DB_SCHEMA: string = process.env.DB_SCHEMA as string;
+const DB_USERS_TABLE: string = process.env.DB_USERS_TABLE as string;
+
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const { email, password } = await request.json();
@@ -17,7 +20,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
     console.log('Checking if an account is registered under the given email...');
     let query = {
-      text: 'SELECT * FROM users.users WHERE email = $1;',
+      text: `SELECT * FROM ${DB_SCHEMA}.${DB_USERS_TABLE} WHERE email = $1;`,
       values: [email],
     };
     const existsUnderEmail: QueryResult<User> = await pgPool.query(query);
@@ -31,7 +34,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
     console.log('Attempting to register account...');
     query = {
-      text: 'INSERT INTO users.users (email, password_hash) VALUES ($1, $2) RETURNING id;',
+      text: `INSERT INTO ${DB_SCHEMA}.${DB_USERS_TABLE} (email, password_hash) VALUES ($1, $2) RETURNING id;`,
       values: [email, hashedPassword],
     };
 

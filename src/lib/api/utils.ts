@@ -3,6 +3,8 @@ import { pgPool } from './db/db';
 import { QueryResult } from 'pg';
 import { User } from './schemas';
 
+const DB_SCHEMA: string = process.env.DB_SCHEMA as string;
+const DB_USERS_TABLE: string = process.env.DB_USERS_TABLE as string;
 let baseUrl: string | null = null;
 const goodBaseUrls = new Set<string>();
 
@@ -178,9 +180,11 @@ export const checkIfUserExists = async (
   value: string
 ): Promise<User | undefined> => {
   const query = {
-    text: `SELECT * FROM users.users WHERE ${field} = $1;`,
+    text: `SELECT * FROM ${DB_SCHEMA}.${DB_USERS_TABLE} WHERE ${field} = $1;`,
     values: [value],
   };
+
   const queryRes: QueryResult<User> = await pgPool.query(query);
+
   return queryRes.rows[0];
 };

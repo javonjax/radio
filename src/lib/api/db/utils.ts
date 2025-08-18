@@ -4,6 +4,8 @@ import fs from 'fs';
 import { QueryResult } from 'pg';
 
 // const NODE_ENV: string = process.env.NODE_ENV as string;
+const DB_SCHEMA: string = process.env.DB_SCHEMA as string;
+const DB_USERS_TABLE: string = process.env.DB_USERS_TABLE as string;
 
 export const initUsersDB = async () => {
   try {
@@ -11,7 +13,7 @@ export const initUsersDB = async () => {
       SELECT EXISTS (
         SELECT 1
         FROM information_schema.tables
-        WHERE table_schema = 'users' AND table_name = 'users'
+        WHERE table_schema = '${DB_SCHEMA}' AND table_name = '${DB_USERS_TABLE}'
       )
     `);
 
