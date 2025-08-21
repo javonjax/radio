@@ -1,9 +1,8 @@
 import { pgPool } from '@/lib/api/db/db';
-import { HTTPError } from '@/lib/api/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { QueryResult } from 'pg';
 import bcrypt from 'bcrypt';
-import { User } from '@/lib/api/schemas';
+import { HTTPError, User } from '@/lib/api/schemas';
 import { createSession } from '@/lib/session';
 
 const DB_SCHEMA: string = process.env.DB_SCHEMA as string;
@@ -38,7 +37,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       values: [email, hashedPassword],
     };
 
-    const queryRes: QueryResult<User> = await pgPool.query(query);
+    const queryRes: QueryResult<{ id: number }> = await pgPool.query(query);
     if (!queryRes.rowCount) {
       throw new HTTPError('Registration failed. Please try again later.', 500);
     }

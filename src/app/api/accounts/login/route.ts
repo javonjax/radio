@@ -1,5 +1,5 @@
-import { User } from '@/lib/api/schemas';
-import { checkIfUserExists, HTTPError } from '@/lib/api/utils';
+import { HTTPError, User } from '@/lib/api/schemas';
+import { checkIfUserExists } from '@/lib/api/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import { createSession } from '@/lib/session';

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getRandomRadioBrowserBaseUrl, HTTPError } from '../../../../lib/api/utils';
+import { getRandomRadioBrowserBaseUrl } from '@/lib/api/utils';
+import { HTTPError } from '@/lib/api/schemas';
 
 /*
   GET a random available radio-browser server url.

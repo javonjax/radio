@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, RadioAPIFetch } from '../../../../lib/api/utils';
+import { getBaseUrl, RadioAPIFetch } from '@/lib/api/utils';
+import { HTTPError } from '@/lib/api/schemas';
 
 /*
   Increases station click count by passing in its UUID.

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getRadioBrowserBaseUrls, HTTPError } from '../../../../lib/api/utils';
+import { getRadioBrowserBaseUrls } from '@/lib/api/utils';
+import { HTTPError } from '@/lib/api/schemas';
 
 /*
   GET all available radio-browser server urls.

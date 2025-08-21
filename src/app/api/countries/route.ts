@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  capitalize,
-  getBaseUrl,
-  HTTPError,
-  isValidName,
-  RadioAPIFetch,
-  SchemaError,
-} from '../../../lib/api/utils';
-import { CountriesAPIResponse, Country } from '../../../lib/api/schemas';
+import { capitalize, getBaseUrl, isValidName, RadioAPIFetch } from '@/lib/api/utils';
+import { CountriesAPIResponse, Country, HTTPError, SchemaError } from '@/lib/api/schemas';
 
 /*
   GET a list of countries where radio stations are being hosted.

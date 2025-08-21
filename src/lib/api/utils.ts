@@ -1,7 +1,7 @@
 import { promises as dns, SrvRecord } from 'dns';
 import { pgPool } from './db/db';
 import { QueryResult } from 'pg';
-import { User } from './schemas';
+import { RadioBrowserServerError, User } from './schemas';
 
 const DB_SCHEMA: string = process.env.DB_SCHEMA as string;
 const DB_USERS_TABLE: string = process.env.DB_USERS_TABLE as string;
@@ -109,45 +109,6 @@ export const RadioAPIFetch = async (url: string, options: RequestInit = {}): Pro
     },
   });
 };
-
-/*
-  Custom error class for failure to retrieve active radio-browser servers.
-*/
-export class RadioBrowserServerError extends Error {
-  public status: number;
-  constructor(
-    message: string = 'An active radio-browser server could not be found.',
-    status: number = 500
-  ) {
-    super(message);
-    this.status = status;
-  }
-}
-
-/*
-  Custom error class that allows adding a status code.
-*/
-export class HTTPError extends Error {
-  public status: number;
-  constructor(message: string, status: number) {
-    super(message);
-    this.status = status;
-  }
-}
-
-/*
-  Custom error class for generic schema errors.
-*/
-export class SchemaError extends Error {
-  public status: number;
-  constructor(
-    message: string = 'API response does not match the desired schema.',
-    status: number = 500
-  ) {
-    super(message);
-    this.status = status;
-  }
-}
 
 /*
   Regex test if a character is a letter.

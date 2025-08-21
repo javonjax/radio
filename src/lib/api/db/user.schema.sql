@@ -3,5 +3,5 @@ CREATE SCHEMA IF NOT EXISTS radio;
 CREATE TABLE IF NOT EXISTS radio.users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(256) UNIQUE NOT NULL,
-    password_hash CHAR(60) NOT NULL
+    password_hash VARCHAR(100) NOT NULL
 );
