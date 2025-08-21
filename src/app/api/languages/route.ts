@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  getBaseUrl,
-  HTTPError,
-  isValidName,
-  RadioAPIFetch,
-  SchemaError,
-} from '../../../lib/api/utils';
-import { Language, LanguagesAPIResponse } from '../../../lib/api/schemas';
+import { getBaseUrl, isValidName, RadioAPIFetch } from '@/lib/api/utils';
+import { HTTPError, Language, LanguagesAPIResponse, SchemaError } from '@/lib/api/schemas';
 
 /*
   GET a list of languages for stations listed in the radio-browser data base.

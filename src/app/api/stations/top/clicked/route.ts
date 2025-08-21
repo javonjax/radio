@@ -1,5 +1,5 @@
-import { RadioStation, RadioStationsAPIResponse } from '@/lib/api/schemas';
-import { getBaseUrl, HTTPError, RadioAPIFetch, SchemaError } from '@/lib/api/utils';
+import { HTTPError, RadioStation, RadioStationsAPIResponse, SchemaError } from '@/lib/api/schemas';
+import { getBaseUrl, RadioAPIFetch } from '@/lib/api/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {

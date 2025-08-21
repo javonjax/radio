@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, RadioAPIFetch, SchemaError } from '../../../lib/api/utils';
-import { TagsAPIResponse, Tag } from '../../../lib/api/schemas';
+import { getBaseUrl, RadioAPIFetch } from '@/lib/api/utils';
+import { TagsAPIResponse, Tag, HTTPError, SchemaError } from '@/lib/api/schemas';
 
 /*
   GET a list of tags in the radio-browser database. Tags are used to categorize

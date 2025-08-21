@@ -82,7 +82,60 @@ export interface User {
   password_hash: string;
 }
 
+export interface Favorite {
+  id: number;
+  user_id: string;
+  station_id: string;
+  station: RadioStation;
+  created_at: Date;
+}
+
 export interface Session {
   isAuth: boolean;
   userId: number | undefined;
+}
+
+export interface NewFavorite {
+  userId: number | undefined;
+  stationId: string | null;
+  station: RadioStation;
+}
+
+/*
+  Custom error class for failure to retrieve active radio-browser servers.
+*/
+export class RadioBrowserServerError extends Error {
+  public status: number;
+  constructor(
+    message: string = 'An active radio-browser server could not be found.',
+    status: number = 500
+  ) {
+    super(message);
+    this.status = status;
+  }
+}
+
+/*
+  Custom error class that allows adding a status code.
+*/
+export class HTTPError extends Error {
+  public status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
+
+/*
+  Custom error class for generic schema errors.
+*/
+export class SchemaError extends Error {
+  public status: number;
+  constructor(
+    message: string = 'API response does not match the desired schema.',
+    status: number = 500
+  ) {
+    super(message);
+    this.status = status;
+  }
 }

@@ -1,5 +1,4 @@
-import { Session } from '@/lib/api/schemas';
-import { HTTPError } from '@/lib/api/utils';
+import { HTTPError, Session } from '@/lib/api/schemas';
 import { getActiveSession } from '@/lib/session';
 import { NextResponse } from 'next/server';
 

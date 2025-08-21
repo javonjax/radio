@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBaseUrl, HTTPError, SchemaError } from '../../../../../../lib/api/utils';
-import { RadioAPIFetch } from '../../../../../../lib/api/utils';
+import { getBaseUrl } from '@/lib/api/utils';
+import { RadioAPIFetch } from '@/lib/api/utils';
 import {
   ClickData,
+  HTTPError,
+  SchemaError,
   StationClick,
   StationClicksAPIResponse,
-} from '../../../../../../lib/api/schemas';
+} from '@/lib/api/schemas';
 
 /*
   GET all radio stations.
@@ -20,7 +22,7 @@ export const GET = async (
     params: Promise<{ stationuuid: string }>;
   }
 ): Promise<NextResponse> => {
-  const { stationuuid } = await params;
+  const { stationuuid }: { stationuuid: string } = await params;
 
   try {
     const baseUrl: string = await getBaseUrl();
