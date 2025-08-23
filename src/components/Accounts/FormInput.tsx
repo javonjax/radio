@@ -7,6 +7,7 @@ export interface InputProps {
   name: string;
   label: string;
   options: RegisterOptions;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validationError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   submissionError?: string;
 }
