@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { StationContextType } from '@/components/ContextProviders/StationContext';
 import Link from 'next/link';
+import { useContext } from 'react';
+import { FavoritesContext, FavoritesContextType } from '../ContextProviders/FavoritesContext';
 
 export interface HomePageCarouselCardProps {
   station: RadioStation;
@@ -26,6 +28,7 @@ const CarouselCard = ({
   stationContext,
   variant = 'horizontal',
 }: HomePageCarouselCardProps) => {
+  const favoritesContext = useContext<FavoritesContextType | undefined>(FavoritesContext);
   return (
     <div className={`m-2 h-[450px] rounded-md border-2 ${variant === 'vertical' ? 'w-full' : ''}`}>
       <div className="flex h-full w-full flex-col justify-between gap-y-4 p-6">
@@ -173,8 +176,25 @@ const CarouselCard = ({
           >
             <Play className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
           </button>
-          <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
-            <Heart className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
+          <button
+            className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
+            onClick={() => {
+              if (
+                station.stationuuid &&
+                favoritesContext?.favoritedIds?.includes(station.stationuuid)
+              ) {
+                favoritesContext?.deleteFavorite(station);
+                return;
+              }
+              favoritesContext?.addFavorite(station);
+              return;
+            }}
+          >
+            <Heart
+              fill={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'transparent'}`}
+              color={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'white'}`}
+              className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]"
+            />
           </button>
           <Link
             className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"

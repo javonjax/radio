@@ -6,9 +6,11 @@ import { StationContext, StationContextType } from '../ContextProviders/StationC
 import { handleAPIError } from '@/lib/utils';
 import LoadingSpinner from '../ui/Custom/LoadingSpinner';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { FavoritesContext, FavoritesContextType } from '../ContextProviders/FavoritesContext';
 
 export interface StationListProps {
-  stationData: { stations: RadioStation[]; hasMore: boolean } | undefined;
+  stations: RadioStation[] | undefined;
+  hasMore: boolean | undefined;
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
@@ -17,7 +19,8 @@ export interface StationListProps {
 }
 
 const StationList = ({
-  stationData,
+  stations,
+  hasMore,
   isLoading,
   isError,
   error,
@@ -26,6 +29,7 @@ const StationList = ({
 }: StationListProps) => {
   const thisComponent: string = StationList.name;
   const stationContext = useContext<StationContextType | undefined>(StationContext);
+  const favoritesContext = useContext<FavoritesContextType | undefined>(FavoritesContext);
 
   useEffect(() => {
     if (isError) {
@@ -41,14 +45,15 @@ const StationList = ({
     <div className="flex w-full grow flex-col">
       <StationListHeaders />
       {isLoading && <LoadingSpinner />}
-      {!isError && !isLoading && stationData?.stations && stationData.stations.length > 0 && (
+      {!isError && !isLoading && stations && stations.length > 0 && (
         <div className="flex grow flex-col justify-between">
           <ul className="flex w-full flex-row flex-wrap justify-center gap-8 xl:flex-col xl:gap-0">
-            {stationData.stations.map((station) => (
+            {stations.map((station) => (
               <StationListItem
                 key={station.stationuuid}
                 station={station}
                 stationContext={stationContext}
+                favoritesContext={favoritesContext}
               />
             ))}
           </ul>
@@ -63,7 +68,7 @@ const StationList = ({
             </button>
             <div>{pageNum}</div>
             <button
-              className={`${stationData?.hasMore ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
+              className={`${hasMore ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
               onClick={() => {
                 setPageNum((prev) => prev + 1);
               }}

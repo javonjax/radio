@@ -45,14 +45,25 @@ const AccountsDropdown = (): React.JSX.Element => {
           </>
         )}
         {authContext?.isAuth && (
-          <DropdownMenuItem className="p-0">
-            <button
-              className="hover:bg-accent h-full w-full rounded-sm p-2 text-left"
-              onClick={() => onLogout()}
-            >
-              Logout
-            </button>
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem className="p-0">
+              <Link
+                className="hover:bg-accent h-full w-full rounded-sm p-2 text-left"
+                href="/favorites"
+              >
+                Favorites
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-foreground mx-[2px]" />
+            <DropdownMenuItem className="p-0">
+              <button
+                className="hover:bg-accent h-full w-full rounded-sm p-2 text-left"
+                onClick={() => onLogout()}
+              >
+                Logout
+              </button>
+            </DropdownMenuItem>
+          </>
         )}
       </DropdownMenuContent>
     </DropdownMenu>

@@ -15,13 +15,15 @@ import Image from 'next/image';
 import Favicon from './Favicon';
 import { StationContextType } from '../ContextProviders/StationContext';
 import Link from 'next/link';
+import { FavoritesContextType } from '../ContextProviders/FavoritesContext';
 
 export interface StationListItemProps {
   station: RadioStation;
   stationContext?: StationContextType | undefined;
+  favoritesContext?: FavoritesContextType | undefined;
 }
 
-const StationListItem = ({ station, stationContext }: StationListItemProps) => {
+const StationListItem = ({ station, stationContext, favoritesContext }: StationListItemProps) => {
   return (
     <li
       key={station.stationuuid}
@@ -198,8 +200,24 @@ const StationListItem = ({ station, stationContext }: StationListItemProps) => {
           >
             <Play />
           </button>
-          <button className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4">
-            <Heart />
+          <button
+            className={`cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4`}
+            onClick={() => {
+              if (
+                station.stationuuid &&
+                favoritesContext?.favoritedIds?.includes(station.stationuuid)
+              ) {
+                favoritesContext?.deleteFavorite(station);
+                return;
+              }
+              favoritesContext?.addFavorite(station);
+              return;
+            }}
+          >
+            <Heart
+              fill={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'transparent'}`}
+              color={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'white'}`}
+            />
           </button>
           <Link
             className="cursor-pointer rounded-xl bg-linear-(--accent-gradient) p-4"
