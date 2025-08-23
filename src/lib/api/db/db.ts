@@ -5,9 +5,14 @@ const projectDir = process.cwd();
 loadEnvConfig(projectDir);
 
 const dbConfig: string = process.env.PG_CONFIG as string;
+const connectionString: string = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 
 const globalObj = global as unknown as { pgPool: Pool | undefined };
 
-export const pgPool = globalObj.pgPool || new Pool(JSON.parse(dbConfig));
+export const pgPool =
+  globalObj.pgPool ||
+  (process.env.NODE_ENV === 'development'
+    ? new Pool(JSON.parse(dbConfig))
+    : new Pool({ connectionString }));
 
 if (process.env.NODE_ENV !== 'production') globalObj.pgPool = pgPool;
