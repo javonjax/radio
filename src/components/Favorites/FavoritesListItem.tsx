@@ -12,18 +12,22 @@ import {
   Tag,
 } from 'lucide-react';
 import Image from 'next/image';
-import Favicon from './Favicon';
+import Favicon from '../StationBrowser/Favicon';
 import { StationContextType } from '../ContextProviders/StationContext';
 import Link from 'next/link';
 import { FavoritesContextType } from '../ContextProviders/FavoritesContext';
 
-export interface StationListItemProps {
+export interface FavoritesListItemProps {
   station: RadioStation;
   stationContext?: StationContextType | undefined;
   favoritesContext?: FavoritesContextType | undefined;
 }
 
-const StationListItem = ({ station, stationContext, favoritesContext }: StationListItemProps) => {
+const FavoritesListItem = ({
+  station,
+  stationContext,
+  favoritesContext,
+}: FavoritesListItemProps) => {
   return (
     <li
       key={station.stationuuid}
@@ -231,4 +235,4 @@ const StationListItem = ({ station, stationContext, favoritesContext }: StationL
   );
 };
 
-export default StationListItem;
+export default FavoritesListItem;

@@ -1,55 +1,28 @@
 import { RadioStation } from '@/lib/api/schemas';
-import React, { Dispatch, SetStateAction, useContext, useEffect } from 'react';
-import StationListItem from './StationListItem';
-import StationListHeaders from './StationListHeaders';
-import { StationContext, StationContextType } from '../ContextProviders/StationContext';
-import { handleAPIError } from '@/lib/utils';
-import LoadingSpinner from '../ui/Custom/LoadingSpinner';
+import StationListHeaders from '../StationBrowser/StationListHeaders';
+import FavoritesListItem from './FavoritesListItem';
+import { useContext, useState } from 'react';
+import { FavoritesContextType, FavoritesContext } from '../ContextProviders/FavoritesContext';
+import { StationContextType, StationContext } from '../ContextProviders/StationContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { FavoritesContext, FavoritesContextType } from '../ContextProviders/FavoritesContext';
 
-export interface StationListProps {
+export interface FavoritesListProps {
   stations: RadioStation[] | undefined;
-  hasMore: boolean | undefined;
-  isLoading: boolean;
-  isError: boolean;
-  error: Error | null;
-  pageNum: number;
-  setPageNum: Dispatch<SetStateAction<number>>;
 }
 
-const StationList = ({
-  stations,
-  hasMore,
-  isLoading,
-  isError,
-  error,
-  pageNum,
-  setPageNum,
-}: StationListProps) => {
-  const thisComponent: string = StationList.name;
+const FavoritesList = ({ stations }: FavoritesListProps): React.JSX.Element => {
   const stationContext = useContext<StationContextType | undefined>(StationContext);
   const favoritesContext = useContext<FavoritesContextType | undefined>(FavoritesContext);
-
-  useEffect(() => {
-    if (isError) {
-      if (error instanceof Error) {
-        handleAPIError(error);
-      } else {
-        console.warn(`Unknown error in ${thisComponent}.`);
-      }
-    }
-  }, [isError]);
-
+  const [pageNum, setPageNum] = useState<number>(1);
+  const itemsPerPage: number = 10;
   return (
     <div className="flex w-full grow flex-col">
       <StationListHeaders />
-      {isLoading && <LoadingSpinner />}
-      {!isError && !isLoading && stations && stations.length > 0 && (
+      {stations && stations.length > 0 && (
         <div className="flex grow flex-col justify-between">
           <ul className="flex w-full flex-row flex-wrap justify-center gap-8 xl:flex-col xl:gap-0">
-            {stations.map((station) => (
-              <StationListItem
+            {stations.slice((pageNum - 1) * itemsPerPage, pageNum * itemsPerPage).map((station) => (
+              <FavoritesListItem
                 key={station.stationuuid}
                 station={station}
                 stationContext={stationContext}
@@ -68,7 +41,7 @@ const StationList = ({
             </button>
             <div>{pageNum}</div>
             <button
-              className={`${hasMore ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
+              className={`${stations.length >= pageNum * itemsPerPage + 1 ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
               onClick={() => {
                 setPageNum((prev) => prev + 1);
               }}
@@ -82,4 +55,4 @@ const StationList = ({
   );
 };
 
-export default StationList;
+export default FavoritesList;
