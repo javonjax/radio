@@ -1,16 +1,16 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
-import Filters from '../../components/StationBrowser/Filters';
-import StationList from '../../components/StationBrowser/StationList';
+import Filters from '@/components/StationBrowser/Filters';
+import StationList from '@/components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { setStationBrowserSearchParams } from './utils';
-import { StationFilters, StationSearchInputs, StationSortingOption } from '../../lib/schemas';
+import { StationFilters, StationSearchInputs, StationSortingOption } from '@/lib/schemas';
 import { handleAPIError } from '@/lib/utils';
 import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
-import { useFetchCountries } from './hooks/useFetchCountries';
-import { useFetchLanguages } from './hooks/useFetchLanguages';
-import { useFetchStations } from './hooks/useFetchStations';
+import { useFetchCountries } from '@/lib/hooks/useFetchCountries';
+import { useFetchLanguages } from '@/lib/hooks/useFetchLanguages';
+import { useFetchStations } from '@/lib/hooks/useFetchStations';
 
 const StationBrowserPage = (): React.JSX.Element => {
   const thisComponent: string = StationBrowserPage.name;
@@ -145,7 +145,8 @@ const StationBrowserPage = (): React.JSX.Element => {
               handleChangeLanguage={handleChangeLanguage}
             />
             <StationList
-              stationData={stationData}
+              stations={stationData?.stations}
+              hasMore={stationData?.hasMore}
               isLoading={stationsLoading}
               isError={isStationsFetchError}
               error={stationsFetchError}

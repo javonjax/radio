@@ -11,6 +11,7 @@ import { StationContextProvider } from '@/components/ContextProviders/StationCon
 import { LocationContextProvider } from '@/components/ContextProviders/LocationContext';
 import QueryProvider from '@/components/ContextProviders/QueryProvider';
 import { AuthContextProvider } from '@/components/ContextProviders/AuthContext';
+import { FavoritesContextProvider } from '@/components/ContextProviders/FavoritesContext';
 
 // Fonts.
 const nunito = Nunito({
@@ -40,25 +41,27 @@ const RootLayout = ({
       >
         <QueryProvider>
           <AuthContextProvider>
-            <LocationContextProvider>
-              <StationContextProvider>
-                <ThemeProvider
-                  attribute="class"
-                  enableSystem
-                  defaultTheme="system"
-                  disableTransitionOnChange
-                >
-                  <IconGradient />
-                  <Toaster richColors closeButton visibleToasts={1} />
-                  <Header />
-                  <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">
-                    {children}
-                  </main>
-                  <Footer />
-                  <Player />
-                </ThemeProvider>
-              </StationContextProvider>
-            </LocationContextProvider>
+            <FavoritesContextProvider>
+              <LocationContextProvider>
+                <StationContextProvider>
+                  <ThemeProvider
+                    attribute="class"
+                    enableSystem
+                    defaultTheme="system"
+                    disableTransitionOnChange
+                  >
+                    <IconGradient />
+                    <Toaster richColors closeButton visibleToasts={1} />
+                    <Header />
+                    <main className="mx-auto flex w-full max-w-7xl grow flex-col p-4">
+                      {children}
+                    </main>
+                    <Footer />
+                    <Player />
+                  </ThemeProvider>
+                </StationContextProvider>
+              </LocationContextProvider>
+            </FavoritesContextProvider>
           </AuthContextProvider>
         </QueryProvider>
       </body>

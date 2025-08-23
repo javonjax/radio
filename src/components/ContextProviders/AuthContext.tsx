@@ -19,7 +19,11 @@ export interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [userId, setUserId] = useState<number>();
@@ -89,14 +93,15 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
       const data: { message: string } = await res.json();
       router.push('/');
       successToast(data.message, 'Enjoy your stay. Share your faves.');
+      return;
     } catch (error) {
       if (error instanceof APIError) {
         handleAPIError(error);
         setLoginError(error.message);
       } else {
         console.warn(`Unknown error in auth context.`);
-        return;
       }
+      return;
     }
   };
 
@@ -118,14 +123,15 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
       const data: { message: string } = await res.json();
       router.push('/');
       successToast(data.message, 'You can now start your list of favorites.');
+      return;
     } catch (error) {
       if (error instanceof APIError) {
         handleAPIError(error);
         setRegistrationError(error.message);
       } else {
         console.warn(`Unknown error in auth context.`);
-        return;
       }
+      return;
     }
   };
 
@@ -145,6 +151,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
 
       const data: { message: string } = await res.json();
       successToast(data.message, 'You have logged out.');
+      return;
     } catch (error) {
       console.warn('Error logging out.', error);
       return;
@@ -153,10 +160,12 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
 
   const clearLoginError = (): void => {
     setLoginError(undefined);
+    return;
   };
 
   const clearRegistrationError = (): void => {
     setRegistrationError(undefined);
+    return;
   };
 
   return (
