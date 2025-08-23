@@ -44,6 +44,8 @@ export const FavoritesContextProvider = ({
         setFavoritedIds(undefined);
         setFavoritedStations(undefined);
       }
+
+      console.log(favorites);
       const favIds: string[] = favorites.map((fav) => fav.station_id);
       const favStations: RadioStation[] = favorites.map((fav) => fav.station);
       setFavoritedIds(favIds);
@@ -98,6 +100,7 @@ export const FavoritesContextProvider = ({
         stationId: station.stationuuid,
         station: station,
       };
+      console.log(station.stationuuid);
       const res: globalThis.Response = await handleAPIFetch(
         await fetch('/api/favorites', {
           method: 'POST',
