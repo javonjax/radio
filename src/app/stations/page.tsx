@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Filters from '@/components/StationBrowser/Filters';
 import StationList from '@/components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
@@ -120,43 +120,41 @@ const StationBrowserPage = (): React.JSX.Element => {
   }, []);
 
   return (
-    <Suspense>
-      <div className="flex w-full grow flex-col gap-y-4">
-        <h1 className="text-heading text-2xl">Station Browser</h1>
-        {(countriesLoading || languagesLoading) && <LoadingSpinner />}
-        {!languagesLoading &&
-          !countriesLoading &&
-          countryData?.countries &&
-          languageData?.languages && (
-            <>
-              <Filters
-                filters={filters}
-                searchInputs={searchInputs}
-                setSearchInputs={setSearchInputs}
-                updateURLSearchParams={updateURLSearchParams}
-                pageNum={pageNum}
-                setPageNum={setPageNum}
-                countries={countryData.countries}
-                languages={languageData.languages}
-                longestCountryLabel={countryData.longestLabel}
-                longestLanguageLabel={languageData.longestLabel}
-                handleChangeSortingOption={handleChangeSortingOption}
-                handleChangeCountry={handleChangeCountry}
-                handleChangeLanguage={handleChangeLanguage}
-              />
-              <StationList
-                stations={stationData?.stations}
-                hasMore={stationData?.hasMore}
-                isLoading={stationsLoading}
-                isError={isStationsFetchError}
-                error={stationsFetchError}
-                pageNum={pageNum}
-                setPageNum={setPageNum}
-              />
-            </>
-          )}
-      </div>
-    </Suspense>
+    <div className="flex w-full grow flex-col gap-y-4">
+      <h1 className="text-heading text-2xl">Station Browser</h1>
+      {(countriesLoading || languagesLoading) && <LoadingSpinner />}
+      {!languagesLoading &&
+        !countriesLoading &&
+        countryData?.countries &&
+        languageData?.languages && (
+          <>
+            <Filters
+              filters={filters}
+              searchInputs={searchInputs}
+              setSearchInputs={setSearchInputs}
+              updateURLSearchParams={updateURLSearchParams}
+              pageNum={pageNum}
+              setPageNum={setPageNum}
+              countries={countryData.countries}
+              languages={languageData.languages}
+              longestCountryLabel={countryData.longestLabel}
+              longestLanguageLabel={languageData.longestLabel}
+              handleChangeSortingOption={handleChangeSortingOption}
+              handleChangeCountry={handleChangeCountry}
+              handleChangeLanguage={handleChangeLanguage}
+            />
+            <StationList
+              stations={stationData?.stations}
+              hasMore={stationData?.hasMore}
+              isLoading={stationsLoading}
+              isError={isStationsFetchError}
+              error={stationsFetchError}
+              pageNum={pageNum}
+              setPageNum={setPageNum}
+            />
+          </>
+        )}
+    </div>
   );
 };
 
