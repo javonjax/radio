@@ -8,7 +8,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
-    console.log(baseUrl, 'base');
     const queryParams: string = request.nextUrl.searchParams.toString();
     const url: string = `${baseUrl}/stations/lastclick?${queryParams}`;
     const res: globalThis.Response = await RadioAPIFetch(url);

@@ -87,7 +87,6 @@ const StationBrowserPage = (): React.JSX.Element => {
   const handleChangeSortingOption = useCallback((sortingOption: StationSortingOption) => {
     setFilters((prev) => {
       if (prev.order === sortingOption) {
-        console.log(prev.order, 'was equal', sortingOption);
         return prev;
       }
       return {

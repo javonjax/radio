@@ -149,7 +149,6 @@ const PlayerControls = ({
                                 <Link
                                   className="h-full w-full underline"
                                   href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount&page=1`}
-                                  onClick={() => console.log(tag)}
                                 >
                                   {capitalize(tag)}
                                 </Link>

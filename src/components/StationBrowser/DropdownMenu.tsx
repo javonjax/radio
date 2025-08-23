@@ -35,8 +35,6 @@ const DropdownMenu = ({ label, value, options, handleChangeSortingOption }: Drop
   React.useLayoutEffect(() => {
     if (ghostRef.current) {
       const width = ghostRef.current.offsetWidth;
-      console.log('dd width', width);
-      console.log(longestLabel);
       setTriggerWidth(width);
     }
   }, [longestLabel]);
@@ -70,7 +68,6 @@ const DropdownMenu = ({ label, value, options, handleChangeSortingOption }: Drop
               <DropdownMenuItem
                 key={option.value}
                 onSelect={() => {
-                  console.log('filters set ', label, option.value);
                   handleChangeSortingOption?.(option.value);
                   setOpen(false);
                 }}

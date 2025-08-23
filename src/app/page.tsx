@@ -31,7 +31,6 @@ const HomePage = (): React.JSX.Element => {
     const url: string = '/api/stations/search?order=clicktrend&limit=12&reverse=true';
     const res: globalThis.Response = await handleAPIFetch(await fetch(url));
     const trendingStations: RadioStation[] = await res.json();
-    console.log(trendingStations);
     return trendingStations;
   };
 
@@ -105,7 +104,6 @@ const HomePage = (): React.JSX.Element => {
 
   useEffect(() => {
     if (isTrendingStationsFetchError) {
-      console.log(trendingStationsFetchError);
       if (trendingStationsFetchError instanceof Error) {
         handleAPIError(trendingStationsFetchError);
       } else {
@@ -117,7 +115,6 @@ const HomePage = (): React.JSX.Element => {
   // Init.
   useEffect(() => {
     if (isTagsFetchError) {
-      console.log(tagsFetchError.message);
       if (tagsFetchError instanceof Error) {
         handleAPIError(tagsFetchError);
       } else {
@@ -128,7 +125,6 @@ const HomePage = (): React.JSX.Element => {
 
   useEffect(() => {
     if (isTagsFetchError) {
-      console.log(tagsFetchError.message);
       if (tagsFetchError instanceof Error) {
         handleAPIError(tagsFetchError);
       } else {
@@ -139,7 +135,6 @@ const HomePage = (): React.JSX.Element => {
 
   useEffect(() => {
     if (isRecentlyClickedStationsFetchError) {
-      console.log(recentlyClickedStationsFetchError);
       if (recentlyClickedStationsFetchError instanceof Error) {
         handleAPIError(recentlyClickedStationsFetchError);
       } else {

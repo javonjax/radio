@@ -178,7 +178,6 @@ const FavoritesListItem = ({
                         <Link
                           className="h-full w-full underline"
                           href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount`}
-                          onClick={() => console.log(tag)}
                         >
                           {capitalize(tag)}
                         </Link>

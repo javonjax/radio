@@ -13,11 +13,9 @@ const Header = () => {
     const randomOffset: string = String(Math.floor(Math.random() * 100));
     const queryParams: string = `hidebroken=true&limit=100&offset=${randomOffset}&order=clickcount&reverse=${reverse}`;
     const url: string = `/api/stations/search?${queryParams}`;
-    console.log(url);
     const res: globalThis.Response = await fetch(url, { cache: 'no-store' });
     const stations: RadioStation[] = await res.json();
     const randomStation: RadioStation = stations[Math.floor(Math.random() * stations.length)];
-    console.log(randomStation);
     stationContext?.setStation(randomStation);
     stationContext?.play();
   };

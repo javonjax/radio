@@ -49,9 +49,7 @@ const Combobox = ({
   React.useLayoutEffect(() => {
     if (ghostRef.current) {
       const width = ghostRef.current.offsetWidth;
-      console.log(width, 'width');
       setTriggerWidth(width);
-      console.log(longestLabel);
     }
   }, [longestLabel]);
 
@@ -112,7 +110,6 @@ const Combobox = ({
                             className="flex text-wrap break-words whitespace-normal"
                             value={country.name}
                             onSelect={(currentValue) => {
-                              console.log('current country', currentValue);
                               handleChangeCountry?.(
                                 `${currentValue === value ? '' : currentValue}`
                               );

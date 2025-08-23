@@ -41,8 +41,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     if (!queryRes.rowCount) {
       throw new HTTPError('Registration failed. Please try again later.', 500);
     }
-    console.log(queryRes);
-    console.log(queryRes.rows[0]);
+
     const userId: number = queryRes.rows[0].id;
     await createSession(userId);
 
