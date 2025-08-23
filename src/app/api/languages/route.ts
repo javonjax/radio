@@ -16,9 +16,9 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         filteredParams.append(key, val);
       }
     }
-    console.log(filteredParams.size);
+
     const url: string = `${baseUrl}/languages${searchTerm ? `/${searchTerm}` : ''}${filteredParams.size ? `?${filteredParams.toString()}` : ''}`;
-    console.log(url);
+
     const res: globalThis.Response = await RadioAPIFetch(url);
     if (!res.ok) {
       throw new HTTPError('Unable to get languages at this time.', 404);

@@ -46,7 +46,6 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
     data: stationClicks,
   } = useFetchStationClicks(stationuuid);
 
-  console.log(stationClicks);
   return (
     <div className="flex w-full grow flex-col">
       <div className="flex grow flex-col gap-y-4">
@@ -197,7 +196,6 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                         <Link
                           className="h-full w-full underline"
                           href={`/stations?tag=${encodeURIComponent(tag)}&order=clickcount&page=1`}
-                          onClick={() => console.log(tag)}
                         >
                           {capitalize(tag)}
                         </Link>

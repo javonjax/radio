@@ -25,9 +25,7 @@ export const getRadioBrowserBaseUrls = async (): Promise<Set<string>> => {
         goodBaseUrls.add(url);
       }
     }
-    console.log('goodurls', goodBaseUrls);
-    console.log('servers', servers);
-    console.log('serverurls', serverUrls);
+
     return goodBaseUrls;
   } catch (error) {
     if (error instanceof Error) {

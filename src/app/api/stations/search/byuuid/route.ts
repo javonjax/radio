@@ -12,7 +12,6 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
     const queryParams: string = request.nextUrl.searchParams.toString();
-    console.log(queryParams);
     const url: string = `${baseUrl}/stations/byuuid?${queryParams}`;
     const res: globalThis.Response = await RadioAPIFetch(url);
     if (!res.ok) {
@@ -26,7 +25,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }
 
     const stations: RadioStation[] = parsedData.data;
-    console.log(stations);
+
     return NextResponse.json(stations);
   } catch (error) {
     let message: string = 'Internal server error';

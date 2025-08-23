@@ -53,7 +53,6 @@ export const handleAPIFetch = async (res: globalThis.Response): Promise<globalTh
 export const handleAPIError = (error: unknown): void => {
   let toastDescription: string = '';
   if (error instanceof APIError) {
-    console.warn(error.message);
     toastDescription = error.message;
   } else {
     console.warn(`API fetch error.`);

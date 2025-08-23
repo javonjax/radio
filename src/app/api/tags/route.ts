@@ -10,7 +10,6 @@ import { TagsAPIResponse, Tag, HTTPError, SchemaError } from '@/lib/api/schemas'
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const baseUrl: string = await getBaseUrl();
-    console.log(baseUrl, 'base');
     const searchTerm: string = request.nextUrl.searchParams.get('search') || '';
     const queryParams: URLSearchParams = request.nextUrl.searchParams;
     const filteredParams: URLSearchParams = new URLSearchParams();
@@ -19,9 +18,9 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         filteredParams.append(key, val);
       }
     }
-    console.log(filteredParams.size);
+
     const url: string = `${baseUrl}/tags${searchTerm ? `/${searchTerm}` : ''}${filteredParams.size ? `?${filteredParams.toString()}` : ''}`;
-    console.log(url);
+
     const res: globalThis.Response = await RadioAPIFetch(url);
     if (!res.ok) {
       throw new HTTPError('Unable to get radio station tags at this time.', 404);

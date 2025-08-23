@@ -24,7 +24,7 @@ export const decrypt = async (
     const { payload } = await jwtVerify(session, encodedKey, { algorithms: ['HS256'] });
     return payload as SessionPayload;
   } catch (error) {
-    console.log('No active session found.', error);
+    console.warn('No active session found.', error);
     return undefined;
   }
 };
