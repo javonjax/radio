@@ -129,7 +129,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                   <div className="whitespace-nowrap">Homepage URL: </div>
                 </div>
                 <Link
-                  className="hover:text-accent"
+                  className="hover:text-accent break-all"
                   target="_blank"
                   rel="noopener noreferrer"
                   href={station.url}
