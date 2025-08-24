@@ -215,7 +215,7 @@ const StationListItem = ({ station, stationContext, favoritesContext }: StationL
           >
             <Heart
               fill={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'transparent'}`}
-              color={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'white'}`}
+              color={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'var(--foreground)'}`}
             />
           </button>
           <Link
