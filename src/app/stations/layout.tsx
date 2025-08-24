@@ -1,12 +1,7 @@
 import React, { Suspense } from 'react';
-import StationBrowserPage from './page';
 
-const layout = () => {
-  return (
-    <Suspense>
-      <StationBrowserPage />
-    </Suspense>
-  );
+const StationPageLayout = ({ children }: { children: React.ReactNode }) => {
+  return <Suspense>{children}</Suspense>;
 };
 
-export default layout;
+export default StationPageLayout;
