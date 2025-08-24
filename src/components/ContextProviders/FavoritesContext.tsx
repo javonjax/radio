@@ -10,6 +10,7 @@ export interface FavoritesContextType {
   deleteFavorite: (station: RadioStation) => Promise<void>;
   favoritedIds: string[] | undefined;
   favoritedStations: RadioStation[] | undefined;
+  updateFavoritesContext: () => Promise<void>;
 }
 
 export const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
@@ -43,6 +44,7 @@ export const FavoritesContextProvider = ({
       if (!favorites.length) {
         setFavoritedIds(undefined);
         setFavoritedStations(undefined);
+        return;
       }
 
       console.log(favorites);
@@ -112,8 +114,12 @@ export const FavoritesContextProvider = ({
         })
       );
 
+      setFavoritedIds((prev) =>
+        prev ? [...prev, String(station.stationuuid)] : [String(station.stationuuid)]
+      );
+      setFavoritedStations((prev) => (prev ? [...prev, station] : [station]));
       const data: { message: string } = await res.json();
-      await updateFavoritesContext();
+
       successToast(data.message, 'You can view your favorites here.');
       return;
     } catch (error) {
@@ -144,8 +150,11 @@ export const FavoritesContextProvider = ({
         })
       );
 
+      setFavoritedIds((prev) => prev?.filter((id) => id !== station.stationuuid));
+      setFavoritedStations((prev) =>
+        prev?.filter((item) => item.stationuuid !== station.stationuuid)
+      );
       const data: { message: string } = await res.json();
-      await updateFavoritesContext();
       successToast(data.message, 'Check out your updated favorites list here.');
       return;
     } catch (error) {
@@ -160,7 +169,13 @@ export const FavoritesContextProvider = ({
 
   return (
     <FavoritesContext.Provider
-      value={{ addFavorite, deleteFavorite, favoritedIds, favoritedStations }}
+      value={{
+        addFavorite,
+        deleteFavorite,
+        favoritedIds,
+        favoritedStations,
+        updateFavoritesContext,
+      }}
     >
       {children}
     </FavoritesContext.Provider>
