@@ -22,7 +22,6 @@ const Header = () => {
           <Link className="hover:text-accent" href="/stations?order=changetimestamp">
             New
           </Link>
-          <div>Map</div>
         </div>
         <div className="m-0 flex items-center justify-center gap-4">
           <ModeToggle />
