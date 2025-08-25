@@ -38,7 +38,10 @@ export const useFetchStations = (
       hasMore = true;
     }
 
-    return { stations: radioStations.slice(0, -1), hasMore: hasMore };
+    return {
+      stations: radioStations.length > 1 ? radioStations.slice(0, -1) : radioStations,
+      hasMore: hasMore,
+    };
   };
 
   return useQuery<{ stations: RadioStation[]; hasMore: boolean }>({
