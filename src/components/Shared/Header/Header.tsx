@@ -13,13 +13,13 @@ const Header = () => {
           TuneTide <SeaWaves className="text-accent" />
         </Link>
         <div className="absolute left-1/2 hidden grow -translate-x-1/2 items-center justify-center gap-x-6 xl:flex">
-          <Link className="hover:text-accent" href="/stations?order=votes">
+          <Link className="hover:text-accent" href="/stations?order=votes&page=1">
             Top
           </Link>
-          <Link className="hover:text-accent" href="/stations?order=clicktrend">
+          <Link className="hover:text-accent" href="/stations?order=clicktrend&page=1">
             Trending
           </Link>
-          <Link className="hover:text-accent" href="/stations?order=changetimestamp">
+          <Link className="hover:text-accent" href="/stations?order=changetimestamp&page=1">
             New
           </Link>
         </div>

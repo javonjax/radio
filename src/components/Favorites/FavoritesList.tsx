@@ -15,6 +15,7 @@ const FavoritesList = ({ stations }: FavoritesListProps): React.JSX.Element => {
   const favoritesContext = useContext<FavoritesContextType | undefined>(FavoritesContext);
   const [pageNum, setPageNum] = useState<number>(1);
   const itemsPerPage: number = 10;
+
   return (
     <div className="flex w-full grow flex-col">
       <StationListHeaders />
