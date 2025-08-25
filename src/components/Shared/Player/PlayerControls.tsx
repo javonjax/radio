@@ -13,6 +13,7 @@ export interface PlayerControlsProps {
   isOpen: boolean;
   isLoading: boolean;
   isError: boolean;
+  isMobileDevice: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handlePlay: () => void;
   handlePause: () => void;
@@ -23,6 +24,7 @@ const PlayerControls = ({
   isOpen,
   isLoading,
   isError,
+  isMobileDevice,
   setIsOpen,
   handlePlay,
   handlePause,
@@ -158,15 +160,17 @@ const PlayerControls = ({
                       </div>
                     )}
                   </div>
-                  <Slider
-                    className="bg-accent max-w-[200px] rounded-md"
-                    value={[stationContext.volume]}
-                    step={1}
-                    max={100}
-                    onValueChange={(value) => {
-                      stationContext.setVolume(value[0]);
-                    }}
-                  />
+                  {!isMobileDevice && (
+                    <Slider
+                      className="bg-accent max-w-[200px] rounded-md"
+                      value={[stationContext.volume]}
+                      step={1}
+                      max={100}
+                      onValueChange={(value) => {
+                        stationContext.setVolume(value[0]);
+                      }}
+                    />
+                  )}
                   <div className="flex items-center justify-center gap-4">
                     <button
                       className="w-fit cursor-pointer rounded-md p-2"
