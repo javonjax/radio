@@ -45,37 +45,43 @@ const StationList = ({
     <div className="flex w-full grow flex-col">
       <StationListHeaders />
       {isLoading && <LoadingSpinner />}
-      {!isError && !isLoading && stations && stations.length > 0 && (
+      {!isError && !isLoading && (
         <div className="flex grow flex-col justify-between">
-          <ul className="flex w-full flex-row flex-wrap justify-center gap-8 xl:flex-col xl:gap-0">
-            {stations.map((station) => (
-              <StationListItem
-                key={station.stationuuid}
-                station={station}
-                stationContext={stationContext}
-                favoritesContext={favoritesContext}
-              />
-            ))}
-          </ul>
-          <div className="mt-6 flex items-center justify-center gap-x-4">
-            <button
-              className={`${pageNum > 1 ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
-              onClick={() => {
-                setPageNum((prev) => prev - 1);
-              }}
-            >
-              <ChevronLeft />
-            </button>
-            <div>{pageNum}</div>
-            <button
-              className={`${hasMore ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
-              onClick={() => {
-                setPageNum((prev) => prev + 1);
-              }}
-            >
-              <ChevronRight />
-            </button>
-          </div>
+          {stations && stations.length > 0 ? (
+            <ul className="flex w-full flex-row flex-wrap justify-center gap-8 xl:flex-col xl:gap-0">
+              {stations.map((station) => (
+                <StationListItem
+                  key={station.stationuuid}
+                  station={station}
+                  stationContext={stationContext}
+                  favoritesContext={favoritesContext}
+                />
+              ))}
+            </ul>
+          ) : (
+            <div className="flex w-full grow items-center justify-center">No stations found.</div>
+          )}
+          {stations && stations.length > 0 && (
+            <div className="mt-6 flex items-center justify-center gap-x-4">
+              <button
+                className={`${pageNum > 1 ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
+                onClick={() => {
+                  setPageNum((prev) => prev - 1);
+                }}
+              >
+                <ChevronLeft />
+              </button>
+              <div>{pageNum}</div>
+              <button
+                className={`${hasMore ? '' : 'invisible'} hover:text-accent hover:cursor-pointer`}
+                onClick={() => {
+                  setPageNum((prev) => prev + 1);
+                }}
+              >
+                <ChevronRight />
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

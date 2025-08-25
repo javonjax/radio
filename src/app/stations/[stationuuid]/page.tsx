@@ -70,6 +70,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                     height={40}
                     width={40}
                     key={`${station.name} icon`}
+                    href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
                   />
                 ) : (
                   <Link

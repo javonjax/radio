@@ -9,14 +9,15 @@ export interface FaviconProps {
   width: number;
   height: number;
   alt: string;
+  href: string;
 }
 
-const Favicon = ({ src, className, width, height, alt }: FaviconProps) => {
+const Favicon = ({ src, className, width, height, alt, href }: FaviconProps) => {
   const [imgError, setImageError] = useState<boolean>(false);
 
   if (imgError) {
     return (
-      <Link href={src} target="_blank" rel="noopener noreferrer">
+      <Link href={href} target="_blank" rel="noopener noreferrer">
         <SquareArrowOutUpRight
           className={`mr-4 ${className} h-[${height}px] w-[${width}px] min-h-[${height}px] min-w-[${width}px]`}
         />
@@ -25,7 +26,7 @@ const Favicon = ({ src, className, width, height, alt }: FaviconProps) => {
   }
 
   return (
-    <Link href={src} target="_blank" rel="noopener noreferrer">
+    <Link href={href} target="_blank" rel="noopener noreferrer">
       <Image
         src={src}
         className={`mr-4 h-[${height}px] w-[${width}px] min-h-[${height}px] min-w-[${width}px] ${className}`}
