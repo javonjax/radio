@@ -4,10 +4,7 @@ import { loadEnvConfig } from '@next/env'; // This function is necessary because
 const projectDir = process.cwd();
 loadEnvConfig(projectDir);
 
-const env: string = process.env.NODE_ENV as string;
-
 const connectionString: string = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-console.log(env, 'poo');
 
 const globalObj = global as unknown as { pgPool: Pool | undefined };
 

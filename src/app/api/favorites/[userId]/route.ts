@@ -33,12 +33,16 @@ export const GET = async (
     };
 
     const queryRes: QueryResult<Favorite> = await pgPool.query(query);
+
     let hasMore: boolean = false;
     if (queryRes.rowCount === itemsPerPage + 1) {
       hasMore = true;
     }
 
-    return NextResponse.json({ favorites: queryRes.rows.slice(0, -1), hasMore: hasMore });
+    return NextResponse.json({
+      favorites: (queryRes.rowCount ?? 0) > 1 ? queryRes.rows.slice(0, -1) : queryRes.rows,
+      hasMore: hasMore,
+    });
   } catch (error) {
     let message: string = 'Internal server error';
     let status: number | undefined = undefined;
