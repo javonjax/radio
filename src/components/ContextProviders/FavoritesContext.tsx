@@ -41,13 +41,13 @@ export const FavoritesContextProvider = ({
       );
 
       const { favorites }: { favorites: Favorite[] } = await res.json();
+
       if (!favorites.length) {
         setFavoritedIds(undefined);
         setFavoritedStations(undefined);
         return;
       }
 
-      console.log(favorites);
       const favIds: string[] = favorites.map((fav) => fav.station_id);
       const favStations: RadioStation[] = favorites.map((fav) => fav.station);
       setFavoritedIds(favIds);
@@ -102,7 +102,7 @@ export const FavoritesContextProvider = ({
         stationId: station.stationuuid,
         station: station,
       };
-      console.log(station.stationuuid);
+
       const res: globalThis.Response = await handleAPIFetch(
         await fetch('/api/favorites', {
           method: 'POST',
@@ -120,7 +120,16 @@ export const FavoritesContextProvider = ({
       setFavoritedStations((prev) => (prev ? [...prev, station] : [station]));
       const data: { message: string } = await res.json();
 
-      successToast(data.message, 'You can view your favorites here.');
+      successToast(
+        data.message,
+        <span>
+          You can view your favorites{' '}
+          <a href="/favorites" className="underline">
+            here
+          </a>
+          .
+        </span>
+      );
       return;
     } catch (error) {
       if (error instanceof APIError) {
@@ -155,7 +164,16 @@ export const FavoritesContextProvider = ({
         prev?.filter((item) => item.stationuuid !== station.stationuuid)
       );
       const data: { message: string } = await res.json();
-      successToast(data.message, 'Check out your updated favorites list here.');
+      successToast(
+        data.message,
+        <span>
+          Check out your updated{' '}
+          <a href="/favorites" className="underline">
+            favorites list
+          </a>
+          .
+        </span>
+      );
       return;
     } catch (error) {
       if (error instanceof APIError) {

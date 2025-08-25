@@ -23,28 +23,7 @@ const AccountsDropdown = (): React.JSX.Element => {
         <User className="h-[24px] min-h-[24px] w-[24px] min-w-[24px]" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background mt-1 hidden xl:block">
-        {!authContext?.isAuth && (
-          <>
-            <DropdownMenuItem className="p-0">
-              <Link
-                className="hover:bg-accent h-full w-full rounded-sm p-2 text-left"
-                href="/login"
-              >
-                Login
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-foreground mx-[2px]" />
-            <DropdownMenuItem className="p-0">
-              <Link
-                className="hover:bg-accent h-full w-full rounded-sm p-2 text-left"
-                href="/register"
-              >
-                Register
-              </Link>
-            </DropdownMenuItem>
-          </>
-        )}
-        {authContext?.isAuth && (
+        {authContext?.isAuth ? (
           <>
             <DropdownMenuItem className="p-0">
               <Link
@@ -62,6 +41,26 @@ const AccountsDropdown = (): React.JSX.Element => {
               >
                 Logout
               </button>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem className="p-0">
+              <Link
+                className="hover:bg-accent h-full w-full rounded-sm p-2 text-left"
+                href="/login"
+              >
+                Login
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-foreground mx-[2px]" />
+            <DropdownMenuItem className="p-0">
+              <Link
+                className="hover:bg-accent h-full w-full rounded-sm p-2 text-left"
+                href="/register"
+              >
+                Register
+              </Link>
             </DropdownMenuItem>
           </>
         )}

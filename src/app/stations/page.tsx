@@ -17,13 +17,13 @@ const StationBrowserPage = (): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
   const [searchInputs, setSearchInputs] = useState<StationSearchInputs>({
-    name: '',
-    tag: '',
+    name: searchParams.get('name') ?? '',
+    tag: searchParams.get('tag') ?? '',
   });
   const [filters, setFilters] = useState<StationFilters>({
-    order: 'name',
-    country: '',
-    language: '',
+    order: (searchParams.get('order') as StationSortingOption) ?? 'name',
+    country: searchParams.get('country') ?? '',
+    language: searchParams.get('language') ?? '',
   });
   const [pageNum, setPageNum] = useState<number>(1);
 

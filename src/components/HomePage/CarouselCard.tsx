@@ -40,13 +40,16 @@ const CarouselCard = ({
                 If there is a favicon but no homepage, render the favicon.
               */}
             {station.homepage !== null && station.homepage.length > 0 ? (
-              station.favicon !== null && station.favicon !== 'null' && !!station.favicon.length ? (
+              station.favicon !== null &&
+              station.favicon !== 'null' &&
+              station.favicon.length > 0 ? (
                 <Favicon
                   alt={`${station.name} icon`}
                   src={station.favicon.trim()}
                   height={40}
                   width={40}
                   key={`${station.name} icon`}
+                  href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
                 />
               ) : (
                 <Link

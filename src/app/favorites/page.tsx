@@ -1,5 +1,5 @@
 'use client';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import FavoritesList from '@/components/Favorites/FavoritesList';
 import {
   FavoritesContext,
@@ -17,6 +17,10 @@ const FavoritesPage = (): React.JSX.Element => {
   //   country: '',
   //   language: '',
   // });
+
+  useEffect(() => {
+    favoritesContext?.updateFavoritesContext();
+  }, []);
 
   return (
     <div className="flex w-full grow flex-col gap-y-4">
@@ -38,8 +42,8 @@ const FavoritesPage = (): React.JSX.Element => {
           <FavoritesList stations={favoritesContext.favoritedStations} />
         )}
       {authContext?.isAuth &&
-        favoritesContext?.favoritedStations &&
-        favoritesContext?.favoritedStations.length === 0 && (
+        (!favoritesContext?.favoritedStations ||
+          favoritesContext?.favoritedStations.length === 0) && (
           <div className="flex w-full grow flex-col">
             <div>
               You haven&apos;t added any favorites yet. Click the heart icon on any station to

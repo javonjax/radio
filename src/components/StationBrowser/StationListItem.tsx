@@ -48,6 +48,7 @@ const StationListItem = ({ station, stationContext, favoritesContext }: StationL
                     height={40}
                     width={40}
                     key={`${station.name} icon`}
+                    href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
                   />
                 ) : (
                   <Link
@@ -72,18 +73,9 @@ const StationListItem = ({ station, stationContext, favoritesContext }: StationL
 
               <div className="flex flex-col items-start">
                 {station.name && !!station?.name?.length ? (
-                  station.homepage !== null && station.homepage.length > 0 ? (
-                    <Link
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-accent"
-                      href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
-                    >
-                      {station.name}
-                    </Link>
-                  ) : (
-                    <p>{station.name}</p>
-                  )
+                  <Link className="hover:text-accent" href={`/stations/${station.stationuuid}`}>
+                    {station.name}
+                  </Link>
                 ) : (
                   <p>Unknown Station</p>
                 )}

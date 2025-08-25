@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
@@ -61,7 +62,10 @@ export const handleAPIError = (error: unknown): void => {
   warningToast('Uh-oh.', toastDescription);
 };
 
-export const successToast = (message: string = 'Success.', description: string): void => {
+export const successToast = (
+  message: string = 'Success.',
+  description: string | ReactNode
+): void => {
   toast.success(message, {
     position: 'top-center',
     duration: 7000,
@@ -69,7 +73,7 @@ export const successToast = (message: string = 'Success.', description: string):
   });
 };
 
-export const warningToast = (message: string = 'Uh-oh.', description: string): void => {
+export const warningToast = (message: string = 'Uh-oh.', description: string | ReactNode): void => {
   toast.warning(message, {
     position: 'top-center',
     duration: 7000,
@@ -77,7 +81,7 @@ export const warningToast = (message: string = 'Uh-oh.', description: string): v
   });
 };
 
-export const errorToast = (message: string = 'Success.', description: string): void => {
+export const errorToast = (message: string = 'Success.', description: string | ReactNode): void => {
   toast.error(message, {
     position: 'top-center',
     duration: 7000,
