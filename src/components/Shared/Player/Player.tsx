@@ -12,6 +12,7 @@ const Player = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [playerType, setPlayerType] = useState<'default' | 'hls'>('default');
+  const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const station: RadioStation | undefined = stationContext?.station;
@@ -28,6 +29,14 @@ const Player = () => {
       setIsError(false);
     }
   }, [stationContext]);
+
+  useEffect(() => {
+    setIsMobileDevice(
+      /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        typeof navigator !== 'undefined' ? navigator.userAgent : ''
+      )
+    );
+  }, []);
 
   useEffect(() => {
     let hls: Hls | null = null;
@@ -107,6 +116,7 @@ const Player = () => {
         isOpen={isOpen}
         isLoading={isLoading}
         isError={isError}
+        isMobileDevice={isMobileDevice}
         setIsOpen={setIsOpen}
         stationContext={stationContext}
         handlePlay={handlePlay}
