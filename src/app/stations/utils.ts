@@ -12,31 +12,32 @@ export const setStationBrowserSearchParams = (
   pageNum: number,
   router: AppRouterInstance
 ): void => {
-  const searchParams: string[] = [];
+  const searchParams: URLSearchParams = new URLSearchParams();
 
-  if (searchInputs.name.length) {
-    searchParams.push(`name=${encodeURIComponent(searchInputs.name)}`);
+  if (searchInputs.name.length > 0) {
+    searchParams.set('name', searchInputs.name);
   }
 
-  if (searchInputs.tag.length) {
-    searchParams.push(`tag=${encodeURIComponent(searchInputs.tag)}`);
+  if (searchInputs.tag.length > 0) {
+    searchParams.set('tag', searchInputs.tag);
   }
 
-  if (filters.country.length) {
-    searchParams.push(`country=${encodeURIComponent(filters.country)}`);
+  if (filters.country.length > 0) {
+    searchParams.set('country', filters.country);
   }
 
-  if (filters.language.length) {
-    searchParams.push(`language=${encodeURIComponent(filters.language)}`);
+  if (filters.language.length > 0) {
+    searchParams.set('language', filters.language);
   }
 
-  if (filters.order.length) {
-    searchParams.push(`order=${encodeURIComponent(filters.order)}`);
+  if (filters.order.length > 0) {
+    searchParams.set('order', filters.order);
   }
 
-  const searchParamsString: string = `?${searchParams.join('&')}&page=${pageNum}`;
+  searchParams.set('page', pageNum.toString());
+  console.log(searchParams.toString());
 
-  router.push(searchParamsString);
+  router.push(`?${searchParams.toString()}`);
 };
 
 /*
