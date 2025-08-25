@@ -1,6 +1,7 @@
 'use client';
 import { Session } from '@/lib/api/schemas';
 import { APIError, handleAPIError, handleAPIFetch, successToast } from '@/lib/utils';
+import { Heart } from 'iconoir-react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 import { createContext, useEffect, useState } from 'react';
@@ -122,7 +123,18 @@ export const AuthContextProvider = ({
       setRegistrationError(undefined);
       const data: { message: string } = await res.json();
       router.push('/');
-      successToast(data.message, 'You can now start your list of favorites.');
+      successToast(
+        data.message,
+        <span className="flex items-center">
+          <p>
+            You can now start a list of your favorites by clicking the{' '}
+            <span className="inline-flex translate-y-[2px] items-center">
+              <Heart className="h-[12px]" />
+            </span>{' '}
+            on a station.
+          </p>
+        </span>
+      );
       return;
     } catch (error) {
       if (error instanceof APIError) {
@@ -150,7 +162,7 @@ export const AuthContextProvider = ({
       await updateSessionContext('logout');
 
       const data: { message: string } = await res.json();
-      successToast(data.message, 'You have logged out.');
+      successToast(data.message, 'Come back soon!');
       return;
     } catch (error) {
       console.warn('Error logging out.', error);
