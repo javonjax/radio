@@ -1,3 +1,4 @@
+import { FavoritesContextType } from '@/components/ContextProviders/FavoritesContext';
 import { StationContextType } from '@/components/ContextProviders/StationContext';
 import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
 import { Slider } from '@/components/ui/slider';
@@ -9,7 +10,8 @@ import Link from 'next/link';
 import { RefObject, useEffect, useRef } from 'react';
 
 export interface PlayerControlsProps {
-  stationContext: StationContextType;
+  stationContext: StationContextType | undefined;
+  favoritesContext: FavoritesContextType | undefined;
   isOpen: boolean;
   isLoading: boolean;
   isError: boolean;
@@ -21,6 +23,7 @@ export interface PlayerControlsProps {
 
 const PlayerControls = ({
   stationContext,
+  favoritesContext,
   isOpen,
   isLoading,
   isError,
@@ -71,8 +74,8 @@ const PlayerControls = ({
                 <button
                   className="cursor-pointer"
                   onClick={() => {
-                    stationContext.setStation(undefined);
-                    stationContext.pause();
+                    stationContext?.setStation(undefined);
+                    stationContext?.pause();
                   }}
                 >
                   <X className="text-red-500" />
@@ -86,8 +89,8 @@ const PlayerControls = ({
               <button
                 className="cursor-pointer self-end"
                 onClick={() => {
-                  stationContext.setStation(undefined);
-                  stationContext.pause();
+                  stationContext?.setStation(undefined);
+                  stationContext?.pause();
                 }}
               >
                 <X className="text-red-500" />
@@ -99,7 +102,7 @@ const PlayerControls = ({
           )}
           {/* Station info */}
           {!isError && !isLoading && isOpen && (
-            <div className="flex grow flex-col gap-4">
+            <div className="flex grow flex-col justify-evenly gap-4">
               {station?.url_resolved && (
                 <>
                   <div className="w-full">
@@ -163,26 +166,40 @@ const PlayerControls = ({
                   {!isMobileDevice && (
                     <Slider
                       className="bg-accent max-w-[200px] rounded-md"
-                      value={[stationContext.volume]}
+                      value={[stationContext?.volume ?? 0]}
                       step={1}
                       max={100}
                       onValueChange={(value) => {
-                        stationContext.setVolume(value[0]);
+                        stationContext?.setVolume(value[0]);
                       }}
                     />
                   )}
                   <div className="flex items-center justify-center gap-4">
                     <button
                       className="w-fit cursor-pointer rounded-md p-2"
-                      onClick={stationContext.isPlaying ? handlePause : handlePlay}
+                      onClick={stationContext?.isPlaying ? handlePause : handlePlay}
                     >
-                      {stationContext.isPlaying ? <Pause /> : <Play />}
+                      {stationContext?.isPlaying ? <Pause /> : <Play />}
                     </button>
                     <button
                       style={{ backgroundImage: 'var(--accent-gradient)' }}
                       className="w-fit cursor-pointer rounded-md p-2"
+                      onClick={() => {
+                        if (
+                          station.stationuuid &&
+                          favoritesContext?.favoritedIds?.includes(station.stationuuid)
+                        ) {
+                          favoritesContext?.deleteFavorite(station);
+                          return;
+                        }
+                        favoritesContext?.addFavorite(station);
+                        return;
+                      }}
                     >
-                      <Heart />
+                      <Heart
+                        fill={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'transparent'}`}
+                        color={`${station.stationuuid && favoritesContext?.favoritedIds?.includes(station.stationuuid) ? '#ed4956' : 'var(--foreground)'}`}
+                      />
                     </button>
                     <Link
                       className="w-fit rounded-md p-2"
@@ -199,9 +216,9 @@ const PlayerControls = ({
             <div className="flex w-full gap-2">
               <button
                 className="w-fit cursor-pointer rounded-md"
-                onClick={stationContext.isPlaying ? handlePause : handlePlay}
+                onClick={stationContext?.isPlaying ? handlePause : handlePlay}
               >
-                {stationContext.isPlaying ? <Pause /> : <Play />}
+                {stationContext?.isPlaying ? <Pause /> : <Play />}
               </button>
               <button
                 className="cursor-pointer"
@@ -214,8 +231,8 @@ const PlayerControls = ({
               <button
                 className="cursor-pointer"
                 onClick={() => {
-                  stationContext.setStation(undefined);
-                  stationContext.pause();
+                  stationContext?.setStation(undefined);
+                  stationContext?.pause();
                 }}
               >
                 <X className="text-red-500" />
