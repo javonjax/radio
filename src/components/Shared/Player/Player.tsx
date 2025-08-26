@@ -5,9 +5,14 @@ import { StationContext, StationContextType } from '../../ContextProviders/Stati
 import { RadioStation } from '@/lib/api/schemas';
 import PlayerControls from './PlayerControls';
 import Hls from 'hls.js';
+import {
+  FavoritesContext,
+  FavoritesContextType,
+} from '@/components/ContextProviders/FavoritesContext';
 
 const Player = () => {
   const stationContext = useContext<StationContextType | undefined>(StationContext);
+  const favoritesContext = useContext<FavoritesContextType | undefined>(FavoritesContext);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -119,6 +124,7 @@ const Player = () => {
         isMobileDevice={isMobileDevice}
         setIsOpen={setIsOpen}
         stationContext={stationContext}
+        favoritesContext={favoritesContext}
         handlePlay={handlePlay}
         handlePause={handlePause}
       />
