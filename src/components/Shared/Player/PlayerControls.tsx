@@ -85,7 +85,7 @@ const PlayerControls = ({
           )}
           {isLoading && <LoadingSpinner />}
           {isError && (
-            <div className="flex flex-col">
+            <div className="flex grow flex-col">
               <button
                 className="cursor-pointer self-end"
                 onClick={() => {
@@ -95,8 +95,11 @@ const PlayerControls = ({
               >
                 <X className="text-red-500" />
               </button>
-              <div className="text-red-500">
-                Unable to establish connection with {station?.name}
+              <div className="flex grow items-center text-red-500">
+                <p>
+                  Unable to establish connection with {station?.name}. Try selecting another
+                  station.
+                </p>
               </div>
             </div>
           )}

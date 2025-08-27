@@ -1,7 +1,6 @@
 'use client';
-import { RadioStation, Tag } from '../lib/api/schemas';
 import Header from '../components/HomePage/Header';
-import { capitalize, handleAPIError, handleAPIFetch } from '@/lib/utils';
+import { capitalize, handleAPIError } from '@/lib/utils';
 import { useContext, useEffect } from 'react';
 // import {
 //   LocationContext,
@@ -17,90 +16,46 @@ import {
 
 import { StationContext, StationContextType } from '@/components/ContextProviders/StationContext';
 
-import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
 import CarouselCard from '@/components/HomePage/CarouselCard';
 import Link from 'next/link';
+import { useFetchTrendingStations } from '@/lib/hooks/useFetchTrendingStations';
+import { useFetchMostPopularTags } from '@/lib/hooks/useFetchMostPopular';
+import { useFetchRecentlyClicked } from '@/lib/hooks/useFetchRecentlyClicked';
+import { useFetchDiscoverStations } from '@/lib/hooks/useFetchDiscoverStations';
 
 const HomePage = (): React.JSX.Element => {
   const thisComponent: string = HomePage.name;
   // const locationContext = useContext<LocationContextType | undefined>(LocationContext);
   const stationContext = useContext<StationContextType | undefined>(StationContext);
 
-  const fetchTrendingStations = async (): Promise<RadioStation[]> => {
-    const url: string = '/api/stations/search?order=clicktrend&limit=12&reverse=true';
-    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
-    const trendingStations: RadioStation[] = await res.json();
-    return trendingStations;
-  };
-
-  const fetchMostPopularTags = async (): Promise<Tag[]> => {
-    const url: string = '/api/tags?order=stationcount&reverse=true&hidebroken=true&limit=12';
-    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
-    const tags: Tag[] = await res.json();
-    return tags;
-  };
-
-  const fetchRecentlyClickedStations = async (): Promise<RadioStation[]> => {
-    const url: string = '/api/stations/recent/clicked?limit=12';
-    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
-    const recentlyClickedStations: RadioStation[] = await res.json();
-    return recentlyClickedStations;
-  };
-
-  const fetchDiscoverStations = async (): Promise<RadioStation[]> => {
-    const randomOffset: string = String(Math.floor(Math.random() * 1000));
-    const queryParams: string = `limit=12&hidebroken=true&order=clickcount&offset=${randomOffset}`;
-    const url: string = `/api/stations/search?${queryParams}`;
-    const res: globalThis.Response = await handleAPIFetch(await fetch(url));
-    const discoverStations: RadioStation[] = await res.json();
-    return discoverStations;
-  };
-
-  //#TODO: tanstack queries
   const {
     isLoading: trendingStationsLoading,
     error: trendingStationsFetchError,
     isError: isTrendingStationsFetchError,
     data: trendingStations,
-  } = useQuery<RadioStation[]>({
-    queryKey: ['fetchTrendingStations'],
-    queryFn: fetchTrendingStations,
-    retry: false,
-  });
+  } = useFetchTrendingStations();
 
   const {
     isLoading: tagsLoading,
     error: tagsFetchError,
     isError: isTagsFetchError,
     data: tags,
-  } = useQuery<Tag[]>({
-    queryKey: ['fetchMostPopularTags'],
-    queryFn: fetchMostPopularTags,
-    retry: false,
-  });
+  } = useFetchMostPopularTags();
 
   const {
     isLoading: recentlyClickedStationsLoading,
     error: recentlyClickedStationsFetchError,
     isError: isRecentlyClickedStationsFetchError,
     data: recentlyClickedStations,
-  } = useQuery<RadioStation[]>({
-    queryKey: ['fetchRecentlyClickedStations'],
-    queryFn: fetchRecentlyClickedStations,
-    retry: false,
-  });
+  } = useFetchRecentlyClicked();
 
   const {
     isLoading: discoverStationsLoading,
     error: discoverStationsFetchError,
     isError: isDiscoverStationsFetchError,
     data: discoverStations,
-  } = useQuery<RadioStation[]>({
-    queryKey: ['fetchDiscoverStations'],
-    queryFn: fetchDiscoverStations,
-    retry: false,
-  });
+  } = useFetchDiscoverStations();
 
   useEffect(() => {
     if (isTrendingStationsFetchError) {

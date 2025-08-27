@@ -11,12 +11,6 @@ import Link from 'next/link';
 const FavoritesPage = (): React.JSX.Element => {
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
   const favoritesContext = useContext<FavoritesContextType | undefined>(FavoritesContext);
-  // TODO: filter favorites?
-  // const [filters, setFilters] = useState<StationFilters>({
-  //   order: 'name',
-  //   country: '',
-  //   language: '',
-  // });
 
   useEffect(() => {
     favoritesContext?.updateFavoritesContext();

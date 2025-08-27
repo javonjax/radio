@@ -6,8 +6,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { StationFilters, StationSearchInputs } from '../schemas';
 import { useQuery } from '@tanstack/react-query';
 
-//TODO: pass in a page num (page num - 1 * page size = offset ex 2 - 1 * 25 = offset 25)
-// return hasMore by checking if pagenum * offset = offset, limit=1 returns radio stations.
 export const useFetchStations = (
   searchParams: ReadonlyURLSearchParams,
   pageNum: number,
