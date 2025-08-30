@@ -82,7 +82,10 @@ const Filters = ({
             className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
             placeholder="Enter a search term..."
           ></input>
-          <button className="hover:text-accent absolute right-2 cursor-pointer" type="submit">
+          <button
+            className="flex h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-md bg-linear-(--accent-gradient)"
+            type="submit"
+          >
             <Search size={16} />
           </button>
         </div>
@@ -99,7 +102,10 @@ const Filters = ({
             className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
             placeholder="Enter a search term..."
           ></input>
-          <button className="hover:text-accent absolute right-2 cursor-pointer" type="submit">
+          <button
+            className="flex h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-md bg-linear-(--accent-gradient)"
+            type="submit"
+          >
             <Search size={16} />
           </button>
         </div>

@@ -15,11 +15,11 @@ export const setStationBrowserSearchParams = (
   const searchParams: URLSearchParams = new URLSearchParams();
 
   if (searchInputs.name.length > 0) {
-    searchParams.set('name', searchInputs.name);
+    searchParams.set('name', searchInputs.name.toLowerCase());
   }
 
   if (searchInputs.tag.length > 0) {
-    searchParams.set('tag', searchInputs.tag);
+    searchParams.set('tag', searchInputs.tag.toLowerCase());
   }
 
   if (filters.country.length > 0) {
@@ -31,11 +31,10 @@ export const setStationBrowserSearchParams = (
   }
 
   if (filters.order.length > 0) {
-    searchParams.set('order', filters.order);
+    searchParams.set('order', filters.order.toLowerCase());
   }
 
   searchParams.set('page', pageNum.toString());
-  console.log(searchParams.toString());
 
   router.push(`?${searchParams.toString()}`);
 };
