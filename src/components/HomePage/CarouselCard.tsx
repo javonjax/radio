@@ -49,11 +49,11 @@ const CarouselCard = ({
                   height={40}
                   width={40}
                   key={`${station.name} icon`}
-                  href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
+                  href={`${station.homepage !== null && station.homepage.length > 0 ? station.homepage : ''}`}
                 />
               ) : (
                 <Link
-                  href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
+                  href={`${station.homepage !== null && station.homepage.length > 0 ? station.homepage : ''}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -73,7 +73,7 @@ const CarouselCard = ({
             ) : null}
 
             <div className="flex flex-col items-start">
-              {station.name && !!station?.name?.length ? (
+              {station.name && station?.name?.length > 0 ? (
                 station.homepage !== null && station.homepage.length > 0 ? (
                   <Link
                     target="_blank"
@@ -90,7 +90,7 @@ const CarouselCard = ({
                 <p>Unknown Station</p>
               )}
 
-              {!!station.clicktrend && station.clicktrend > 10 && (
+              {station.clicktrend && station.clicktrend > 10 && (
                 <div className="flex items-center">
                   <Flame
                     height={20}
@@ -133,13 +133,13 @@ const CarouselCard = ({
                 </ul>
               </div>
             )}
-            {!!station.clickcount && (
+            {station.clickcount && station.clickcount > 0 && (
               <div className="flex items-center gap-x-2">
                 <MousePointerClick className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
                 <p>Clicks: {station.clickcount}</p>
               </div>
             )}{' '}
-            {station.votes !== null && (
+            {station.votes && station.votes > 0 && (
               <div className="flex items-center gap-x-2">
                 <Heart className="h-[20px] min-h-[20px] w-[20px] min-w-[20px]" />
                 <p>Favorites: {station.votes}</p>

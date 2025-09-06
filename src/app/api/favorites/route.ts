@@ -12,7 +12,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
     console.log('Checking that all params are present...');
     if (!userId) {
-      throw new HTTPError('Must be logged in to add favorites.', 400);
+      throw new HTTPError('You must be logged in to add favorites.', 400);
     }
     if (!stationId || !station) {
       throw new HTTPError('Failed to add new favorite. Missing station.', 400);
@@ -73,7 +73,7 @@ export const DELETE = async (request: NextRequest): Promise<NextResponse> => {
     const { userId, station }: { userId: string; station: RadioStation } = await request.json();
 
     if (!userId) {
-      throw new HTTPError('Must be logged in to add favorites.', 400);
+      throw new HTTPError('You must be logged in to add favorites.', 400);
     }
 
     if (!station || !station.stationuuid) {

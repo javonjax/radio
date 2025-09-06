@@ -45,18 +45,18 @@ const FavoritesListItem = ({
               {station.homepage !== null && station.homepage.length > 0 ? (
                 station.favicon !== null &&
                 station.favicon !== 'null' &&
-                !!station.favicon.length ? (
+                station.favicon.length > 0 ? (
                   <Favicon
                     alt={`${station.name} icon`}
                     src={station.favicon.trim()}
                     height={40}
                     width={40}
                     key={`${station.name} icon`}
-                    href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
+                    href={`${station.homepage !== null && station.homepage.length > 0 ? station.homepage : ''}`}
                   />
                 ) : (
                   <Link
-                    href={`${station.homepage !== null && station.homepage.length ? station.homepage : ''}`}
+                    href={`${station.homepage !== null && station.homepage.length > 0 ? station.homepage : ''}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -76,7 +76,7 @@ const FavoritesListItem = ({
               ) : null}
 
               <div className="flex flex-col items-start">
-                {station.name && !!station?.name?.length ? (
+                {station.name && station?.name?.length > 0 ? (
                   <Link className="hover:text-accent" href={`/stations/${station.stationuuid}`}>
                     {station.name}
                   </Link>
@@ -84,7 +84,7 @@ const FavoritesListItem = ({
                   <p>Unknown Station</p>
                 )}
 
-                {!!station.clicktrend && station.clicktrend > 10 && (
+                {station.clicktrend && station.clicktrend > 10 && (
                   <div className="flex items-center">
                     <Flame
                       height={20}
@@ -137,13 +137,13 @@ const FavoritesListItem = ({
                   </ul>
                 </div>
               )}
-              {!!station.clickcount && (
+              {station.clickcount && station.clickcount > 0 && (
                 <div className="flex items-center gap-x-2">
                   <MousePointerClick size={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
                   <p>Clicks: {station.clickcount}</p>
                 </div>
               )}
-              {station.votes !== null && (
+              {station.votes && station.votes > 0 && (
                 <div className="flex items-center gap-x-2">
                   <Heart size={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
                   <p>Favorites: {station.votes}</p>

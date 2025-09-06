@@ -3,9 +3,17 @@ import { Favorite, NewFavorite, RadioStation } from '@/lib/api/schemas';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { AuthContext, AuthContextType } from './AuthContext';
 import { APIError, handleAPIError, handleAPIFetch, successToast } from '@/lib/utils';
+import { StationSortingOption } from '@/lib/schemas';
 
 export interface FavoritesContextType {
-  // getFavorites: () => Promise<void>;
+  getFavorites: (
+    page: number | undefined,
+    name: string | undefined,
+    tag: string | undefined,
+    country: string | undefined,
+    language: string | undefined,
+    order: StationSortingOption | undefined
+  ) => Promise<{ favorites: RadioStation[]; hasMore: boolean }>;
   addFavorite: (station: RadioStation) => Promise<void>;
   deleteFavorite: (station: RadioStation) => Promise<void>;
   favoritedIds: string[] | undefined;
@@ -52,6 +60,7 @@ export const FavoritesContextProvider = ({
       const favStations: RadioStation[] = favorites.map((fav) => fav.station);
       setFavoritedIds(favIds);
       setFavoritedStations(favStations);
+
       return;
     } catch (error) {
       if (error instanceof APIError) {
@@ -63,37 +72,64 @@ export const FavoritesContextProvider = ({
     }
   };
 
-  // const getFavorites = async (page: number) => {
-  //   try {
-  //     const userId: number | undefined = authContext?.userId;
-  //     if (!userId) {
-  //       setFavoritedIds(undefined);
-  //       setFavoritedStations(undefined);
-  //       return;
-  //     }
-  //     const res: globalThis.Response = await handleAPIFetch(
-  //       await fetch(`/api/favorites/${userId}?page=${page}`)
-  //     );
+  const getFavorites = async (
+    page: number | undefined,
+    name: string | undefined,
+    tag: string | undefined,
+    country: string | undefined,
+    language: string | undefined,
+    order: StationSortingOption | undefined
+  ): Promise<{ favorites: RadioStation[]; hasMore: boolean }> => {
+    try {
+      const userId: number | undefined = authContext?.userId;
+      if (!userId) {
+        return { favorites: [], hasMore: false };
+      }
 
-  //     const {favorites, hasMore}: {favorites: Favorite[], hasMore: boolean} = await res.json();
-  //     if (!favorites.length) {
-  //       setFavoritedIds(undefined);
-  //       setFavoritedStations(undefined);
-  //     }
-  //     const favIds: string[] = favorites.map((fav) => fav.station_id);
-  //     const favStations: RadioStation[] = favorites.map((fav) => fav.station);
-  //     setFavoritedIds(favIds);
-  //     setFavoritedStations(favStations);
-  //     return;
-  //   } catch (error) {
-  //     if (error instanceof APIError) {
-  //       handleAPIError(error);
-  //     } else {
-  //       console.warn(`Unknown error in favorites context.`);
-  //     }
-  //     return;
-  //   }
-  // };
+      let url: string = `/api/favorites/${userId}?`;
+      const searchParams: URLSearchParams = new URLSearchParams();
+      if (page && page > 0) {
+        searchParams.set('page', String(page));
+      }
+
+      if (name && name.length > 0) {
+        searchParams.set('name', name.toLowerCase());
+      }
+
+      if (tag && tag.length > 0) {
+        searchParams.set('tag', tag.toLowerCase());
+      }
+
+      if (country && country.length > 0) {
+        searchParams.set('country', country.toLowerCase());
+      }
+
+      if (language && language.length > 0) {
+        searchParams.set('language', language.toLowerCase());
+      }
+
+      if (order && order.length > 0) {
+        searchParams.set('order', order.toLowerCase());
+      }
+
+      url += searchParams.toString();
+      console.log(url);
+
+      const res: globalThis.Response = await handleAPIFetch(await fetch(url));
+
+      const { favorites, hasMore }: { favorites: Favorite[]; hasMore: boolean } = await res.json();
+      const favStations: RadioStation[] = favorites.map((fav) => fav.station);
+
+      return { favorites: favStations, hasMore: hasMore };
+    } catch (error) {
+      if (error instanceof APIError) {
+        handleAPIError(error);
+      } else {
+        console.warn(`Unknown error in favorites context.`);
+      }
+      return { favorites: [], hasMore: false };
+    }
+  };
 
   const addFavorite = async (station: RadioStation): Promise<void> => {
     try {
@@ -188,6 +224,7 @@ export const FavoritesContextProvider = ({
   return (
     <FavoritesContext.Provider
       value={{
+        getFavorites,
         addFavorite,
         deleteFavorite,
         favoritedIds,

@@ -6,7 +6,7 @@ import { StationFilters, StationSearchInputs, StationSortingOption } from '../..
 /*
   Updates url search params when a search is submitted.
 */
-export const setStationBrowserSearchParams = (
+export const setSearchParams = (
   searchInputs: StationSearchInputs,
   filters: StationFilters,
   pageNum: number,
@@ -43,7 +43,7 @@ export const setStationBrowserSearchParams = (
   Updates dropdown box options if they do not already match.
   This is for cases such as direct link navigation to this page.
 */
-export const setStationBrowserDropdownOptions = (
+export const setDropdownOptions = (
   searchParams: ReadonlyURLSearchParams,
   setSearchInputs: Dispatch<SetStateAction<StationSearchInputs>>,
   setFilters: Dispatch<SetStateAction<StationFilters>>

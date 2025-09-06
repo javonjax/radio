@@ -1,10 +1,10 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
-import Filters from '@/components/StationBrowser/Filters';
+import StationBrowserFilters from '@/components/StationBrowser/StationBrowserFilters';
 import StationList from '@/components/StationBrowser/StationList';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { setStationBrowserSearchParams } from './utils';
+import { setSearchParams } from './utils';
 import { StationFilters, StationSearchInputs, StationSortingOption } from '@/lib/schemas';
 import { handleAPIError } from '@/lib/utils';
 import LoadingSpinner from '@/components/ui/Custom/LoadingSpinner';
@@ -62,7 +62,7 @@ const StationBrowserPage = (): React.JSX.Element => {
   useEffect(() => {
     if (isLanguagesFetchError) {
       if (languagesFetchError instanceof Error) {
-        handleAPIError(languageData);
+        handleAPIError(languagesFetchError);
       } else {
         console.warn(`Unknown error in ${thisComponent}.`);
       }
@@ -71,16 +71,16 @@ const StationBrowserPage = (): React.JSX.Element => {
 
   // Update url search params when filters or pagenum update.
   useEffect(() => {
-    updateURLSearchParams();
+    updateURLParams();
   }, [filters, pageNum]);
 
   /*
     Event handlers.
   */
 
-  // Updates to url search params will trigger a search.
-  const updateURLSearchParams = () => {
-    setStationBrowserSearchParams(searchInputs, filters, pageNum, router);
+  // Updating url search params will trigger a search.
+  const updateURLParams = () => {
+    setSearchParams(searchInputs, filters, pageNum, router);
   };
 
   // Search happens immediately after filters update. Reset page number when filters are updated.
@@ -128,11 +128,11 @@ const StationBrowserPage = (): React.JSX.Element => {
         countryData?.countries &&
         languageData?.languages && (
           <>
-            <Filters
+            <StationBrowserFilters
               filters={filters}
               searchInputs={searchInputs}
               setSearchInputs={setSearchInputs}
-              updateURLSearchParams={updateURLSearchParams}
+              updateURLParams={updateURLParams}
               pageNum={pageNum}
               setPageNum={setPageNum}
               countries={countryData.countries}

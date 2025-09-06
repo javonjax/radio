@@ -1,35 +1,15 @@
+import { Search } from 'lucide-react';
+import React, { Dispatch, SetStateAction } from 'react';
+import DropdownMenu from './DropdownMenu';
 import {
   DropdownMenuOption,
   StationFilters,
   StationSearchInputs,
   StationSortingOption,
 } from '@/lib/schemas';
-import { Country, Language } from '@/lib/api/schemas';
-import { Search } from 'lucide-react';
-import { Dispatch, SetStateAction } from 'react';
+import { Language, Country } from '@/lib/api/schemas';
 import Combobox from '../ui/Custom/Combobox';
-import DropdownMenu from './DropdownMenu';
 
-export interface FiltersProps {
-  filters: StationFilters;
-
-  languages: Language[];
-  countries: Country[];
-  searchInputs: StationSearchInputs;
-  setSearchInputs: Dispatch<SetStateAction<StationSearchInputs>>;
-  pageNum: number;
-  setPageNum: Dispatch<SetStateAction<number>>;
-  longestCountryLabel: string;
-  longestLanguageLabel: string;
-  handleChangeSortingOption: (sortingOption: StationSortingOption) => void;
-  handleChangeCountry: (country: string) => void;
-  handleChangeLanguage: (language: string) => void;
-  updateURLSearchParams: () => void;
-}
-
-/*
-  Sorting options to be passed into dropdown menu.
-*/
 const sortingOptions: DropdownMenuOption[] = [
   { label: 'Most Clicked', value: 'clickcount' },
   { label: 'Most Favorited', value: 'votes' },
@@ -38,32 +18,44 @@ const sortingOptions: DropdownMenuOption[] = [
   { label: 'Recently Added', value: 'changetimestamp' },
   { label: 'Trending', value: 'clicktrend' },
 ];
+export interface FavoritesFiltersProps {
+  searchInputs: StationSearchInputs;
+  setSearchInputs: Dispatch<SetStateAction<StationSearchInputs>>;
+  filters: StationFilters;
+  handleChangeSortingOption: (sortingOption: StationSortingOption) => void;
+  countries: Country[];
+  languages: Language[];
+  longestCountryLabel: string;
+  longestLanguageLabel: string;
+  handleChangeCountry: (country: string) => void;
+  handleChangeLanguage: (language: string) => void;
+  pageNum: number;
+  setPageNum: Dispatch<SetStateAction<number>>;
+  updateURLParams: () => void;
+}
 
-const Filters = ({
-  filters,
-  languages,
-  countries,
+const FavoritesFilters = ({
   searchInputs,
   setSearchInputs,
-  pageNum,
-  setPageNum,
+  filters,
+  handleChangeSortingOption,
+  countries,
+  languages,
   longestCountryLabel,
   longestLanguageLabel,
-  handleChangeSortingOption,
   handleChangeCountry,
   handleChangeLanguage,
-  updateURLSearchParams,
-}: FiltersProps): React.JSX.Element => {
+  pageNum,
+  setPageNum,
+  updateURLParams,
+}: FavoritesFiltersProps) => {
   return (
     <form
       className="flex w-full flex-col"
       onSubmit={(e) => {
         e.preventDefault();
-        // Manually trigger params update if page num is already 1, otherwise the act of resetting page num to 1 will also update other params.
-        // Text inputs should only update search params when the form is submitted.
-        // Other filteer changes such as changing the page number or selecting an option from a dropdown will update search params immediately.
         if (pageNum === 1) {
-          updateURLSearchParams();
+          updateURLParams();
         } else {
           setPageNum(1);
         }
@@ -73,14 +65,13 @@ const Filters = ({
         <div className="relative flex flex-1 items-center gap-2">
           <label htmlFor="station-search-name">Name: </label>
           <input
-            id="station-search-name"
+            type="search"
+            className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
+            placeholder="Enter a search term..."
             value={searchInputs.name}
             onChange={(e) => {
               setSearchInputs({ ...searchInputs, name: e.target.value });
             }}
-            type="search"
-            className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
-            placeholder="Enter a search term..."
           ></input>
           <button
             className="flex h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-md bg-linear-(--accent-gradient)"
@@ -89,18 +80,16 @@ const Filters = ({
             <Search size={16} />
           </button>
         </div>
-
         <div className="relative flex flex-1 items-center gap-2">
           <label htmlFor="station-search-tag">Tag: </label>
           <input
-            id="station-search-tag"
+            type="search"
+            className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
+            placeholder="Enter a search term..."
             value={searchInputs.tag}
             onChange={(e) => {
               setSearchInputs({ ...searchInputs, tag: e.target.value });
             }}
-            type="search"
-            className="w-full min-w-[250px] rounded-md border-2 p-2 pr-8"
-            placeholder="Enter a search term..."
           ></input>
           <button
             className="flex h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-md bg-linear-(--accent-gradient)"
@@ -109,14 +98,12 @@ const Filters = ({
             <Search size={16} />
           </button>
         </div>
-
         <DropdownMenu
           label="Sort by"
           value={filters.order ?? 'name'}
           options={sortingOptions}
           handleChangeSortingOption={handleChangeSortingOption}
         />
-
         {countries && countries.length > 0 && (
           <Combobox
             label="Country"
@@ -144,4 +131,4 @@ const Filters = ({
   );
 };
 
-export default Filters;
+export default FavoritesFilters;
