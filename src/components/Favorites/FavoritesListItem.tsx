@@ -84,7 +84,7 @@ const FavoritesListItem = ({
                   <p>Unknown Station</p>
                 )}
 
-                {station.clicktrend && station.clicktrend > 10 && (
+                {station.clicktrend !== null && station.clicktrend > 10 && (
                   <div className="flex items-center">
                     <Flame
                       height={20}
@@ -137,13 +137,13 @@ const FavoritesListItem = ({
                   </ul>
                 </div>
               )}
-              {station.clickcount && station.clickcount > 0 && (
+              {station.clickcount !== null && station.clickcount > 0 && (
                 <div className="flex items-center gap-x-2">
                   <MousePointerClick size={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
                   <p>Clicks: {station.clickcount}</p>
                 </div>
               )}
-              {station.votes && station.votes > 0 && (
+              {station.votes !== null && station.votes > 0 && (
                 <div className="flex items-center gap-x-2">
                   <Heart size={20} className="min-h-[20px] w-[20px] min-w-[20px]" />
                   <p>Favorites: {station.votes}</p>

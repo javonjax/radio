@@ -111,7 +111,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                   <p>Unknown Station</p>
                 )}
 
-                {station.clicktrend && station.clicktrend > 10 && (
+                {station.clicktrend !== null && station.clicktrend > 10 && (
                   <div className="flex items-center">
                     <Flame
                       height={20}
@@ -169,7 +169,7 @@ const StationInfoPage = ({ params }: StationInfoPageProps): React.JSX.Element =>
                 </ul>
               </div>
             )}
-            {station.clickcount && station.clickcount > 0 && (
+            {station.clickcount !== null && station.clickcount > 0 && (
               <div className="flex items-center gap-x-2">
                 <MousePointerClick size={20} />
                 <div>Clicks: {station.clickcount}</div>
