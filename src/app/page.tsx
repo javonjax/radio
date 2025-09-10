@@ -1,11 +1,7 @@
 'use client';
 import Header from '../components/HomePage/Header';
-import { capitalize, errorToast, handleAPIError, warningToast } from '@/lib/utils';
-import { useContext, useEffect, useState } from 'react';
-// import {
-//   LocationContext,
-//   LocationContextType,
-// } from '@/components/ContextProviders/LocationContext';
+import { capitalize, handleAPIError, warningToast } from '@/lib/utils';
+import { useContext, useEffect } from 'react';
 import {
   Carousel,
   CarouselContent,
@@ -80,7 +76,6 @@ const HomePage = (): React.JSX.Element => {
     }
   }, [isTrendingStationsFetchError]);
 
-  // Init.
   useEffect(() => {
     if (isTagsFetchError) {
       if (tagsFetchError instanceof Error) {
