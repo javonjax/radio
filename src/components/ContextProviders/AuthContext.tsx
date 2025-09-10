@@ -6,8 +6,10 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useRouter } from 'next/navigation';
 import { createContext, useEffect, useState } from 'react';
 import { FieldValues } from 'react-hook-form';
+
 export interface AuthContextType {
   isAuth: boolean;
+  isMobileDevice: boolean;
   userId: number | undefined;
   register: (credentials: FieldValues) => Promise<void>;
   login: (credentials: FieldValues) => Promise<void>;
@@ -27,6 +29,7 @@ export const AuthContextProvider = ({
 }): React.JSX.Element => {
   const router: AppRouterInstance = useRouter();
   const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false);
   const [userId, setUserId] = useState<number>();
   const [registrationError, setRegistrationError] = useState<string>();
   const [loginError, setLoginError] = useState<string>();
@@ -73,6 +76,11 @@ export const AuthContextProvider = ({
   };
 
   useEffect(() => {
+    setIsMobileDevice(
+      /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        typeof navigator !== 'undefined' ? navigator.userAgent : ''
+      )
+    );
     updateSessionContext('init');
   }, []);
 
@@ -184,6 +192,7 @@ export const AuthContextProvider = ({
     <AuthContext.Provider
       value={{
         isAuth,
+        isMobileDevice,
         userId,
         register,
         login,

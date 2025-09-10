@@ -9,15 +9,16 @@ import {
   FavoritesContext,
   FavoritesContextType,
 } from '@/components/ContextProviders/FavoritesContext';
+import { AuthContext, AuthContextType } from '@/components/ContextProviders/AuthContext';
 
 const Player = () => {
+  const authContext = useContext<AuthContextType | undefined>(AuthContext);
   const stationContext = useContext<StationContextType | undefined>(StationContext);
   const favoritesContext = useContext<FavoritesContextType | undefined>(FavoritesContext);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [playerType, setPlayerType] = useState<'default' | 'hls'>('default');
-  const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const station: RadioStation | undefined = stationContext?.station;
@@ -34,14 +35,6 @@ const Player = () => {
       setIsError(false);
     }
   }, [stationContext]);
-
-  useEffect(() => {
-    setIsMobileDevice(
-      /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        typeof navigator !== 'undefined' ? navigator.userAgent : ''
-      )
-    );
-  }, []);
 
   useEffect(() => {
     let hls: Hls | null = null;
@@ -122,7 +115,7 @@ const Player = () => {
         isOpen={isOpen}
         isLoading={isLoading}
         isError={isError}
-        isMobileDevice={isMobileDevice}
+        isMobileDevice={authContext?.isMobileDevice ?? false}
         setIsOpen={setIsOpen}
         stationContext={stationContext}
         favoritesContext={favoritesContext}
@@ -158,15 +151,12 @@ const Player = () => {
           ref={videoRef}
           controls={false}
           onLoadStart={() => {
-            console.log('load start video', station?.url_resolved);
             setIsLoading(true);
           }}
           onCanPlay={() => {
-            console.log('can play video');
             setIsLoading(false);
           }}
           onError={() => {
-            console.log('on error video');
             setIsLoading(false);
             setIsError(true);
           }}

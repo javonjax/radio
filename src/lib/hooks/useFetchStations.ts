@@ -1,5 +1,5 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
-import { setStationBrowserDropdownOptions } from '@/app/stations/utils';
+import { setDropdownOptions } from '@/app/stations/utils';
 import { RadioStation } from '@/lib/api/schemas';
 import { handleAPIFetch } from '@/lib/utils';
 import { Dispatch, SetStateAction } from 'react';
@@ -14,7 +14,7 @@ export const useFetchStations = (
 ) => {
   const searchParamString: string = searchParams.toString();
   const fetchStations = async (): Promise<{ stations: RadioStation[]; hasMore: boolean }> => {
-    setStationBrowserDropdownOptions(searchParams, setSearchInputs, setFilters);
+    setDropdownOptions(searchParams, setSearchInputs, setFilters);
     const itemsPerPage: number = 10;
     const offset: number = (pageNum - 1) * itemsPerPage;
     let url: string = `/api/stations/search?limit=${itemsPerPage + 1}&offset=${offset}&hidebroken=true`;

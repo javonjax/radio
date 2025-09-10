@@ -1,11 +1,7 @@
 'use client';
 import Header from '../components/HomePage/Header';
-import { capitalize, handleAPIError } from '@/lib/utils';
+import { capitalize, handleAPIError, warningToast } from '@/lib/utils';
 import { useContext, useEffect } from 'react';
-// import {
-//   LocationContext,
-//   LocationContextType,
-// } from '@/components/ContextProviders/LocationContext';
 import {
   Carousel,
   CarouselContent,
@@ -23,10 +19,16 @@ import { useFetchTrendingStations } from '@/lib/hooks/useFetchTrendingStations';
 import { useFetchMostPopularTags } from '@/lib/hooks/useFetchMostPopular';
 import { useFetchRecentlyClicked } from '@/lib/hooks/useFetchRecentlyClicked';
 import { useFetchDiscoverStations } from '@/lib/hooks/useFetchDiscoverStations';
+import {
+  LocationContextType,
+  LocationContext,
+} from '@/components/ContextProviders/LocationContext';
+import { Navigation } from 'lucide-react';
+import { useFetchLocalStations } from '@/lib/hooks/useFetchLocalStations';
 
 const HomePage = (): React.JSX.Element => {
   const thisComponent: string = HomePage.name;
-  // const locationContext = useContext<LocationContextType | undefined>(LocationContext);
+  const locationContext = useContext<LocationContextType | undefined>(LocationContext);
   const stationContext = useContext<StationContextType | undefined>(StationContext);
 
   const {
@@ -57,6 +59,13 @@ const HomePage = (): React.JSX.Element => {
     data: discoverStations,
   } = useFetchDiscoverStations();
 
+  const {
+    isLoading: localStationsLoading,
+    error: localStationsFetchError,
+    isError: isLocalStationsFetchError,
+    data: localStations,
+  } = useFetchLocalStations(locationContext?.location);
+
   useEffect(() => {
     if (isTrendingStationsFetchError) {
       if (trendingStationsFetchError instanceof Error) {
@@ -67,7 +76,6 @@ const HomePage = (): React.JSX.Element => {
     }
   }, [isTrendingStationsFetchError]);
 
-  // Init.
   useEffect(() => {
     if (isTagsFetchError) {
       if (tagsFetchError instanceof Error) {
@@ -98,35 +106,15 @@ const HomePage = (): React.JSX.Element => {
     }
   }, [isRecentlyClickedStationsFetchError]);
 
-  // TODO: API seems to be bugged when searching with a geo_distance.
-  // Get stations near the user.
-  // useEffect(() => {
-  //   if (locationContext?.location) {
-  //     const fetchLocalStations = async () => {
-  //       const lat: string = locationContext.location?.latitude.toString() || '';
-  //       const lon: string = locationContext.location?.longitude.toString() || '';
-  //       let queryParams: string = '';
-  //       if (lat.length && lon.length) {
-  //         queryParams += `&geo_lat=${lat}&geo_lon=${lon}&geo_distance=75000`;
-  //       }
-  //       const res: globalThis.Response = await fetch(
-  //         `/api/stations/search?limit=12${queryParams}`
-  //       );
-  //       console.log(res);
-  //       const localStations: RadioStation[] = await res.json();
-  //       if (!localStations.length) {
-  //         throw new Error('No stations found near this location.');
-  //       }
-  //       setLocalStations(localStations);
-  //     };
-  //     try {
-  //       fetchLocalStations();
-  //     } catch (error) {
-  //       console.warn(error);
-  //       toast.warning('error');
-  //     }
-  //   }
-  // }, [locationContext?.location]);
+  useEffect(() => {
+    if (isLocalStationsFetchError) {
+      if (localStationsFetchError instanceof Error) {
+        handleAPIError(localStationsFetchError);
+      } else {
+        console.warn(`Unknown error in ${thisComponent}.`);
+      }
+    }
+  }, [isLocalStationsFetchError]);
 
   return (
     <div className="grid h-full w-full grid-cols-12 gap-4">
@@ -234,37 +222,7 @@ const HomePage = (): React.JSX.Element => {
           </div>
         )}
       </div>
-      {/* <div className="col-span-full flex w-full flex-col gap-6 xl:col-span-6 xl:min-h-[500px]">
-        <h2 className="text-heading mr-auto text-xl">Stations Hosted Near You</h2>
-        {locationContext?.location ? (
-          <div>{locationContext.location.latitude}</div>
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <button
-              className="flex items-center rounded-md bg-linear-(--accent-gradient) p-4"
-              onClick={async () => {
-                try {
-                  if (!locationContext?.location) {
-                    await locationContext?.requestLocation();
-                  }
-                } catch (error) {
-                  console.warn(error);
-                  toast.warning('Location services required.', {
-                    position: 'top-center',
-                    duration: 7000,
-                    description:
-                      'Please enable location services in your browser to use this feature.',
-                  });
-                }
-              }}
-            >
-              {' '}
-              Coming Soon! Search near me
-              <Navigation className="mt-1 ml-2" size={16} />
-            </button>
-          </div>
-        )}
-      </div> */}
+
       <div className="col-span-full flex min-h-[500px] flex-col items-center">
         <h2 className="text-heading mr-auto text-xl">Discover Something New</h2>
         {discoverStationsLoading && <LoadingSpinner />}
@@ -295,6 +253,67 @@ const HomePage = (): React.JSX.Element => {
               <CarouselPrevious />
               <CarouselNext />
             </Carousel>
+          </div>
+        )}
+      </div>
+
+      <div className="col-span-full flex min-h-[500px] flex-col items-center">
+        <h2 className="text-heading mr-auto text-xl">Stations Hosted Near You</h2>
+        {locationContext?.location && localStationsLoading && <LoadingSpinner />}
+        {locationContext?.location &&
+          !localStationsLoading &&
+          (localStations === undefined || (localStations && !localStations.length)) && (
+            <div>No stations found</div>
+          )}
+        {locationContext?.location &&
+          localStations &&
+          localStations.length > 0 &&
+          !localStationsLoading && (
+            <div className="flex w-[82%] items-center justify-center md:w-[90%] xl:w-[95%]">
+              <Carousel
+                opts={{
+                  align: 'start',
+                }}
+                className="w-full p-4"
+              >
+                <CarouselContent>
+                  {localStations.length > 0 &&
+                    localStations?.map((station) => (
+                      <CarouselItem
+                        key={station.stationuuid}
+                        className="-mt-2 pb-2 md:basis-1/2 lg:basis-1/3"
+                      >
+                        <CarouselCard station={station} stationContext={stationContext} />
+                      </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </div>
+          )}
+        {!locationContext?.location && (
+          <div className="flex h-full w-full items-center justify-center">
+            <button
+              className="flex cursor-pointer items-center rounded-md bg-linear-(--accent-gradient) p-4"
+              onClick={async () => {
+                try {
+                  if (!locationContext?.location) {
+                    await locationContext?.requestLocation();
+                  }
+                } catch (error) {
+                  console.warn(error);
+                  warningToast(
+                    'Location services required.',
+                    'Please enable location services in your browser to use this feature.'
+                  );
+                }
+              }}
+            >
+              {' '}
+              Search near me
+              <Navigation className="mt-1 ml-2" size={16} />
+            </button>
           </div>
         )}
       </div>
