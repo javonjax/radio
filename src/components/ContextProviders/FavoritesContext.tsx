@@ -113,7 +113,6 @@ export const FavoritesContextProvider = ({
       }
 
       url += searchParams.toString();
-      console.log(url);
 
       const res: globalThis.Response = await handleAPIFetch(await fetch(url));
 

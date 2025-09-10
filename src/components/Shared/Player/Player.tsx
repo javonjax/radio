@@ -151,15 +151,12 @@ const Player = () => {
           ref={videoRef}
           controls={false}
           onLoadStart={() => {
-            console.log('load start video', station?.url_resolved);
             setIsLoading(true);
           }}
           onCanPlay={() => {
-            console.log('can play video');
             setIsLoading(false);
           }}
           onError={() => {
-            console.log('on error video');
             setIsLoading(false);
             setIsError(true);
           }}

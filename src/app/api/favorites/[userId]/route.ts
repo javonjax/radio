@@ -22,8 +22,6 @@ export const GET = async (
       order = null,
     } = Object.fromEntries(searchParams);
 
-    console.log(searchParams);
-    console.log(page, name, tag, country, language, order);
     const itemsPerPage: number = 10;
     if (!userId) {
       throw new HTTPError('Must be logged in to get favorites.', 400);
@@ -56,8 +54,6 @@ export const GET = async (
       text: queryText,
       values: [userId, name, tag, country, language],
     };
-
-    console.log(queryText);
 
     const queryRes: QueryResult<Favorite> = await pgPool.query(query);
 

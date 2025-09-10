@@ -81,8 +81,6 @@ const FavoritesPage = (): React.JSX.Element => {
   useEffect(() => {
     setIsLoading(true);
     const fetchFavorites = async () => {
-      console.log(filters);
-      console.log(searchInputs);
       const res = await favoritesContext?.getFavorites(
         pageNum,
         searchInputs.name,
